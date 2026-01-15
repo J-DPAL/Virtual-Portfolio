@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/virtual_portfolio
+    username: postgres
+    password: password
+  
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    root: DEBUG
+    com.portfolio: DEBUG

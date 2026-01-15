@@ -1,0 +1,19 @@
+{
+  "home": "Home",
+  "skills": "Skills",
+  "projects": "Projects",
+  "experience": "Experience",
+  "education": "Education",
+  "hobbies": "Hobbies",
+  "contact": "Contact",
+  "testimonials": "Testimonials",
+  "login": "Login",
+  "logout": "Logout",
+  "language": "Language",
+  "admin": "Admin Panel",
+  "email": "Email",
+  "password": "Password",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "welcome": "Welcome to Virtual Portfolio"
+}

@@ -1,0 +1,19 @@
+{
+  "home": "Accueil",
+  "skills": "Compétences",
+  "projects": "Projets",
+  "experience": "Expérience",
+  "education": "Éducation",
+  "hobbies": "Loisirs",
+  "contact": "Contact",
+  "testimonials": "Témoignages",
+  "login": "Connexion",
+  "logout": "Déconnexion",
+  "language": "Langue",
+  "admin": "Panneau Admin",
+  "email": "Email",
+  "password": "Mot de passe",
+  "submit": "Soumettre",
+  "cancel": "Annuler",
+  "welcome": "Bienvenue dans le Portfolio Virtuel"
+}
