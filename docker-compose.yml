@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
+  # PostgreSQL Database - Shared across all services
   postgres:
     image: postgres:16-alpine
     container_name: portfolio-postgres
@@ -22,21 +22,194 @@ services:
     networks:
       - portfolio-network
 
-  # Java Backend
-  backend:
+  # API Gateway - Service Router
+  api-gateway:
     build:
-      context: ./backend
+      context: ./backend/api-gateway
       dockerfile: Dockerfile
-    container_name: portfolio-backend
+    container_name: portfolio-api-gateway
     environment:
+      SPRING_APPLICATION_NAME: api-gateway
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - users-service
+      - skills-service
+      - projects-service
+      - experience-service
+      - education-service
+      - hobbies-service
+      - testimonials-service
+      - messages-service
+    networks:
+      - portfolio-network
+
+  # Users Service - Authentication & User Management
+  users-service:
+    build:
+      context: ./backend/users-service
+      dockerfile: Dockerfile
+    container_name: portfolio-users-service
+    environment:
+      SPRING_APPLICATION_NAME: users-service
+      SERVER_PORT: 8081
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
-      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
       SPRING_PROFILES_ACTIVE: prod
     ports:
-      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Skills Service
+  skills-service:
+    build:
+      context: ./backend/skills-service
+      dockerfile: Dockerfile
+    container_name: portfolio-skills-service
+    environment:
+      SPRING_APPLICATION_NAME: skills-service
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Projects Service
+  projects-service:
+    build:
+      context: ./backend/projects-service
+      dockerfile: Dockerfile
+    container_name: portfolio-projects-service
+    environment:
+      SPRING_APPLICATION_NAME: projects-service
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Experience Service
+  experience-service:
+    build:
+      context: ./backend/experience-service
+      dockerfile: Dockerfile
+    container_name: portfolio-experience-service
+    environment:
+      SPRING_APPLICATION_NAME: experience-service
+      SERVER_PORT: 8084
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Education Service
+  education-service:
+    build:
+      context: ./backend/education-service
+      dockerfile: Dockerfile
+    container_name: portfolio-education-service
+    environment:
+      SPRING_APPLICATION_NAME: education-service
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8085:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Hobbies Service
+  hobbies-service:
+    build:
+      context: ./backend/hobbies-service
+      dockerfile: Dockerfile
+    container_name: portfolio-hobbies-service
+    environment:
+      SPRING_APPLICATION_NAME: hobbies-service
+      SERVER_PORT: 8086
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8086:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Testimonials Service
+  testimonials-service:
+    build:
+      context: ./backend/testimonials-service
+      dockerfile: Dockerfile
+    container_name: portfolio-testimonials-service
+    environment:
+      SPRING_APPLICATION_NAME: testimonials-service
+      SERVER_PORT: 8087
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8087:8087"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  # Messages Service
+  messages-service:
+    build:
+      context: ./backend/messages-service
+      dockerfile: Dockerfile
+    container_name: portfolio-messages-service
+    environment:
+      SPRING_APPLICATION_NAME: messages-service
+      SERVER_PORT: 8088
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8088:8088"
     depends_on:
       postgres:
         condition: service_healthy
@@ -48,6 +221,24 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: portfolio-frontend
+    environment:
+      REACT_APP_API_BASE_URL: http://api-gateway:8080/api
+      NODE_ENV: production
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - portfolio-network
+
+volumes:
+  postgres_data:
+
+networks:
+  portfolio-network:
+    driver: bridge
+
     container_name: portfolio-frontend
     environment:
       VITE_API_BASE_URL: http://localhost:8080/api

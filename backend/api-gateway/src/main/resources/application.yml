@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: api-gateway
+  
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-secret-key-change-in-production}
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    root: INFO
+    com.portfolio: DEBUG
+
+# Service URLs for routing
+services:
+  users:
+    url: http://users-service:8081/api
+  skills:
+    url: http://skills-service:8082/api
+  projects:
+    url: http://projects-service:8083/api
+  experience:
+    url: http://experience-service:8084/api
+  education:
+    url: http://education-service:8085/api
+  hobbies:
+    url: http://hobbies-service:8086/api
+  testimonials:
+    url: http://testimonials-service:8087/api
+  messages:
+    url: http://messages-service:8088/api
