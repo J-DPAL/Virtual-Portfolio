@@ -34,3 +34,9 @@ services:
     url: http://testimonials-service:8087/api
   messages:
     url: http://messages-service:8088/api
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
