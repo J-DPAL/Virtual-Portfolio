@@ -1,0 +1,27 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+    shutdown:
+      enabled: true
+
+# Eureka server configuration
+# Do not register itself and do not fetch registry
+# Clients will point to this server via docker-compose environment variables
+# or default to localhost when running locally
+#
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
