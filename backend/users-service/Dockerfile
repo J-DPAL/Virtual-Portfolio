@@ -3,14 +3,11 @@ FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copy parent pom
-COPY pom.xml .
+# Copy entire backend so the parent pom can resolve all modules during the targeted build
+COPY . .
 
-# Copy users-service
-COPY users-service/ users-service/
-
-# Build users-service
-RUN mvn clean package -pl users-service -DskipTests
+# Build users-service only (compile all required modules)
+RUN mvn clean package -pl users-service -am -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-alpine

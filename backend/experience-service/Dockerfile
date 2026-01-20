@@ -3,14 +3,11 @@ FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copy parent pom
-COPY pom.xml .
+# Copy entire backend so the parent pom can resolve all modules during the targeted build
+COPY . .
 
-# Copy experience-service
-COPY experience-service/ experience-service/
-
-# Build experience-service
-RUN mvn clean package -pl experience-service -DskipTests
+# Build experience-service only (compile all required modules)
+RUN mvn clean package -pl experience-service -am -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-alpine

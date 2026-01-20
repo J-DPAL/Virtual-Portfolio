@@ -3,14 +3,11 @@ FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copy parent pom
-COPY pom.xml .
+# Copy entire backend so the parent pom can resolve all modules during the targeted build
+COPY . .
 
-# Copy testimonials-service
-COPY testimonials-service/ testimonials-service/
-
-# Build testimonials-service
-RUN mvn clean package -pl testimonials-service -DskipTests
+# Build testimonials-service only (compile all required modules)
+RUN mvn clean package -pl testimonials-service -am -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-alpine
