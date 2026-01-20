@@ -25,3 +25,9 @@ logging:
   level:
     root: INFO
     com.portfolio: DEBUG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
