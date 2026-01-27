@@ -1,61 +1,321 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const [isVisible, setIsVisible] = useState(false);
 
-  const highlights = [
-    { title: t('projects'), desc: 'Recent builds and experiments.', to: '/projects' },
-    { title: t('skills'), desc: 'Tech stack and strengths.', to: '/skills' },
-    { title: t('experience'), desc: 'Work journey and roles.', to: '/experience' },
-    { title: t('contact'), desc: 'Let’s start a conversation.', to: '/contact' },
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const features = [
+    {
+      icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+      title: t('projects'),
+      desc: 'Showcase your amazing work and achievements',
+      to: '/projects',
+      gradient: 'from-blue-500 to-cyan-500',
+    },
+    {
+      icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+      title: t('skills'),
+      desc: 'Display your expertise and tech stack',
+      to: '/skills',
+      gradient: 'from-purple-500 to-pink-500',
+    },
+    {
+      icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+      title: t('experience'),
+      desc: 'Share your professional journey',
+      to: '/experience',
+      gradient: 'from-orange-500 to-red-500',
+    },
+    {
+      icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+      title: t('contact'),
+      desc: "Let's collaborate on your next project",
+      to: '/contact',
+      gradient: 'from-green-500 to-teal-500',
+    },
+  ];
+
+  const stats = [
+    { label: 'Projects Completed', value: '50+', icon: '🚀' },
+    { label: 'Technologies Mastered', value: '20+', icon: '💻' },
+    { label: 'Years of Experience', value: '5+', icon: '⏱️' },
+    { label: 'Client Satisfaction', value: '100%', icon: '⭐' },
   ];
 
   return (
-    <div className="bg-gradient-to-b from-slate-100 via-white to-slate-100">
-      <section className="container mx-auto px-4 pt-14 pb-10 grid gap-8 lg:grid-cols-12 items-center">
-        <div className="lg:col-span-7 space-y-5">
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">Virtual Portfolio</p>
-          <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{t('welcome')}</h1>
-          <p className="text-lg text-slate-600 max-w-2xl">
-            A clean starting point to showcase projects, skills, and experience. Backend wiring will be added next.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/projects" className="px-5 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">View projects</Link>
-            <Link to="/contact" className="px-5 py-3 rounded-xl border border-slate-200 text-slate-800 font-medium hover:border-blue-200 hover:text-blue-700 transition">Contact</Link>
+    <div className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+      {/* Hero Section with Animated Gradient */}
+      <section className="relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div
+          className={`relative container mx-auto px-4 pt-20 pb-32 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center px-4 py-2 bg-white bg-opacity-10 backdrop-blur-md rounded-full border border-white border-opacity-20 mb-8">
+              <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+              <span className="text-white text-sm font-medium">
+                Available for new opportunities
+              </span>
+            </div>
+
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 animate-gradient">
+                {t('welcome')}
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Full-stack developer crafting beautiful, performant web
+              experiences with modern technologies. Turning ideas into reality,
+              one line of code at a time.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <Link
+                to="/projects"
+                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl font-semibold text-white overflow-hidden transition-all hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-1"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  View My Work
+                  <svg
+                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </Link>
+
+              <Link
+                to="/contact"
+                className="px-8 py-4 bg-white bg-opacity-10 backdrop-blur-md border-2 border-white border-opacity-20 rounded-2xl font-semibold text-white hover:bg-opacity-20 transition-all hover:-translate-y-1"
+              >
+                Get In Touch
+              </Link>
+            </div>
+
+            {/* Floating Tech Stack Pills */}
+            <div className="flex flex-wrap gap-3 justify-center">
+              {['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'AWS'].map(
+                (tech, idx) => (
+                  <div
+                    key={tech}
+                    className="px-4 py-2 bg-white bg-opacity-5 backdrop-blur-sm border border-white border-opacity-10 rounded-full text-slate-300 text-sm hover:bg-opacity-10 transition-all cursor-default"
+                    style={{ animationDelay: `${idx * 100}ms` }}
+                  >
+                    {tech}
+                  </div>
+                )
+              )}
+            </div>
           </div>
         </div>
-        <div className="lg:col-span-5">
-          <div className="bg-white rounded-3xl shadow-lg border border-slate-100 p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-500">Current focus</p>
-                <p className="text-lg font-semibold text-slate-900">Spring Boot • React • PostgreSQL</p>
+
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg
+            viewBox="0 0 1440 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z"
+              fill="rgb(248, 250, 252)"
+            />
+          </svg>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="bg-slate-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, idx) => (
+              <div
+                key={stat.label}
+                className="text-center transform hover:scale-105 transition-transform"
+                style={{ animationDelay: `${idx * 150}ms` }}
+              >
+                <div className="text-5xl mb-3">{stat.icon}</div>
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-cyan-600 mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-slate-600 font-medium">{stat.label}</div>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">In progress</span>
-            </div>
-            <p className="text-slate-600">Docker-compose spins up gateway, services, database, and frontend. This UI is a starter you can refine later.</p>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="container mx-auto px-4 pb-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {highlights.map((item) => (
-            <Link
-              key={item.title}
-              to={item.to}
-              className="group bg-white rounded-2xl shadow-sm border border-slate-100 p-5 hover:-translate-y-1 hover:shadow-md transition block"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-slate-900">{item.title}</h2>
-                <span className="text-blue-600 group-hover:translate-x-1 transition">→</span>
-              </div>
-              <p className="text-slate-600">{item.desc}</p>
-            </Link>
-          ))}
+      {/* Features Grid */}
+      <section className="bg-slate-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+              Explore My Portfolio
+            </h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+              Discover my projects, skills, and professional journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {features.map((feature, idx) => (
+              <Link
+                key={feature.title}
+                to={feature.to}
+                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+                style={{ animationDelay: `${idx * 100}ms` }}
+              >
+                {/* Gradient Overlay on Hover */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}
+                ></div>
+
+                {/* Icon */}
+                <div
+                  className={`relative w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform`}
+                >
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d={feature.icon}
+                    />
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <h3 className="relative text-2xl font-bold text-slate-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-cyan-600 transition-all">
+                  {feature.title}
+                </h3>
+                <p className="relative text-slate-600 mb-4">{feature.desc}</p>
+
+                {/* Arrow */}
+                <div
+                  className={`relative inline-flex items-center text-sm font-semibold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}
+                >
+                  Explore
+                  <svg
+                    className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-br from-purple-900 via-slate-900 to-cyan-900 py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to Start Your Project?
+          </h2>
+          <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
+            Let&apos;s collaborate to bring your ideas to life with cutting-edge
+            technology and creative solutions.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl font-bold text-white text-lg hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-1 transition-all"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+            Let&apos;s Talk
+          </Link>
+        </div>
+      </section>
+
+      <style>{`
+        @keyframes blob {
+          0%, 100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+        
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+
+        @keyframes gradient {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
     </div>
   );
 }
