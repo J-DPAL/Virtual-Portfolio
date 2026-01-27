@@ -1,4 +1,5 @@
-import { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -22,7 +23,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, isAuthenticated, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -34,4 +37,8 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
