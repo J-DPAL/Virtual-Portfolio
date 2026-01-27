@@ -1,37 +1,163 @@
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { getAllProjects } from '../services/projectsService';
 
 export default function ProjectsPage() {
-  const { t } = useTranslation();
-  const projects = [
-    { title: 'Portfolio Website', stack: 'React, Tailwind, Vite', status: 'Live' },
-    { title: 'API Gateway', stack: 'Spring Boot, Eureka', status: 'Planned' },
-    { title: 'Skills Service', stack: 'Spring Boot, PostgreSQL', status: 'In Progress' },
-  ];
+  const { t, i18n } = useTranslation();
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const currentLang = i18n.language;
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllProjects();
+      setProjects(response.data);
+    } catch (err) {
+      setError('Failed to load projects');
+      console.error('Error fetching projects:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-pink-50">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <p className="mt-4 text-slate-600">{t('loading')}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <header className="mb-8 flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <p className="text-sm text-slate-500 uppercase tracking-wide">{t('projects')}</p>
-          <h1 className="text-3xl font-bold text-slate-900">Highlighted Projects</h1>
-          <p className="text-slate-600 mt-2">A quick look at what is built and what is coming next.</p>
-        </div>
-        <Link to="/contact" className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
-          Get in touch
-        </Link>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-pink-50 py-12">
+      <div className="container mx-auto px-4">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600 mb-4">
+            {t('projects')}
+          </h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
+            Explore my portfolio of projects showcasing innovation and technical
+            expertise
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+          >
+            Get in Touch
+            <svg
+              className="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </Link>
+        </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <div key={project.title} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:-translate-y-1 hover:shadow-md transition">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-semibold text-slate-900">{project.title}</h2>
-              <span className="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">{project.status}</span>
-            </div>
-            <p className="text-slate-600">{project.stack}</p>
+        {error && (
+          <div className="max-w-2xl mx-auto mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {error}
           </div>
-        ))}
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="group bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="bg-gradient-to-br from-indigo-500 to-purple-600 h-48 flex items-center justify-center">
+                <svg
+                  className="w-20 h-20 text-white opacity-80"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                  />
+                </svg>
+              </div>
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition">
+                  {currentLang === 'fr' && project.titleFr
+                    ? project.titleFr
+                    : project.titleEn}
+                </h2>
+                <p className="text-slate-600 mb-4 line-clamp-3">
+                  {currentLang === 'fr' && project.descriptionFr
+                    ? project.descriptionFr
+                    : project.descriptionEn}
+                </p>
+                {project.technologies && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.technologies
+                      .split(',')
+                      .slice(0, 3)
+                      .map((tech, idx) => (
+                        <span
+                          key={idx}
+                          className="text-xs px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-medium"
+                        >
+                          {tech.trim()}
+                        </span>
+                      ))}
+                  </div>
+                )}
+                {project.projectUrl && (
+                  <a
+                    href={project.projectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium transition"
+                  >
+                    View Project
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {projects.length === 0 && !loading && (
+          <div className="text-center py-12">
+            <p className="text-slate-600 text-lg">
+              No projects available at the moment.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
