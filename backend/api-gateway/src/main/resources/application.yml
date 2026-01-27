@@ -16,24 +16,24 @@ logging:
     root: INFO
     com.portfolio: DEBUG
 
-# Service URLs for routing
+# Service URLs for routing (NO /api suffix - services run at root context)
 services:
   users:
-    url: http://users-service:8081/api
+    url: http://users-service:8081
   skills:
-    url: http://skills-service:8082/api
+    url: http://skills-service:8082
   projects:
-    url: http://projects-service:8083/api
+    url: http://projects-service:8083
   experience:
-    url: http://experience-service:8084/api
+    url: http://experience-service:8084
   education:
-    url: http://education-service:8085/api
+    url: http://education-service:8085
   hobbies:
-    url: http://hobbies-service:8086/api
+    url: http://hobbies-service:8086
   testimonials:
-    url: http://testimonials-service:8087/api
+    url: http://testimonials-service:8087
   messages:
-    url: http://messages-service:8088/api
+    url: http://messages-service:8088
 eureka:
   client:
     serviceUrl:
