@@ -1,39 +1,39 @@
 package com.portfolio.skills.mappingLayer.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class SkillDTO {
-    private Long id;
+  private Long id;
 
-    @NotBlank(message = "English name is required")
-    private String nameEn;
+  @NotBlank(message = "English name is required")
+  private String nameEn;
 
-    @NotBlank(message = "Arabic name is required")
-    private String nameAr;
+  @NotBlank(message = "Arabic name is required")
+  private String nameAr;
 
-    private String descriptionEn;
-    private String descriptionAr;
+  private String descriptionEn;
+  private String descriptionAr;
 
-    @NotBlank(message = "Proficiency level is required")
-    private String proficiencyLevel;
+  @NotBlank(message = "Proficiency level is required")
+  private String proficiencyLevel;
 
-    @NotBlank(message = "Category is required")
-    private String category;
+  @NotBlank(message = "Category is required")
+  private String category;
 
-    @Min(value = 0, message = "Years of experience must be positive")
-    private Integer yearsOfExperience;
+  @Min(value = 0, message = "Years of experience must be positive")
+  private Integer yearsOfExperience;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 }
