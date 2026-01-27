@@ -58,6 +58,7 @@ services:
       - hobbies-service
       - testimonials-service
       - messages-service
+      - files-service
     networks:
       - portfolio-network
 
@@ -254,6 +255,33 @@ services:
     networks:
       - portfolio-network
 
+  # Files Service - Resume Upload/Download
+  files-service:
+    build:
+      context: ./backend
+      dockerfile: ./files-service/Dockerfile
+    container_name: portfolio-files-service
+    environment:
+      SPRING_APPLICATION_NAME: files-service
+      SERVER_PORT: 8090
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8090:8090"
+    volumes:
+      - resume_uploads:/app/uploads/resumes
+    depends_on:
+      eureka-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
   # React Frontend
   frontend:
     build:
@@ -272,6 +300,7 @@ services:
 
 volumes:
   postgres_data:
+  resume_uploads:
 
 networks:
   portfolio-network:
