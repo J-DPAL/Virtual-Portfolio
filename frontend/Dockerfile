@@ -9,6 +9,10 @@ RUN npm ci
 
 COPY . .
 
+# Vite reads VITE_* at build time; allow override via build-arg
+ARG VITE_API_BASE_URL=http://localhost:8080/api
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
 RUN npm run build
 
 # Runtime stage
