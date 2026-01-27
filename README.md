@@ -3,6 +3,15 @@
 ## Project Description
 A fully dynamic, bilingual portfolio website built with Java microservices architecture and React frontend, featuring an API Gateway router and independent microservices for different portfolio components.
 
+## Feature Checklist (this branch)
+- ✅ Docker-based deployment: `docker-compose up --build` brings up Postgres (with seeded admin), Eureka, gateway, all microservices, frontend; persistent volumes for Postgres and resume uploads.
+- ✅ Public/Admin separation: admin routes are behind auth (`ProtectedRoute`), public pages remain open; admin UI not rendered without a token.
+- ✅ Internationalization: frontend uses i18next (EN/FR) with RTL toggle; backend models store multilingual fields (e.g., `*_en` / `*_ar`).
+- ⚠️ Automated testing: backend `./mvnw test` is supported but no authored suites; add JUnit/WebTestClient coverage per service. Frontend lint/format scripts exist; add unit/E2E.
+- ⚠️ End-to-end tests: not yet implemented—recommend Playwright/Cypress hitting the Docker stack (admin login, CRUD flows, contact/testimonials).
+- ⚠️ Documentation: this README documents setup/architecture; extend with troubleshooting and E2E steps as tests are added.
+- ✅ Licensing: MIT license present (see LICENSE).
+
 ## Tech Stack
 - **Backend**: Java 17, Spring Boot 3.2, PostgreSQL, JWT, Spring Cloud, Microservices Architecture
 - **API Gateway**: Spring Boot with routing and load balancing
@@ -98,6 +107,11 @@ This will start all 9 services:
 - Testimonials Service on port 8087
 - Messages Service on port 8088
 - React frontend on port 3000
+
+Environment variables of note (Compose defaults are set):
+- VITE_API_BASE_URL (frontend build/runtime, defaults to http://api-gateway:8080/api in Docker)
+- DB_USERNAME / DB_PASSWORD (Postgres auth)
+- JWT_SECRET (backend auth signing secret)
 
 ### Access the application:
 - Frontend: http://localhost:3000
