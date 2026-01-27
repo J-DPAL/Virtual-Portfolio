@@ -1,0 +1,56 @@
+package com.portfolio.education.mappingLayer.dto;
+
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EducationDTO {
+    private Long id;
+
+    @NotBlank(message = "Institution name in English is required")
+    private String institutionNameEn;
+
+    @NotBlank(message = "Institution name in Arabic is required")
+    private String institutionNameAr;
+
+    @NotBlank(message = "Degree in English is required")
+    private String degreeEn;
+
+    @NotBlank(message = "Degree in Arabic is required")
+    private String degreeAr;
+
+    @NotBlank(message = "Field of study in English is required")
+    private String fieldOfStudyEn;
+
+    @NotBlank(message = "Field of study in Arabic is required")
+    private String fieldOfStudyAr;
+
+    private String descriptionEn;
+    private String descriptionAr;
+
+    @NotNull(message = "Start date is required")
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    @NotNull(message = "Current status is required")
+    private Boolean isCurrent;
+
+    @DecimalMin(value = "0.00", message = "GPA must be at least 0.00")
+    @DecimalMax(value = "4.00", message = "GPA must not exceed 4.00")
+    @Digits(integer = 1, fraction = 2, message = "GPA must have at most 1 integer digit and 2 decimal places")
+    private BigDecimal gpa;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}
