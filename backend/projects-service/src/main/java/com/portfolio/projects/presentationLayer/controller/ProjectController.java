@@ -1,67 +1,70 @@
 package com.portfolio.projects.presentationLayer.controller;
 
-import com.portfolio.projects.businessLayer.service.ProjectService;
-import com.portfolio.projects.mappingLayer.dto.ProjectDTO;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.portfolio.projects.businessLayer.service.ProjectService;
+import com.portfolio.projects.mappingLayer.dto.ProjectDTO;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/projects")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class ProjectController {
 
-    private final ProjectService projectService;
+  private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService) {
-        this.projectService = projectService;
-    }
+  public ProjectController(ProjectService projectService) {
+    this.projectService = projectService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
-        List<ProjectDTO> projects = projectService.getAllProjects();
-        return ResponseEntity.ok(projects);
-    }
+  @GetMapping
+  public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+    List<ProjectDTO> projects = projectService.getAllProjects();
+    return ResponseEntity.ok(projects);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
-        ProjectDTO project = projectService.getProjectById(id);
-        return ResponseEntity.ok(project);
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
+    ProjectDTO project = projectService.getProjectById(id);
+    return ResponseEntity.ok(project);
+  }
 
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<ProjectDTO>> getProjectsByStatus(@PathVariable String status) {
-        List<ProjectDTO> projects = projectService.getProjectsByStatus(status);
-        return ResponseEntity.ok(projects);
-    }
+  @GetMapping("/status/{status}")
+  public ResponseEntity<List<ProjectDTO>> getProjectsByStatus(@PathVariable String status) {
+    List<ProjectDTO> projects = projectService.getProjectsByStatus(status);
+    return ResponseEntity.ok(projects);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
-        ProjectDTO createdProject = projectService.createProject(projectDTO);
-        return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping
+  public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
+    ProjectDTO createdProject = projectService.createProject(projectDTO);
+    return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
-        ProjectDTO updatedProject = projectService.updateProject(id, projectDTO);
-        return ResponseEntity.ok(updatedProject);
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping("/{id}")
+  public ResponseEntity<ProjectDTO> updateProject(
+      @PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
+    ProjectDTO updatedProject = projectService.updateProject(id, projectDTO);
+    return ResponseEntity.ok(updatedProject);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
-        return ResponseEntity.noContent().build();
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+    projectService.deleteProject(id);
+    return ResponseEntity.noContent().build();
+  }
 
-    @GetMapping("/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("Projects service is running");
-    }
+  @GetMapping("/health")
+  public ResponseEntity<String> health() {
+    return ResponseEntity.ok("Projects service is running");
+  }
 }
