@@ -1,12 +1,13 @@
 package com.portfolio.files.dataAccessLayer.repository;
 
-import com.portfolio.files.dataAccessLayer.entity.Resume;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.portfolio.files.dataAccessLayer.entity.Resume;
 
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
-    Optional<Resume> findTopByOrderByUploadedAtDesc();
+  Optional<Resume> findTopByOrderByUploadedAtDesc();
 }

@@ -7,7 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 public class FilesServiceApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(FilesServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(FilesServiceApplication.class, args);
+  }
 }
