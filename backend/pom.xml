@@ -29,6 +29,7 @@
         <module>hobbies-service</module>
         <module>testimonials-service</module>
         <module>messages-service</module>
+        <module>files-service</module>
         <module>eureka-server</module>
     </modules>
 
