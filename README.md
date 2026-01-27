@@ -90,6 +90,19 @@ Virtual Portfolio/
 
 ## Docker Deployment
 
+### Secrets Management
+⚠️ **Critical for Production:** Set strong secrets via environment variables or `.env.production`:
+```bash
+# Generate strong JWT secret
+openssl rand -base64 32
+
+# Copy .env.example to .env (or use .env.production) and set:
+# DB_USERNAME=production_user
+# DB_PASSWORD=$(openssl rand -base64 16)
+# JWT_SECRET=$(openssl rand -base64 32)
+```
+Never commit real secrets to git. Use `.env.production` (ignored) or CI/CD secret management.
+
 ### Start all microservices:
 ```bash
 docker-compose up --build
@@ -110,8 +123,8 @@ This will start all 9 services:
 
 Environment variables of note (Compose defaults are set):
 - VITE_API_BASE_URL (frontend build/runtime, defaults to http://api-gateway:8080/api in Docker)
-- DB_USERNAME / DB_PASSWORD (Postgres auth)
-- JWT_SECRET (backend auth signing secret)
+- `DB_USERNAME` / `DB_PASSWORD` (Postgres auth; change in production)
+- `JWT_SECRET` (backend auth signing secret; use strong 32-char value via `openssl rand -base64 32`; defaults to dev-only unsafe value)
 
 ### Access the application:
 - Frontend: http://localhost:3000

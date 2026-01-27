@@ -44,7 +44,8 @@ services:
       SPRING_APPLICATION_NAME: api-gateway
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: prod
-      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
       - "8080:8080"
@@ -74,7 +75,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
-      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -267,7 +269,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
-      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
