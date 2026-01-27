@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class EducationServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EducationServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(EducationServiceApplication.class, args);
+  }
 }

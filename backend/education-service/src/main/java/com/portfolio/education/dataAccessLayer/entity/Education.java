@@ -1,13 +1,14 @@
 package com.portfolio.education.dataAccessLayer.entity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "education")
@@ -17,62 +18,62 @@ import java.time.LocalDateTime;
 @Builder
 public class Education {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String institutionNameEn;
+  @Column(nullable = false)
+  private String institutionNameEn;
 
-    @Column(nullable = false)
-    private String institutionNameAr;
+  @Column(nullable = false)
+  private String institutionNameAr;
 
-    @Column(nullable = false)
-    private String degreeEn;
+  @Column(nullable = false)
+  private String degreeEn;
 
-    @Column(nullable = false)
-    private String degreeAr;
+  @Column(nullable = false)
+  private String degreeAr;
 
-    @Column(nullable = false)
-    private String fieldOfStudyEn;
+  @Column(nullable = false)
+  private String fieldOfStudyEn;
 
-    @Column(nullable = false)
-    private String fieldOfStudyAr;
+  @Column(nullable = false)
+  private String fieldOfStudyAr;
 
-    @Column(length = 2000)
-    private String descriptionEn;
+  @Column(length = 2000)
+  private String descriptionEn;
 
-    @Column(length = 2000)
-    private String descriptionAr;
+  @Column(length = 2000)
+  private String descriptionAr;
 
-    @Column(nullable = false)
-    private LocalDate startDate;
+  @Column(nullable = false)
+  private LocalDate startDate;
 
-    private LocalDate endDate;
+  private LocalDate endDate;
 
-    @Column(nullable = false)
-    private Boolean isCurrent;
+  @Column(nullable = false)
+  private Boolean isCurrent;
 
-    @Column(precision = 3, scale = 2)
-    private BigDecimal gpa;
+  @Column(precision = 3, scale = 2)
+  private BigDecimal gpa;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+  @Column(nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-        if (isCurrent == null) {
-            isCurrent = false;
-        }
+  @PrePersist
+  protected void onCreate() {
+    createdAt = LocalDateTime.now();
+    updatedAt = LocalDateTime.now();
+    if (isCurrent == null) {
+      isCurrent = false;
     }
+  }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+  @PreUpdate
+  protected void onUpdate() {
+    updatedAt = LocalDateTime.now();
+  }
 }
