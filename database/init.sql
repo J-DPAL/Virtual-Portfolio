@@ -128,7 +128,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_read ON messages(is_read);
 CREATE INDEX IF NOT EXISTS idx_testimonials_status ON testimonials(status);
 
 -- Insert default admin user (password: admin123 - should be changed in production)
--- Use bcrypt to hash password: $2a$10$slYQmyNdGzin7olVN3p5Be
+-- BCrypt hash generated with cost 10
 INSERT INTO users (email, password, full_name, role, active) 
-VALUES ('admin@portfolio.com', '$2a$10$slYQmyNdGzin7olVN3p5Be7.5xwlm/EhIxYDXxMl.rM6SqKOUIxGi', 'Admin User', 'ADMIN', true)
+VALUES ('admin@portfolio.com', '$2a$10$DNrpFf/oVX7ug4BkCTgVv.xEscg7I2Ri5D5qO9NEgXif/pneqs92C', 'Admin User', 'ADMIN', true)
 ON CONFLICT DO NOTHING;
