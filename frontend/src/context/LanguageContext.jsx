@@ -1,9 +1,12 @@
-import { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
+  const [language, setLanguage] = useState(
+    localStorage.getItem('language') || 'en'
+  );
 
   const switchLanguage = (lang) => {
     setLanguage(lang);
@@ -23,4 +26,8 @@ export const useLanguage = () => {
     throw new Error('useLanguage must be used within LanguageProvider');
   }
   return context;
+};
+
+LanguageProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
