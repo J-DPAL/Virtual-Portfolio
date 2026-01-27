@@ -21,28 +21,28 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 @Configuration
 public class GatewayConfig {
 
-    @Value("${services.users.url}")
+    @Value("${services.users.url:http://users-service:8081}")
     private String usersServiceUrl;
 
-    @Value("${services.skills.url}")
+    @Value("${services.skills.url:http://skills-service:8082}")
     private String skillsServiceUrl;
 
-    @Value("${services.projects.url}")
+    @Value("${services.projects.url:http://projects-service:8083}")
     private String projectsServiceUrl;
 
-    @Value("${services.experience.url}")
+    @Value("${services.experience.url:http://experience-service:8084}")
     private String experienceServiceUrl;
 
-    @Value("${services.education.url}")
+    @Value("${services.education.url:http://education-service:8085}")
     private String educationServiceUrl;
 
-    @Value("${services.hobbies.url}")
+    @Value("${services.hobbies.url:http://hobbies-service:8086}")
     private String hobbiesServiceUrl;
 
-    @Value("${services.testimonials.url}")
+    @Value("${services.testimonials.url:http://testimonials-service:8087}")
     private String testimonialsServiceUrl;
 
-    @Value("${services.messages.url}")
+    @Value("${services.messages.url:http://messages-service:8088}")
     private String messagesServiceUrl;
 
     @Bean
@@ -138,15 +138,23 @@ public class GatewayConfig {
             });
 
             // Create entity with body when applicable
-            // Always provide a non-null HttpEntity (body may be null, entity must not)
-            String body = (request.method() == HttpMethod.GET || request.method() == HttpMethod.DELETE)
-                    ? null
-                    : request.body(String.class);
-            HttpEntity<String> entity = new HttpEntity<>(body, headers);
+            // Always provide a non-null HttpEntity instance
+            HttpMethod httpMethod = HttpMethod.valueOf(request.method().name());
+            String body = null;
+            if (!(httpMethod == HttpMethod.GET || httpMethod == HttpMethod.DELETE || httpMethod == HttpMethod.HEAD || httpMethod == HttpMethod.OPTIONS)) {
+                try {
+                    body = request.body(String.class);
+                } catch (Exception ignore) {
+                    body = null;
+                }
+            }
+            HttpEntity<String> entity = (body == null)
+                    ? new HttpEntity<>(headers)
+                    : new HttpEntity<>(body, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
                     uri,
-                    HttpMethod.valueOf(request.method().name()),
+                    httpMethod,
                     entity,
                     String.class
             );
