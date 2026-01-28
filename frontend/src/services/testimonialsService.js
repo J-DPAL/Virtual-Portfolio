@@ -3,7 +3,7 @@ import apiClient from './apiClient';
 export const getAllTestimonials = () => apiClient.get('/testimonials');
 
 export const getApprovedTestimonials = () =>
-  apiClient.get('/testimonials/approved');
+  apiClient.get('/testimonials'); // Backend /testimonials already returns approved ones
 
 export const getTestimonialById = (id) =>
   apiClient.get(`/testimonials/${id}`);
