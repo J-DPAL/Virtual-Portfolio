@@ -1,21 +1,21 @@
 import apiClient from './apiClient';
 
-export const getAllTestimonials = () => apiClient.get('/v1/testimonials');
+export const getAllTestimonials = () => apiClient.get('/testimonials');
 
 export const getApprovedTestimonials = () =>
-  apiClient.get('/v1/testimonials/approved');
+  apiClient.get('/testimonials/approved');
 
 export const getTestimonialById = (id) =>
-  apiClient.get(`/v1/testimonials/${id}`);
+  apiClient.get(`/testimonials/${id}`);
 
 export const submitTestimonial = (testimonialData) =>
-  apiClient.post('/v1/testimonials', testimonialData);
+  apiClient.post('/testimonials', testimonialData);
 
 export const updateTestimonial = (id, testimonialData) =>
-  apiClient.put(`/v1/testimonials/${id}`, testimonialData);
+  apiClient.put(`/testimonials/${id}`, testimonialData);
 
 export const approveTestimonial = (id) =>
-  apiClient.patch(`/v1/testimonials/${id}/approve`);
+  apiClient.patch(`/testimonials/${id}/approve`);
 
 export const deleteTestimonial = (id) =>
-  apiClient.delete(`/v1/testimonials/${id}`);
+  apiClient.delete(`/testimonials/${id}`);
