@@ -28,9 +28,9 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/resume/download", "/api/resume/current")
+                auth.requestMatchers("/resume/download", "/resume/current")
                     .permitAll()
-                    .requestMatchers("/api/resume/upload")
+                    .requestMatchers("/resume/upload")
                     .hasRole("ADMIN")
                     .requestMatchers("/actuator/health")
                     .permitAll()

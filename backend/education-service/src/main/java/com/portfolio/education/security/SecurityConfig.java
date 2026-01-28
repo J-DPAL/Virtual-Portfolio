@@ -28,7 +28,7 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/education/**")
+                auth.requestMatchers("/education/**")
                     .permitAll()
                     .requestMatchers("/actuator/health")
                     .permitAll()

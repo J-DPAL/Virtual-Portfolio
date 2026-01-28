@@ -28,7 +28,7 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/skills/**")
+                auth.requestMatchers("/skills/**")
                     .permitAll() // GET allowed for public, POST/PUT/DELETE controlled by
                     // @PreAuthorize
                     .requestMatchers("/actuator/health")
