@@ -14,6 +14,7 @@ import com.portfolio.messages.utils.exceptions.ResourceNotFoundException;
 
 @Service
 @Transactional
+@SuppressWarnings("null")
 public class MessageService {
 
   private final MessageRepository messageRepository;
