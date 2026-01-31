@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ export default function AdminLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { isDark } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,18 +33,30 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div
+      className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200 ${
+        isDark ? 'bg-slate-950' : 'bg-gray-50'
+      }`}
+    >
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2
+            className={`mt-6 text-center text-3xl font-extrabold ${
+              isDark ? 'text-slate-100' : 'text-gray-900'
+            }`}
+          >
             {t('admin')}
           </h2>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm font-medium text-red-800">{error}</p>
+            <div
+              className={`rounded-md p-4 ${
+                isDark ? 'bg-rose-900 text-rose-200' : 'bg-red-50 text-red-800'
+              }`}
+            >
+              <p className="text-sm font-medium">{error}</p>
             </div>
           )}
 
@@ -56,7 +70,11 @@ export default function AdminLogin() {
                 name="email"
                 type="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm ${
+                  isDark
+                    ? 'bg-slate-800 border border-slate-600 text-slate-100 placeholder-slate-400'
+                    : 'border border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                }`}
                 placeholder={t('email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -71,7 +89,11 @@ export default function AdminLogin() {
                 name="password"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm ${
+                  isDark
+                    ? 'bg-slate-800 border border-slate-600 text-slate-100 placeholder-slate-400'
+                    : 'border border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                }`}
                 placeholder={t('password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
