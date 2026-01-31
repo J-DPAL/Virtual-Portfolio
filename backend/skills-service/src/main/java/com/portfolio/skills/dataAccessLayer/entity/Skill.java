@@ -26,11 +26,17 @@ public class Skill {
   @Column(nullable = false)
   private String nameFr;
 
+  @Column(nullable = false)
+  private String nameEs;
+
   @Column(length = 1000)
   private String descriptionEn;
 
   @Column(length = 1000)
   private String descriptionFr;
+
+  @Column(length = 1000)
+  private String descriptionEs;
 
   @Column(nullable = false)
   private String proficiencyLevel; // Beginner, Intermediate, Advanced, Expert

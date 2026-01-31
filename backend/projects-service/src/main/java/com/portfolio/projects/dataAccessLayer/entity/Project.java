@@ -25,13 +25,19 @@ public class Project {
   private String titleEn;
 
   @Column(nullable = false)
-  private String titleAr;
+  private String titleFr;
+
+  @Column(nullable = false)
+  private String titleEs;
 
   @Column(length = 2000)
   private String descriptionEn;
 
   @Column(length = 2000)
-  private String descriptionAr;
+  private String descriptionFr;
+
+  @Column(length = 2000)
+  private String descriptionEs;
 
   @Column(length = 1000)
   private String technologies; // Comma-separated or JSON string

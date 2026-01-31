@@ -20,10 +20,16 @@ export default function EducationManagement() {
   const [formData, setFormData] = useState({
     degreeEn: '',
     degreeFr: '',
+    degreeEs: '',
     institutionEn: '',
     institutionFr: '',
+    institutionEs: '',
     fieldEn: '',
     fieldFr: '',
+    fieldEs: '',
+    descriptionEn: '',
+    descriptionFr: '',
+    descriptionEs: '',
     location: '',
     startDate: '',
     endDate: '',
@@ -57,10 +63,16 @@ export default function EducationManagement() {
     setFormData({
       degreeEn: '',
       degreeFr: '',
+      degreeEs: '',
       institutionEn: '',
       institutionFr: '',
+      institutionEs: '',
       fieldEn: '',
       fieldFr: '',
+      fieldEs: '',
+      descriptionEn: '',
+      descriptionFr: '',
+      descriptionEs: '',
       location: '',
       startDate: '',
       endDate: '',
@@ -74,10 +86,16 @@ export default function EducationManagement() {
     setFormData({
       degreeEn: edu.degreeEn || '',
       degreeFr: edu.degreeFr || '',
+      degreeEs: edu.degreeEs || '',
       institutionEn: edu.institutionEn || '',
       institutionFr: edu.institutionFr || '',
+      institutionEs: edu.institutionEs || '',
       fieldEn: edu.fieldEn || '',
       fieldFr: edu.fieldFr || '',
+      fieldEs: edu.fieldEs || '',
+      descriptionEn: edu.descriptionEn || '',
+      descriptionFr: edu.descriptionFr || '',
+      descriptionEs: edu.descriptionEs || '',
       location: edu.location || '',
       startDate: edu.startDate || '',
       endDate: edu.endDate || '',
@@ -363,6 +381,20 @@ export default function EducationManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Degree (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.degreeEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, degreeEs: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -400,6 +432,23 @@ export default function EducationManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Institution (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.institutionEs}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          institutionEs: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -426,6 +475,20 @@ export default function EducationManagement() {
                       value={formData.fieldFr}
                       onChange={(e) =>
                         setFormData({ ...formData, fieldFr: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Field (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.fieldEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, fieldEs: e.target.value })
                       }
                       className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
                       required

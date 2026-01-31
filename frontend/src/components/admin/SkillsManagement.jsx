@@ -20,8 +20,10 @@ export default function SkillsManagement() {
   const [formData, setFormData] = useState({
     nameEn: '',
     nameFr: '',
+    nameEs: '',
     descriptionEn: '',
     descriptionFr: '',
+    descriptionEs: '',
     proficiency: 'intermediate',
   });
   const [successMessage, setSuccessMessage] = useState('');
@@ -52,8 +54,10 @@ export default function SkillsManagement() {
     setFormData({
       nameEn: '',
       nameFr: '',
+      nameEs: '',
       descriptionEn: '',
       descriptionFr: '',
+      descriptionEs: '',
       proficiency: 'intermediate',
     });
     setShowModal(true);
@@ -64,8 +68,10 @@ export default function SkillsManagement() {
     setFormData({
       nameEn: skill.nameEn || '',
       nameFr: skill.nameFr || '',
+      nameEs: skill.nameEs || '',
       descriptionEn: skill.descriptionEn || '',
       descriptionFr: skill.descriptionFr || '',
+      descriptionEs: skill.descriptionEs || '',
       proficiency: skill.proficiency || 'intermediate',
     });
     setShowModal(true);
@@ -352,6 +358,20 @@ export default function SkillsManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Name (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.nameEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameEs: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -382,6 +402,24 @@ export default function SkillsManagement() {
                       setFormData({
                         ...formData,
                         descriptionFr: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Description (Spanish)
+                  </label>
+                  <textarea
+                    value={formData.descriptionEs}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        descriptionEs: e.target.value,
                       })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"

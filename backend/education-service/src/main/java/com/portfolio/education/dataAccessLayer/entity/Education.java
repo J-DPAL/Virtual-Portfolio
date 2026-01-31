@@ -29,10 +29,16 @@ public class Education {
   private String institutionNameFr;
 
   @Column(nullable = false)
+  private String institutionNameEs;
+
+  @Column(nullable = false)
   private String degreeEn;
 
   @Column(nullable = false)
   private String degreeFr;
+
+  @Column(nullable = false)
+  private String degreeEs;
 
   @Column(nullable = false)
   private String fieldOfStudyEn;
@@ -40,11 +46,17 @@ public class Education {
   @Column(nullable = false)
   private String fieldOfStudyFr;
 
+  @Column(nullable = false)
+  private String fieldOfStudyEs;
+
   @Column(length = 2000)
   private String descriptionEn;
 
   @Column(length = 2000)
   private String descriptionFr;
+
+  @Column(length = 2000)
+  private String descriptionEs;
 
   @Column(nullable = false)
   private LocalDate startDate;

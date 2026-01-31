@@ -98,14 +98,18 @@ export default function ProjectsPage() {
               </div>
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition">
-                  {currentLang === 'fr' && project.titleFr
-                    ? project.titleFr
-                    : project.titleEn}
+                  {currentLang === 'es' && project.titleEs
+                    ? project.titleEs
+                    : currentLang === 'fr' && project.titleFr
+                      ? project.titleFr
+                      : project.titleEn}
                 </h2>
                 <p className="text-slate-600 mb-4 line-clamp-3">
-                  {currentLang === 'fr' && project.descriptionFr
-                    ? project.descriptionFr
-                    : project.descriptionEn}
+                  {currentLang === 'es' && project.descriptionEs
+                    ? project.descriptionEs
+                    : currentLang === 'fr' && project.descriptionFr
+                      ? project.descriptionFr
+                      : project.descriptionEn}
                 </p>
                 {project.technologies && (
                   <div className="flex flex-wrap gap-2 mb-4">

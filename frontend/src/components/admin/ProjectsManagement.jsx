@@ -20,8 +20,10 @@ export default function ProjectsManagement() {
   const [formData, setFormData] = useState({
     titleEn: '',
     titleFr: '',
+    titleEs: '',
     descriptionEn: '',
     descriptionFr: '',
+    descriptionEs: '',
     technologies: '',
     githubLink: '',
     liveLink: '',
@@ -54,8 +56,10 @@ export default function ProjectsManagement() {
     setFormData({
       titleEn: '',
       titleFr: '',
+      titleEs: '',
       descriptionEn: '',
       descriptionFr: '',
+      descriptionEs: '',
       technologies: '',
       githubLink: '',
       liveLink: '',
@@ -68,8 +72,10 @@ export default function ProjectsManagement() {
     setFormData({
       titleEn: project.titleEn || '',
       titleFr: project.titleFr || '',
+      titleEs: project.titleEs || '',
       descriptionEn: project.descriptionEn || '',
       descriptionFr: project.descriptionFr || '',
+      descriptionEs: project.descriptionEs || '',
       technologies: Array.isArray(project.technologies)
         ? project.technologies.join(', ')
         : '',
@@ -339,6 +345,20 @@ export default function ProjectsManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Title (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.titleEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, titleEs: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -369,6 +389,24 @@ export default function ProjectsManagement() {
                       setFormData({
                         ...formData,
                         descriptionFr: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Description (Spanish)
+                  </label>
+                  <textarea
+                    value={formData.descriptionEs}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        descriptionEs: e.target.value,
                       })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"

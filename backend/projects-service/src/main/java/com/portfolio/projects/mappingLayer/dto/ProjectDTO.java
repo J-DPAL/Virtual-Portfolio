@@ -20,11 +20,15 @@ public class ProjectDTO {
   @NotBlank(message = "English title is required")
   private String titleEn;
 
-  @NotBlank(message = "Arabic title is required")
-  private String titleAr;
+  @NotBlank(message = "French title is required")
+  private String titleFr;
+
+  @NotBlank(message = "Spanish title is required")
+  private String titleEs;
 
   private String descriptionEn;
-  private String descriptionAr;
+  private String descriptionFr;
+  private String descriptionEs;
   private String technologies;
 
   @Pattern(regexp = "^(https?://.*)?$", message = "Invalid project URL format")

@@ -33,7 +33,10 @@ public class Testimonial {
   private String testimonialTextEn;
 
   @Column(nullable = false, length = 2000)
-  private String testimonialTextAr;
+  private String testimonialTextFr;
+
+  @Column(nullable = false, length = 2000)
+  private String testimonialTextEs;
 
   @Column(nullable = false)
   private Integer rating;

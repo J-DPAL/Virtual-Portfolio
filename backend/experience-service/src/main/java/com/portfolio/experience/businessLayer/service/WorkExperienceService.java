@@ -71,12 +71,16 @@ public class WorkExperienceService {
 
     existingExperience.setCompanyNameEn(workExperienceDTO.getCompanyNameEn());
     existingExperience.setCompanyNameFr(workExperienceDTO.getCompanyNameFr());
+    existingExperience.setCompanyNameEs(workExperienceDTO.getCompanyNameEs());
     existingExperience.setPositionEn(workExperienceDTO.getPositionEn());
     existingExperience.setPositionFr(workExperienceDTO.getPositionFr());
+    existingExperience.setPositionEs(workExperienceDTO.getPositionEs());
     existingExperience.setDescriptionEn(workExperienceDTO.getDescriptionEn());
     existingExperience.setDescriptionFr(workExperienceDTO.getDescriptionFr());
+    existingExperience.setDescriptionEs(workExperienceDTO.getDescriptionEs());
     existingExperience.setLocationEn(workExperienceDTO.getLocationEn());
     existingExperience.setLocationFr(workExperienceDTO.getLocationFr());
+    existingExperience.setLocationEs(workExperienceDTO.getLocationEs());
     existingExperience.setStartDate(workExperienceDTO.getStartDate());
     existingExperience.setEndDate(workExperienceDTO.getEndDate());
     existingExperience.setIsCurrent(workExperienceDTO.getIsCurrent());

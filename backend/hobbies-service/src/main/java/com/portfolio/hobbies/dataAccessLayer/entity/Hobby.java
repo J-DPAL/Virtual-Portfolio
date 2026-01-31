@@ -24,13 +24,19 @@ public class Hobby {
   private String nameEn;
 
   @Column(nullable = false)
-  private String nameAr;
+  private String nameFr;
+
+  @Column(nullable = false)
+  private String nameEs;
 
   @Column(length = 2000)
   private String descriptionEn;
 
   @Column(length = 2000)
-  private String descriptionAr;
+  private String descriptionFr;
+
+  @Column(length = 2000)
+  private String descriptionEs;
 
   private String icon;
 

@@ -75,9 +75,11 @@ export default function SkillsPage() {
             >
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">
-                  {currentLang === 'fr' && skill.nameFr
-                    ? skill.nameFr
-                    : skill.nameEn}
+                  {currentLang === 'es' && skill.nameEs
+                    ? skill.nameEs
+                    : currentLang === 'fr' && skill.nameFr
+                      ? skill.nameFr
+                      : skill.nameEn}
                 </h2>
                 <span
                   className={`text-xs px-3 py-1 rounded-full border font-medium ${getLevelColor(skill.proficiencyLevel)}`}
@@ -86,9 +88,11 @@ export default function SkillsPage() {
                 </span>
               </div>
               <p className="text-slate-600 mb-4">
-                {currentLang === 'fr' && skill.descriptionFr
-                  ? skill.descriptionFr
-                  : skill.descriptionEn}
+                {currentLang === 'es' && skill.descriptionEs
+                  ? skill.descriptionEs
+                  : currentLang === 'fr' && skill.descriptionFr
+                    ? skill.descriptionFr
+                    : skill.descriptionEn}
               </p>
               <div className="flex items-center text-sm text-slate-500">
                 <svg

@@ -32,8 +32,11 @@ public class TestimonialDTO {
   @NotBlank(message = "Testimonial text in English is required")
   private String testimonialTextEn;
 
-  @NotBlank(message = "Testimonial text in Arabic is required")
-  private String testimonialTextAr;
+  @NotBlank(message = "Testimonial text in French is required")
+  private String testimonialTextFr;
+
+  @NotBlank(message = "Testimonial text in Spanish is required")
+  private String testimonialTextEs;
 
   @NotNull(message = "Rating is required")
   @Min(value = 1, message = "Rating must be at least 1")

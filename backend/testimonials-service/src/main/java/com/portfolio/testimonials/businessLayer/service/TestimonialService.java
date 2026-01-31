@@ -76,7 +76,8 @@ public class TestimonialService {
     existingTestimonial.setClientPosition(testimonialDTO.getClientPosition());
     existingTestimonial.setClientCompany(testimonialDTO.getClientCompany());
     existingTestimonial.setTestimonialTextEn(testimonialDTO.getTestimonialTextEn());
-    existingTestimonial.setTestimonialTextAr(testimonialDTO.getTestimonialTextAr());
+    existingTestimonial.setTestimonialTextFr(testimonialDTO.getTestimonialTextFr());
+    existingTestimonial.setTestimonialTextEs(testimonialDTO.getTestimonialTextEs());
     existingTestimonial.setRating(testimonialDTO.getRating());
     existingTestimonial.setClientImageUrl(testimonialDTO.getClientImageUrl());
 

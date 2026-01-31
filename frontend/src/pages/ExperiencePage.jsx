@@ -79,14 +79,18 @@ export default function ExperiencePage() {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-slate-900 mb-2">
-                    {currentLang === 'fr' && exp.positionFr
-                      ? exp.positionFr
-                      : exp.positionEn}
+                    {currentLang === 'es' && exp.positionEs
+                      ? exp.positionEs
+                      : currentLang === 'fr' && exp.positionFr
+                        ? exp.positionFr
+                        : exp.positionEn}
                   </h2>
                   <h3 className="text-xl text-cyan-600 font-semibold mb-2">
-                    {currentLang === 'fr' && exp.companyNameFr
-                      ? exp.companyNameFr
-                      : exp.companyNameEn}
+                    {currentLang === 'es' && exp.companyNameEs
+                      ? exp.companyNameEs
+                      : currentLang === 'fr' && exp.companyNameFr
+                        ? exp.companyNameFr
+                        : exp.companyNameEn}
                   </h3>
                   {(exp.locationEn || exp.locationFr) && (
                     <p className="text-slate-600 flex items-center mb-3">
@@ -109,9 +113,11 @@ export default function ExperiencePage() {
                           d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                         />
                       </svg>
-                      {currentLang === 'fr' && exp.locationFr
-                        ? exp.locationFr
-                        : exp.locationEn}
+                      {currentLang === 'es' && exp.locationEs
+                        ? exp.locationEs
+                        : currentLang === 'fr' && exp.locationFr
+                          ? exp.locationFr
+                          : exp.locationEn}
                     </p>
                   )}
                 </div>
@@ -136,9 +142,11 @@ export default function ExperiencePage() {
 
               {exp.descriptionEn && (
                 <p className="text-slate-600 leading-relaxed mb-4">
-                  {currentLang === 'fr' && exp.descriptionFr
-                    ? exp.descriptionFr
-                    : exp.descriptionEn}
+                  {currentLang === 'es' && exp.descriptionEs
+                    ? exp.descriptionEs
+                    : currentLang === 'fr' && exp.descriptionFr
+                      ? exp.descriptionFr
+                      : exp.descriptionEn}
                 </p>
               )}
 

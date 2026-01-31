@@ -20,13 +20,19 @@ export default function ExperienceManagement() {
   const [formData, setFormData] = useState({
     positionEn: '',
     positionFr: '',
+    positionEs: '',
     companyEn: '',
     companyFr: '',
+    companyEs: '',
     location: '',
+    locationEn: '',
+    locationFr: '',
+    locationEs: '',
     startDate: '',
     endDate: '',
     descriptionEn: '',
     descriptionFr: '',
+    descriptionEs: '',
     responsibilities: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
@@ -57,13 +63,19 @@ export default function ExperienceManagement() {
     setFormData({
       positionEn: '',
       positionFr: '',
+      positionEs: '',
       companyEn: '',
       companyFr: '',
+      companyEs: '',
       location: '',
+      locationEn: '',
+      locationFr: '',
+      locationEs: '',
       startDate: '',
       endDate: '',
       descriptionEn: '',
       descriptionFr: '',
+      descriptionEs: '',
       responsibilities: '',
     });
     setShowModal(true);
@@ -74,13 +86,19 @@ export default function ExperienceManagement() {
     setFormData({
       positionEn: experience.positionEn || '',
       positionFr: experience.positionFr || '',
+      positionEs: experience.positionEs || '',
       companyEn: experience.companyEn || '',
       companyFr: experience.companyFr || '',
+      companyEs: experience.companyEs || '',
       location: experience.location || '',
+      locationEn: experience.locationEn || '',
+      locationFr: experience.locationFr || '',
+      locationEs: experience.locationEs || '',
       startDate: experience.startDate || '',
       endDate: experience.endDate || '',
       descriptionEn: experience.descriptionEn || '',
       descriptionFr: experience.descriptionFr || '',
+      descriptionEs: experience.descriptionEs || '',
       responsibilities: Array.isArray(experience.responsibilities)
         ? experience.responsibilities.join(', ')
         : '',
@@ -392,6 +410,20 @@ export default function ExperienceManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Position (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.positionEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, positionEs: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -418,6 +450,20 @@ export default function ExperienceManagement() {
                       value={formData.companyFr}
                       onChange={(e) =>
                         setFormData({ ...formData, companyFr: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Company (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.companyEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, companyEs: e.target.value })
                       }
                       className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
@@ -498,6 +544,24 @@ export default function ExperienceManagement() {
                       setFormData({
                         ...formData,
                         descriptionFr: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Description (Spanish)
+                  </label>
+                  <textarea
+                    value={formData.descriptionEs}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        descriptionEs: e.target.value,
                       })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"

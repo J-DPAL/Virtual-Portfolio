@@ -79,19 +79,25 @@ export default function EducationPage() {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-slate-900 mb-2">
-                    {currentLang === 'fr' && edu.degreeFr
-                      ? edu.degreeFr
-                      : edu.degreeEn}
+                    {currentLang === 'es' && edu.degreeEs
+                      ? edu.degreeEs
+                      : currentLang === 'fr' && edu.degreeFr
+                        ? edu.degreeFr
+                        : edu.degreeEn}
                   </h2>
                   <h3 className="text-xl text-emerald-600 font-semibold mb-2">
-                    {currentLang === 'fr' && edu.institutionNameFr
-                      ? edu.institutionNameFr
-                      : edu.institutionNameEn}
+                    {currentLang === 'es' && edu.institutionNameEs
+                      ? edu.institutionNameEs
+                      : currentLang === 'fr' && edu.institutionNameFr
+                        ? edu.institutionNameFr
+                        : edu.institutionNameEn}
                   </h3>
                   <p className="text-slate-600 mb-4">
-                    {currentLang === 'fr' && edu.fieldOfStudyFr
-                      ? edu.fieldOfStudyFr
-                      : edu.fieldOfStudyEn}
+                    {currentLang === 'es' && edu.fieldOfStudyEs
+                      ? edu.fieldOfStudyEs
+                      : currentLang === 'fr' && edu.fieldOfStudyFr
+                        ? edu.fieldOfStudyFr
+                        : edu.fieldOfStudyEn}
                   </p>
                 </div>
                 <div className="flex flex-col items-end">
@@ -122,9 +128,11 @@ export default function EducationPage() {
 
               {edu.descriptionEn && (
                 <p className="text-slate-600 leading-relaxed">
-                  {currentLang === 'fr' && edu.descriptionFr
-                    ? edu.descriptionFr
-                    : edu.descriptionEn}
+                  {currentLang === 'es' && edu.descriptionEs
+                    ? edu.descriptionEs
+                    : currentLang === 'fr' && edu.descriptionFr
+                      ? edu.descriptionFr
+                      : edu.descriptionEn}
                 </p>
               )}
             </div>

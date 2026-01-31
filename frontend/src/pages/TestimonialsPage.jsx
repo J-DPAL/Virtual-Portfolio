@@ -6,10 +6,11 @@ import {
 } from '../services/testimonialsService';
 
 export default function TestimonialsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const currentLang = i18n.language;
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -226,7 +227,13 @@ export default function TestimonialsPage() {
                 ))}
               </div>
               <p className="text-slate-600 leading-relaxed italic">
-                &ldquo;{testimonial.content}&rdquo;
+                &ldquo;
+                {currentLang === 'es' && testimonial.testimonialTextEs
+                  ? testimonial.testimonialTextEs
+                  : currentLang === 'fr' && testimonial.testimonialTextFr
+                    ? testimonial.testimonialTextFr
+                    : testimonial.testimonialTextEn || testimonial.content}
+                &rdquo;
               </p>
             </div>
           ))}

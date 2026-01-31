@@ -98,14 +98,18 @@ export default function HobbiesPage() {
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition">
-                {currentLang === 'fr' && hobby.nameFr
-                  ? hobby.nameFr
-                  : hobby.nameEn}
+                {currentLang === 'es' && hobby.nameEs
+                  ? hobby.nameEs
+                  : currentLang === 'fr' && hobby.nameFr
+                    ? hobby.nameFr
+                    : hobby.nameEn}
               </h2>
               <p className="text-slate-600 leading-relaxed">
-                {currentLang === 'fr' && hobby.descriptionFr
-                  ? hobby.descriptionFr
-                  : hobby.descriptionEn}
+                {currentLang === 'es' && hobby.descriptionEs
+                  ? hobby.descriptionEs
+                  : currentLang === 'fr' && hobby.descriptionFr
+                    ? hobby.descriptionFr
+                    : hobby.descriptionEn}
               </p>
             </div>
           ))}

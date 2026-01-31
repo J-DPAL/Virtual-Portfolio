@@ -28,10 +28,16 @@ public class WorkExperience {
   private String companyNameFr;
 
   @Column(nullable = false)
+  private String companyNameEs;
+
+  @Column(nullable = false)
   private String positionEn;
 
   @Column(nullable = false)
   private String positionFr;
+
+  @Column(nullable = false)
+  private String positionEs;
 
   @Column(length = 2000)
   private String descriptionEn;
@@ -39,9 +45,14 @@ public class WorkExperience {
   @Column(length = 2000)
   private String descriptionFr;
 
+  @Column(length = 2000)
+  private String descriptionEs;
+
   private String locationEn;
 
   private String locationFr;
+
+  private String locationEs;
 
   @Column(nullable = false)
   private LocalDate startDate;

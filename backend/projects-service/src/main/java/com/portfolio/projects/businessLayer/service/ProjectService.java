@@ -60,9 +60,11 @@ public class ProjectService {
             .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + id));
 
     existingProject.setTitleEn(projectDTO.getTitleEn());
-    existingProject.setTitleAr(projectDTO.getTitleAr());
+    existingProject.setTitleFr(projectDTO.getTitleFr());
+    existingProject.setTitleEs(projectDTO.getTitleEs());
     existingProject.setDescriptionEn(projectDTO.getDescriptionEn());
-    existingProject.setDescriptionAr(projectDTO.getDescriptionAr());
+    existingProject.setDescriptionFr(projectDTO.getDescriptionFr());
+    existingProject.setDescriptionEs(projectDTO.getDescriptionEs());
     existingProject.setTechnologies(projectDTO.getTechnologies());
     existingProject.setProjectUrl(projectDTO.getProjectUrl());
     existingProject.setGithubUrl(projectDTO.getGithubUrl());

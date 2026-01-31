@@ -50,9 +50,11 @@ public class HobbyService {
             .orElseThrow(() -> new ResourceNotFoundException("Hobby not found with id: " + id));
 
     existingHobby.setNameEn(hobbyDTO.getNameEn());
-    existingHobby.setNameAr(hobbyDTO.getNameAr());
+    existingHobby.setNameFr(hobbyDTO.getNameFr());
+    existingHobby.setNameEs(hobbyDTO.getNameEs());
     existingHobby.setDescriptionEn(hobbyDTO.getDescriptionEn());
-    existingHobby.setDescriptionAr(hobbyDTO.getDescriptionAr());
+    existingHobby.setDescriptionFr(hobbyDTO.getDescriptionFr());
+    existingHobby.setDescriptionEs(hobbyDTO.getDescriptionEs());
     existingHobby.setIcon(hobbyDTO.getIcon());
 
     Hobby updatedHobby = hobbyRepository.save(existingHobby);

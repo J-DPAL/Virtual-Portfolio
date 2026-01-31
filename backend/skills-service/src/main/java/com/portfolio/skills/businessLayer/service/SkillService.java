@@ -60,8 +60,10 @@ public class SkillService {
 
     existingSkill.setNameEn(skillDTO.getNameEn());
     existingSkill.setNameFr(skillDTO.getNameFr());
+    existingSkill.setNameEs(skillDTO.getNameEs());
     existingSkill.setDescriptionEn(skillDTO.getDescriptionEn());
     existingSkill.setDescriptionFr(skillDTO.getDescriptionFr());
+    existingSkill.setDescriptionEs(skillDTO.getDescriptionEs());
     existingSkill.setProficiencyLevel(skillDTO.getProficiencyLevel());
     existingSkill.setCategory(skillDTO.getCategory());
     existingSkill.setYearsOfExperience(skillDTO.getYearsOfExperience());

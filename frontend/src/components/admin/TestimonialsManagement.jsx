@@ -8,6 +8,17 @@ const TestimonialsManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    title: '',
+    company: '',
+    rating: 5,
+    testimonialTextEn: '',
+    testimonialTextFr: '',
+    testimonialTextEs: '',
+  });
 
   useEffect(() => {
     fetchTestimonials();
@@ -33,6 +44,55 @@ const TestimonialsManagement = () => {
       await fetchTestimonials();
     } catch (err) {
       setError(t('manageTestimonialsFailedApprove'));
+      console.error(err);
+    }
+  };
+
+  const handleAdd = () => {
+    setEditingTestimonial(null);
+    setFormData({
+      name: '',
+      title: '',
+      company: '',
+      rating: 5,
+      testimonialTextEn: '',
+      testimonialTextFr: '',
+      testimonialTextEs: '',
+    });
+    setShowModal(true);
+  };
+
+  const handleEdit = (testimonial) => {
+    setEditingTestimonial(testimonial);
+    setFormData({
+      name: testimonial.name || '',
+      title: testimonial.title || '',
+      company: testimonial.company || '',
+      rating: testimonial.rating || 5,
+      testimonialTextEn:
+        testimonial.testimonialTextEn || testimonial.content || '',
+      testimonialTextFr: testimonial.testimonialTextFr || '',
+      testimonialTextEs: testimonial.testimonialTextEs || '',
+    });
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingTestimonial) {
+        await testimonialsService.updateTestimonial(
+          editingTestimonial.id,
+          formData
+        );
+      } else {
+        await testimonialsService.submitTestimonial(formData);
+      }
+      setShowModal(false);
+      await fetchTestimonials();
+      setError(null);
+    } catch (err) {
+      setError(t('manageTestimonialsFailedSave'));
       console.error(err);
     }
   };
@@ -83,8 +143,31 @@ const TestimonialsManagement = () => {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold">{t('testimonialManagement')}</h2>
-        <p className="mt-2 opacity-90">{t('reviewApproveTestimonials')}</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold">{t('testimonialManagement')}</h2>
+            <p className="mt-2 opacity-90">{t('reviewApproveTestimonials')}</p>
+          </div>
+          <button
+            onClick={handleAdd}
+            className="px-6 py-3 bg-white text-orange-600 rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            {t('addNew')}
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -155,6 +238,12 @@ const TestimonialsManagement = () => {
                         >
                           {expandedId === testimonial.id ? 'Hide' : 'View'}
                         </button>
+                        <button
+                          onClick={() => handleEdit(testimonial)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                        >
+                          Edit
+                        </button>
                         {!testimonial.approved && (
                           <button
                             onClick={() => handleApprove(testimonial.id)}
@@ -197,6 +286,178 @@ const TestimonialsManagement = () => {
           )}
         </div>
       </div>
+
+      {/* Add/Edit Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-yellow-600 to-orange-600 px-8 py-6 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-white">
+                {editingTestimonial ? 'Edit' : 'Add'} Testimonial
+              </h2>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2 transition"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.company}
+                    onChange={(e) =>
+                      setFormData({ ...formData, company: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Rating
+                  </label>
+                  <select
+                    value={formData.rating}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        rating: parseInt(e.target.value),
+                      })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  >
+                    <option value={1}>1 Star</option>
+                    <option value={2}>2 Stars</option>
+                    <option value={3}>3 Stars</option>
+                    <option value={4}>4 Stars</option>
+                    <option value={5}>5 Stars</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Testimonial Text (English)
+                </label>
+                <textarea
+                  value={formData.testimonialTextEn}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      testimonialTextEn: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  rows="4"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Testimonial Text (French)
+                </label>
+                <textarea
+                  value={formData.testimonialTextFr}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      testimonialTextFr: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  rows="4"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Testimonial Text (Spanish)
+                </label>
+                <textarea
+                  value={formData.testimonialTextEs}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      testimonialTextEs: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  rows="4"
+                  required
+                />
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

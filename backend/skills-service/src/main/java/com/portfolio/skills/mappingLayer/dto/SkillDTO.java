@@ -22,8 +22,12 @@ public class SkillDTO {
   @NotBlank(message = "French name is required")
   private String nameFr;
 
+  @NotBlank(message = "Spanish name is required")
+  private String nameEs;
+
   private String descriptionEn;
   private String descriptionFr;
+  private String descriptionEs;
 
   @NotBlank(message = "Proficiency level is required")
   private String proficiencyLevel;

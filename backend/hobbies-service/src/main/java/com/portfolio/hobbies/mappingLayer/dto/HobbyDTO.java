@@ -18,11 +18,15 @@ public class HobbyDTO {
   @NotBlank(message = "Name in English is required")
   private String nameEn;
 
-  @NotBlank(message = "Name in Arabic is required")
-  private String nameAr;
+  @NotBlank(message = "Name in French is required")
+  private String nameFr;
+
+  @NotBlank(message = "Name in Spanish is required")
+  private String nameEs;
 
   private String descriptionEn;
-  private String descriptionAr;
+  private String descriptionFr;
+  private String descriptionEs;
   private String icon;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;

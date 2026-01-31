@@ -23,11 +23,17 @@ public class EducationDTO {
   @NotBlank(message = "Institution name in French is required")
   private String institutionNameFr;
 
+  @NotBlank(message = "Institution name in Spanish is required")
+  private String institutionNameEs;
+
   @NotBlank(message = "Degree in English is required")
   private String degreeEn;
 
   @NotBlank(message = "Degree in French is required")
   private String degreeFr;
+
+  @NotBlank(message = "Degree in Spanish is required")
+  private String degreeEs;
 
   @NotBlank(message = "Field of study in English is required")
   private String fieldOfStudyEn;
@@ -35,8 +41,12 @@ public class EducationDTO {
   @NotBlank(message = "Field of study in French is required")
   private String fieldOfStudyFr;
 
+  @NotBlank(message = "Field of study in Spanish is required")
+  private String fieldOfStudyEs;
+
   private String descriptionEn;
   private String descriptionFr;
+  private String descriptionEs;
 
   @NotNull(message = "Start date is required")
   private LocalDate startDate;

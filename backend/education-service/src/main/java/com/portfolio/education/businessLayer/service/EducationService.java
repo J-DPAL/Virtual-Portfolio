@@ -67,12 +67,16 @@ public class EducationService {
 
     existingEducation.setInstitutionNameEn(educationDTO.getInstitutionNameEn());
     existingEducation.setInstitutionNameFr(educationDTO.getInstitutionNameFr());
+    existingEducation.setInstitutionNameEs(educationDTO.getInstitutionNameEs());
     existingEducation.setDegreeEn(educationDTO.getDegreeEn());
     existingEducation.setDegreeFr(educationDTO.getDegreeFr());
+    existingEducation.setDegreeEs(educationDTO.getDegreeEs());
     existingEducation.setFieldOfStudyEn(educationDTO.getFieldOfStudyEn());
     existingEducation.setFieldOfStudyFr(educationDTO.getFieldOfStudyFr());
+    existingEducation.setFieldOfStudyEs(educationDTO.getFieldOfStudyEs());
     existingEducation.setDescriptionEn(educationDTO.getDescriptionEn());
     existingEducation.setDescriptionFr(educationDTO.getDescriptionFr());
+    existingEducation.setDescriptionEs(educationDTO.getDescriptionEs());
     existingEducation.setStartDate(educationDTO.getStartDate());
     existingEducation.setEndDate(educationDTO.getEndDate());
     existingEducation.setIsCurrent(educationDTO.getIsCurrent());

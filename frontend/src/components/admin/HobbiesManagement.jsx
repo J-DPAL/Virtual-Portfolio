@@ -20,8 +20,10 @@ export default function HobbiesManagement() {
   const [formData, setFormData] = useState({
     nameEn: '',
     nameFr: '',
+    nameEs: '',
     descriptionEn: '',
     descriptionFr: '',
+    descriptionEs: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,8 +53,10 @@ export default function HobbiesManagement() {
     setFormData({
       nameEn: '',
       nameFr: '',
+      nameEs: '',
       descriptionEn: '',
       descriptionFr: '',
+      descriptionEs: '',
     });
     setShowModal(true);
   };
@@ -62,8 +66,10 @@ export default function HobbiesManagement() {
     setFormData({
       nameEn: hobby.nameEn || '',
       nameFr: hobby.nameFr || '',
+      nameEs: hobby.nameEs || '',
       descriptionEn: hobby.descriptionEn || '',
       descriptionFr: hobby.descriptionFr || '',
+      descriptionEs: hobby.descriptionEs || '',
     });
     setShowModal(true);
   };
@@ -331,6 +337,20 @@ export default function HobbiesManagement() {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Name (Spanish)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.nameEs}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameEs: e.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -361,6 +381,24 @@ export default function HobbiesManagement() {
                       setFormData({
                         ...formData,
                         descriptionFr: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Description (Spanish)
+                  </label>
+                  <textarea
+                    value={formData.descriptionEs}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        descriptionEs: e.target.value,
                       })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
