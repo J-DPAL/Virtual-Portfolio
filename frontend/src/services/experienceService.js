@@ -10,5 +10,4 @@ export const createExperience = (experienceData) =>
 export const updateExperience = (id, experienceData) =>
   apiClient.put(`/experience/${id}`, experienceData);
 
-export const deleteExperience = (id) =>
-  apiClient.delete(`/experience/${id}`);
+export const deleteExperience = (id) => apiClient.delete(`/experience/${id}`);
