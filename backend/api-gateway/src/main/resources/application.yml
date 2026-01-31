@@ -1,7 +1,7 @@
 spring:
   application:
     name: api-gateway
-  
+
   security:
     jwt:
       secret: ${JWT_SECRET:your-secret-key-change-in-production}
@@ -34,6 +34,8 @@ services:
     url: http://testimonials-service:8087
   messages:
     url: http://messages-service:8088
+  files:
+    url: http://files-service:8090
 eureka:
   client:
     serviceUrl:

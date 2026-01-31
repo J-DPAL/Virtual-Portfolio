@@ -45,6 +45,9 @@ public class GatewayConfig {
   @Value("${services.messages.url:http://messages-service:8088}")
   private String messagesServiceUrl;
 
+  @Value("${services.files.url:http://files-service:8090}")
+  private String filesServiceUrl;
+
   @Bean
   public RestTemplate restTemplate() {
     return new RestTemplate();
@@ -130,9 +133,26 @@ public class GatewayConfig {
                     .POST("/**", req -> proxyRequest(req, messagesServiceUrl, restTemplate))
                     .PATCH("/**", req -> proxyRequest(req, messagesServiceUrl, restTemplate))
                     .DELETE("/**", req -> proxyRequest(req, messagesServiceUrl, restTemplate)))
+
+        // Files routes
+        .path(
+            "/v1/files",
+            builder ->
+                builder
+                    .GET(
+                        "/**",
+                        req ->
+                            proxyRequestWithPathRewrite(
+                                req, filesServiceUrl, "/api", "/v1/files", restTemplate))
+                    .POST(
+                        "/**",
+                        req ->
+                            proxyRequestWithPathRewrite(
+                                req, filesServiceUrl, "/api", "/v1/files", restTemplate)))
         .build();
   }
 
+  @SuppressWarnings("null")
   private ServerResponse proxyRequest(
       ServerRequest request, String targetUrl, RestTemplate restTemplate) {
     try {
@@ -148,14 +168,18 @@ public class GatewayConfig {
       return executeProxyRequest(request, uri, restTemplate);
     } catch (org.springframework.web.client.HttpClientErrorException
         | org.springframework.web.client.HttpServerErrorException e) {
-      return ServerResponse.status(e.getStatusCode())
-          .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
+      @SuppressWarnings("null")
+      ServerResponse response =
+          ServerResponse.status(e.getStatusCode())
+              .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
+      return response;
     } catch (Exception e) {
       return ServerResponse.status(500)
           .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
     }
   }
 
+  @SuppressWarnings("null")
   private ServerResponse proxyRequestNoContextPath(
       ServerRequest request, String targetUrl, RestTemplate restTemplate) {
     try {
@@ -172,6 +196,40 @@ public class GatewayConfig {
         | org.springframework.web.client.HttpServerErrorException e) {
       return ServerResponse.status(e.getStatusCode())
           .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
+    } catch (Exception e) {
+      return ServerResponse.status(500)
+          .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
+    }
+  }
+
+  private ServerResponse proxyRequestWithPathRewrite(
+      ServerRequest request,
+      String targetUrl,
+      String apiPrefix,
+      String stripPrefix,
+      RestTemplate restTemplate) {
+    try {
+      String requestPath = request.path();
+      @SuppressWarnings("null")
+      String strippedPath =
+          requestPath.startsWith(stripPrefix)
+              ? requestPath.substring(stripPrefix.length())
+              : requestPath;
+
+      @SuppressWarnings("null")
+      URI uri =
+          UriComponentsBuilder.fromHttpUrl(targetUrl)
+              .path(apiPrefix + strippedPath)
+              .query(request.uri().getRawQuery())
+              .build(true)
+              .toUri();
+
+      return executeProxyRequest(request, uri, restTemplate);
+    } catch (org.springframework.web.client.HttpClientErrorException
+        | org.springframework.web.client.HttpServerErrorException e) {
+      @SuppressWarnings("null")
+      String body = Objects.requireNonNullElse(e.getResponseBodyAsString(), "");
+      return ServerResponse.status(e.getStatusCode()).body(body);
     } catch (Exception e) {
       return ServerResponse.status(500)
           .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
@@ -196,6 +254,7 @@ public class GatewayConfig {
 
       // Create entity with body when applicable
       // Always provide a non-null HttpEntity instance
+      @SuppressWarnings("null")
       HttpMethod httpMethod = Objects.requireNonNullElse(request.method(), HttpMethod.GET);
       String body = null;
       if (!(httpMethod == HttpMethod.GET
@@ -211,19 +270,22 @@ public class GatewayConfig {
       HttpEntity<String> entity =
           (body == null) ? new HttpEntity<>(headers) : new HttpEntity<>(body, headers);
 
-      ResponseEntity<String> response =
-          restTemplate.exchange(uri, httpMethod, entity, String.class);
+      // Use byte[] for binary responses to avoid corruption
+      @SuppressWarnings("null")
+      ResponseEntity<byte[]> response =
+          restTemplate.exchange(uri, httpMethod, entity, byte[].class);
 
-      String responseBody = response.getBody();
+      byte[] responseBody = response.getBody();
 
       return ServerResponse.status(response.getStatusCode())
           .headers(h -> h.addAll(response.getHeaders()))
-          .body(responseBody != null ? responseBody : "");
+          .body(responseBody != null ? responseBody : new byte[0]);
 
     } catch (org.springframework.web.client.HttpClientErrorException
         | org.springframework.web.client.HttpServerErrorException e) {
-      return ServerResponse.status(e.getStatusCode())
-          .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
+      @SuppressWarnings("null")
+      String body = Objects.requireNonNullElse(e.getResponseBodyAsString(), "");
+      return ServerResponse.status(e.getStatusCode()).body(body);
     } catch (Exception e) {
       return ServerResponse.status(500)
           .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
