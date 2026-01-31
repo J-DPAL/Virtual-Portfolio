@@ -14,6 +14,7 @@ import com.portfolio.hobbies.utils.exceptions.ResourceNotFoundException;
 
 @Service
 @Transactional
+@SuppressWarnings("null")
 public class HobbyService {
 
   private final HobbyRepository hobbyRepository;
