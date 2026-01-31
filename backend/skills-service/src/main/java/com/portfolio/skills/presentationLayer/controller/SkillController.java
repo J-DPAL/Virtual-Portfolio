@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.portfolio.skills.businessLayer.service.SkillService;
@@ -41,14 +40,12 @@ public class SkillController {
     return ResponseEntity.ok(skills);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<SkillDTO> createSkill(@Valid @RequestBody SkillDTO skillDTO) {
     SkillDTO createdSkill = skillService.createSkill(skillDTO);
     return new ResponseEntity<>(createdSkill, HttpStatus.CREATED);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<SkillDTO> updateSkill(
       @PathVariable Long id, @Valid @RequestBody SkillDTO skillDTO) {
@@ -56,7 +53,6 @@ public class SkillController {
     return ResponseEntity.ok(updatedSkill);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
     skillService.deleteSkill(id);

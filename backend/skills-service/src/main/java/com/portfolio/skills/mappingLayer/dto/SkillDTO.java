@@ -19,11 +19,11 @@ public class SkillDTO {
   @NotBlank(message = "English name is required")
   private String nameEn;
 
-  @NotBlank(message = "Arabic name is required")
-  private String nameAr;
+  @NotBlank(message = "French name is required")
+  private String nameFr;
 
   private String descriptionEn;
-  private String descriptionAr;
+  private String descriptionFr;
 
   @NotBlank(message = "Proficiency level is required")
   private String proficiencyLevel;

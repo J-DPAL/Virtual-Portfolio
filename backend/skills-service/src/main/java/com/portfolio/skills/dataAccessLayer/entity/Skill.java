@@ -24,13 +24,13 @@ public class Skill {
   private String nameEn;
 
   @Column(nullable = false)
-  private String nameAr;
+  private String nameFr;
 
   @Column(length = 1000)
   private String descriptionEn;
 
   @Column(length = 1000)
-  private String descriptionAr;
+  private String descriptionFr;
 
   @Column(nullable = false)
   private String proficiencyLevel; // Beginner, Intermediate, Advanced, Expert

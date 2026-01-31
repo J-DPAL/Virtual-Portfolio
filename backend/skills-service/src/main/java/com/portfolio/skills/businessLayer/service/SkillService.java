@@ -29,6 +29,7 @@ public class SkillService {
   }
 
   public SkillDTO getSkillById(Long id) {
+    @SuppressWarnings("null")
     Skill skill =
         skillRepository
             .findById(id)
@@ -43,29 +44,34 @@ public class SkillService {
   }
 
   public SkillDTO createSkill(SkillDTO skillDTO) {
+    @SuppressWarnings("null")
     Skill skill = skillMapper.toEntity(skillDTO);
+    @SuppressWarnings("null")
     Skill savedSkill = skillRepository.save(skill);
     return skillMapper.toDTO(savedSkill);
   }
 
   public SkillDTO updateSkill(Long id, SkillDTO skillDTO) {
+    @SuppressWarnings("null")
     Skill existingSkill =
         skillRepository
             .findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
 
     existingSkill.setNameEn(skillDTO.getNameEn());
-    existingSkill.setNameAr(skillDTO.getNameAr());
+    existingSkill.setNameFr(skillDTO.getNameFr());
     existingSkill.setDescriptionEn(skillDTO.getDescriptionEn());
-    existingSkill.setDescriptionAr(skillDTO.getDescriptionAr());
+    existingSkill.setDescriptionFr(skillDTO.getDescriptionFr());
     existingSkill.setProficiencyLevel(skillDTO.getProficiencyLevel());
     existingSkill.setCategory(skillDTO.getCategory());
     existingSkill.setYearsOfExperience(skillDTO.getYearsOfExperience());
 
+    @SuppressWarnings("null")
     Skill updatedSkill = skillRepository.save(existingSkill);
     return skillMapper.toDTO(updatedSkill);
   }
 
+  @SuppressWarnings("null")
   public void deleteSkill(Long id) {
     if (!skillRepository.existsById(id)) {
       throw new ResourceNotFoundException("Skill not found with id: " + id);
