@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../context/ThemeContext';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -49,7 +51,13 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 min-h-screen">
+    <div
+      className={`min-h-screen transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950'
+          : 'bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900'
+      }`}
+    >
       {/* Hero Section with Animated Gradient */}
       <section className="relative overflow-hidden">
         {/* Animated Background Elements */}
@@ -148,7 +156,11 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="bg-slate-50 py-20">
+      <section
+        className={`py-20 transition-colors duration-200 ${
+          isDark ? 'bg-slate-900' : 'bg-slate-50'
+        }`}
+      >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, idx) => (
@@ -161,7 +173,13 @@ export default function HomePage() {
                 <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
                   {stat.value}
                 </div>
-                <div className="text-slate-600 font-medium">{stat.label}</div>
+                <div
+                  className={`font-medium ${
+                    isDark ? 'text-slate-400' : 'text-slate-600'
+                  }`}
+                >
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -169,13 +187,25 @@ export default function HomePage() {
       </section>
 
       {/* Features Grid */}
-      <section className="bg-slate-50 py-20">
+      <section
+        className={`py-20 transition-colors duration-200 ${
+          isDark ? 'bg-slate-900' : 'bg-slate-50'
+        }`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            <h2
+              className={`text-4xl md:text-5xl font-bold mb-4 ${
+                isDark ? 'text-slate-100' : 'text-slate-900'
+              }`}
+            >
               {t('exploreMyPortfolio')}
             </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p
+              className={`text-xl max-w-2xl mx-auto ${
+                isDark ? 'text-slate-400' : 'text-slate-600'
+              }`}
+            >
               {t('discoverProjectsSkillsJourney')}
             </p>
           </div>
@@ -185,7 +215,11 @@ export default function HomePage() {
               <Link
                 key={feature.title}
                 to={feature.to}
-                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+                className={`group relative rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden ${
+                  isDark
+                    ? 'bg-slate-800 hover:shadow-slate-900'
+                    : 'bg-white hover:shadow-slate-300'
+                }`}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 {/* Gradient Overlay on Hover */}
@@ -213,10 +247,20 @@ export default function HomePage() {
                 </div>
 
                 {/* Content */}
-                <h3 className="relative text-2xl font-bold text-slate-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-cyan-600 transition-all">
+                <h3
+                  className={`relative text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-cyan-600 transition-all ${
+                    isDark ? 'text-slate-100' : 'text-slate-900'
+                  }`}
+                >
                   {feature.title}
                 </h3>
-                <p className="relative text-slate-600 mb-4">{feature.desc}</p>
+                <p
+                  className={`relative mb-4 ${
+                    isDark ? 'text-slate-400' : 'text-slate-600'
+                  }`}
+                >
+                  {feature.desc}
+                </p>
 
                 {/* Arrow */}
                 <div
@@ -244,7 +288,13 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-blue-900 via-slate-900 to-cyan-900 py-20">
+      <section
+        className={`py-20 transition-colors duration-200 ${
+          isDark
+            ? 'bg-gradient-to-br from-blue-950 via-slate-950 to-cyan-950'
+            : 'bg-gradient-to-br from-blue-900 via-slate-900 to-cyan-900'
+        }`}
+      >
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {t('readyToStartProject')}
