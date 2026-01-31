@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../context/ThemeContext';
 import { getAllSkills } from '../services/skillsService';
 
 export default function SkillsPage() {
   const { t, i18n } = useTranslation();
+  const { isDark } = useTheme();
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,42 +29,80 @@ export default function SkillsPage() {
   };
 
   const getLevelColor = (level) => {
-    const levels = {
-      beginner: 'bg-green-50 text-green-700 border-green-200',
-      intermediate: 'bg-blue-50 text-blue-700 border-blue-200',
-      advanced: 'bg-teal-50 text-teal-700 border-teal-200',
-      expert: 'bg-orange-50 text-orange-700 border-orange-200',
-    };
+    const levels = isDark
+      ? {
+          beginner: 'bg-green-900/30 text-green-300 border-green-700',
+          intermediate: 'bg-blue-900/30 text-blue-300 border-blue-700',
+          advanced: 'bg-teal-900/30 text-teal-300 border-teal-700',
+          expert: 'bg-orange-900/30 text-orange-300 border-orange-700',
+        }
+      : {
+          beginner: 'bg-green-50 text-green-700 border-green-200',
+          intermediate: 'bg-blue-50 text-blue-700 border-blue-200',
+          advanced: 'bg-teal-50 text-teal-700 border-teal-200',
+          expert: 'bg-orange-50 text-orange-700 border-orange-200',
+        };
     return (
-      levels[level?.toLowerCase()] || 'bg-gray-50 text-gray-700 border-gray-200'
+      levels[level?.toLowerCase()] ||
+      (isDark
+        ? 'bg-gray-900/30 text-gray-300 border-gray-700'
+        : 'bg-gray-50 text-gray-700 border-gray-200')
     );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+      <div
+        className={`min-h-screen flex items-center justify-center transition-colors duration-200 ${
+          isDark
+            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+            : 'bg-gradient-to-br from-blue-50 via-white to-cyan-50'
+        }`}
+      >
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <div
+            className={`inline-block animate-spin rounded-full h-12 w-12 border-b-2 ${
+              isDark ? 'border-blue-400' : 'border-blue-600'
+            }`}
+          ></div>
+          <p className={`mt-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            {t('loading')}
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12">
+    <div
+      className={`min-h-screen py-12 transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+          : 'bg-gradient-to-br from-blue-50 via-white to-cyan-50'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-4">
             {t('skills')}
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p
+            className={`text-lg max-w-2xl mx-auto ${
+              isDark ? 'text-slate-400' : 'text-slate-600'
+            }`}
+          >
             {t('discoverTechnologiesTools')}
           </p>
         </div>
 
         {error && (
-          <div className="max-w-2xl mx-auto mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div
+            className={`max-w-2xl mx-auto mb-6 border px-4 py-3 rounded-lg ${
+              isDark
+                ? 'bg-red-900/30 border-red-700 text-red-300'
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}
+          >
             {t('errorOccurred')}
           </div>
         )}
@@ -71,10 +111,18 @@ export default function SkillsPage() {
           {skills.map((skill) => (
             <div
               key={skill.id}
-              className="group bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+              className={`group rounded-2xl shadow-lg p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
             >
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">
+                <h2
+                  className={`text-xl font-bold group-hover:text-blue-600 transition ${
+                    isDark ? 'text-slate-100' : 'text-slate-900'
+                  }`}
+                >
                   {currentLang === 'es' && skill.nameEs
                     ? skill.nameEs
                     : currentLang === 'fr' && skill.nameFr
@@ -87,14 +135,22 @@ export default function SkillsPage() {
                   {skill.proficiencyLevel}
                 </span>
               </div>
-              <p className="text-slate-600 mb-4">
+              <p
+                className={`mb-4 ${
+                  isDark ? 'text-slate-400' : 'text-slate-600'
+                }`}
+              >
                 {currentLang === 'es' && skill.descriptionEs
                   ? skill.descriptionEs
                   : currentLang === 'fr' && skill.descriptionFr
                     ? skill.descriptionFr
                     : skill.descriptionEn}
               </p>
-              <div className="flex items-center text-sm text-slate-500">
+              <div
+                className={`flex items-center text-sm ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}
+              >
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"
@@ -116,7 +172,13 @@ export default function SkillsPage() {
 
         {skills.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">{t('noSkillsAvailable')}</p>
+            <p
+              className={`text-lg ${
+                isDark ? 'text-slate-400' : 'text-slate-600'
+              }`}
+            >
+              {t('noSkillsAvailable')}
+            </p>
           </div>
         )}
       </div>
