@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sendMessage } from '../services/messagesService';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ContactPage() {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
   const [form, setForm] = useState({
     senderName: '',
     senderEmail: '',
@@ -36,25 +38,51 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12">
+    <div
+      className={`min-h-screen py-12 transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+          : 'bg-gradient-to-br from-blue-50 via-white to-cyan-50'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-4">
             {t('contact')}
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p
+            className={`text-lg max-w-2xl mx-auto ${
+              isDark ? 'text-slate-400' : 'text-slate-600'
+            }`}
+          >
             {t('letsConnectDiscuss')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+          <div
+            className={`rounded-2xl shadow-xl p-8 transition-colors duration-200 ${
+              isDark
+                ? 'bg-slate-800 border border-slate-700'
+                : 'bg-white border border-slate-200'
+            }`}
+          >
+            <h2
+              className={`text-2xl font-bold mb-6 ${
+                isDark ? 'text-slate-100' : 'text-slate-900'
+              }`}
+            >
               {t('sendMessage')}
             </h2>
 
             {submitted && (
-              <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center">
+              <div
+                className={`mb-6 px-4 py-3 rounded-lg flex items-center border ${
+                  isDark
+                    ? 'bg-emerald-900 border-emerald-700 text-emerald-200'
+                    : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                }`}
+              >
                 <svg
                   className="w-5 h-5 mr-2"
                   fill="none"
@@ -73,54 +101,92 @@ export default function ContactPage() {
             )}
 
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              <div
+                className={`mb-6 px-4 py-3 rounded-lg border ${
+                  isDark
+                    ? 'bg-rose-900 border-rose-700 text-rose-200'
+                    : 'bg-rose-50 border-rose-200 text-rose-800'
+                }`}
+              >
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   {t('name')} *
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={form.senderName}
                   onChange={(e) => updateField('senderName', e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   {t('email')} *
                 </label>
                 <input
                   type="email"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={form.senderEmail}
                   onChange={(e) => updateField('senderEmail', e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   {t('subject')} *
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={form.subject}
                   onChange={(e) => updateField('subject', e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   {t('message')} *
                 </label>
                 <textarea
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  className={`w-full rounded-lg px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={form.content}
                   onChange={(e) => updateField('content', e.target.value)}
                   required
@@ -159,11 +225,23 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+            <div
+              className={`rounded-2xl shadow-lg p-8 transition-colors duration-200 ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
+            >
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    isDark
+                      ? 'bg-slate-700/50 text-blue-400'
+                      : 'bg-gradient-to-br from-blue-100 to-cyan-100 text-blue-600'
+                  }`}
+                >
                   <svg
-                    className="w-6 h-6 text-blue-600"
+                    className="w-6 h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -177,19 +255,41 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-slate-900">
+                  <h3
+                    className={`text-lg font-semibold ${
+                      isDark ? 'text-slate-100' : 'text-slate-900'
+                    }`}
+                  >
                     Email
                   </h3>
-                  <p className="text-slate-600">admin@portfolio.com</p>
+                  <p
+                    className={`${
+                      isDark ? 'text-slate-400' : 'text-slate-600'
+                    }`}
+                  >
+                    admin@portfolio.com
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+            <div
+              className={`rounded-2xl shadow-lg p-8 transition-colors duration-200 ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
+            >
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    isDark
+                      ? 'bg-slate-700/50 text-blue-400'
+                      : 'bg-gradient-to-br from-blue-100 to-cyan-100 text-blue-600'
+                  }`}
+                >
                   <svg
-                    className="w-6 h-6 text-blue-600"
+                    className="w-6 h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -203,10 +303,20 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-slate-900">
+                  <h3
+                    className={`text-lg font-semibold ${
+                      isDark ? 'text-slate-100' : 'text-slate-900'
+                    }`}
+                  >
                     {t('responseTime')}
                   </h3>
-                  <p className="text-slate-600">{t('within24Hours')}</p>
+                  <p
+                    className={`${
+                      isDark ? 'text-slate-400' : 'text-slate-600'
+                    }`}
+                  >
+                    {t('within24Hours')}
+                  </p>
                 </div>
               </div>
             </div>
