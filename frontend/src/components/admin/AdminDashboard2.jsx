@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../context/ThemeContext';
 import { getAllSkills } from '../../services/skillsService';
 import { getAllProjects } from '../../services/projectsService';
 import { getAllExperiences } from '../../services/experienceService';
@@ -13,6 +14,7 @@ import { getAllMessages } from '../../services/messagesService';
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
+  const { isDark } = useTheme();
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     skills: 0,
@@ -131,23 +133,43 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div
+        className={`min-h-screen flex items-center justify-center transition-colors duration-200 ${
+          isDark ? 'bg-slate-950' : 'bg-gray-100'
+        }`}
+      >
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <div
+            className={`inline-block animate-spin rounded-full h-12 w-12 border-b-2 ${
+              isDark ? 'border-blue-400' : 'border-blue-600'
+            }`}
+          ></div>
+          <p className={`mt-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            {t('loading')}
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-100 py-12">
+    <div
+      className={`min-h-screen py-12 transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+          : 'bg-gradient-to-br from-slate-100 via-white to-slate-100'
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 mb-4">
             {t('adminDashboard')}
           </h1>
-          <p className="text-lg text-slate-600">
+          <p
+            className={`text-lg ${
+              isDark ? 'text-slate-400' : 'text-slate-600'
+            }`}
+          >
             Manage all aspects of your portfolio from this central dashboard
           </p>
         </div>
@@ -157,7 +179,11 @@ export default function AdminDashboard() {
             <Link
               key={section.title}
               to={section.link}
-              className="group relative bg-white rounded-2xl shadow-lg border border-slate-200 p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 overflow-hidden"
+              className={`group relative rounded-2xl shadow-lg p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 overflow-hidden ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
             >
               <div
                 className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${section.gradient} opacity-10 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-500`}
@@ -181,7 +207,11 @@ export default function AdminDashboard() {
                 </svg>
               </div>
 
-              <h2 className="text-xl font-bold text-slate-900 mb-2">
+              <h2
+                className={`text-xl font-bold mb-2 ${
+                  isDark ? 'text-slate-100' : 'text-slate-900'
+                }`}
+              >
                 {section.title}
               </h2>
 
@@ -193,7 +223,11 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              <div className="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all mt-4">
+              <div
+                className={`flex items-center font-semibold group-hover:gap-2 transition-all mt-4 ${
+                  isDark ? 'text-blue-400' : 'text-blue-600'
+                }`}
+              >
                 <span>Manage</span>
                 <svg
                   className="w-5 h-5 group-hover:translate-x-1 transition-transform"
