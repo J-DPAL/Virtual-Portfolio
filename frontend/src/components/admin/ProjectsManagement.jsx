@@ -262,9 +262,12 @@ export default function ProjectsManagement() {
                     </button>
                   </div>
                 </div>
-                {project.technologies && project.technologies.length > 0 && (
+                {project.technologies && (
                   <div className="flex flex-wrap gap-2 mt-3">
-                    {project.technologies.map((tech, idx) => (
+                    {(Array.isArray(project.technologies)
+                      ? project.technologies
+                      : project.technologies.split(',').map((t) => t.trim())
+                    ).map((tech, idx) => (
                       <span
                         key={idx}
                         className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium"
