@@ -30,6 +30,7 @@ public class ProjectService {
         .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("null")
   public ProjectDTO getProjectById(Long id) {
     Project project =
         projectRepository
@@ -44,12 +45,14 @@ public class ProjectService {
         .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("null")
   public ProjectDTO createProject(ProjectDTO projectDTO) {
     Project project = projectMapper.toEntity(projectDTO);
     Project savedProject = projectRepository.save(project);
     return projectMapper.toDTO(savedProject);
   }
 
+  @SuppressWarnings("null")
   public ProjectDTO updateProject(Long id, ProjectDTO projectDTO) {
     Project existingProject =
         projectRepository
@@ -72,6 +75,7 @@ public class ProjectService {
     return projectMapper.toDTO(updatedProject);
   }
 
+  @SuppressWarnings("null")
   public void deleteProject(Long id) {
     if (!projectRepository.existsById(id)) {
       throw new ResourceNotFoundException("Project not found with id: " + id);

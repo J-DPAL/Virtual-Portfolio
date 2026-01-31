@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.portfolio.projects.businessLayer.service.ProjectService;
@@ -15,6 +14,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/projects")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
+@SuppressWarnings("null")
 public class ProjectController {
 
   private final ProjectService projectService;
@@ -41,14 +41,12 @@ public class ProjectController {
     return ResponseEntity.ok(projects);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
     ProjectDTO createdProject = projectService.createProject(projectDTO);
     return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<ProjectDTO> updateProject(
       @PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
@@ -56,7 +54,6 @@ public class ProjectController {
     return ResponseEntity.ok(updatedProject);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
     projectService.deleteProject(id);
