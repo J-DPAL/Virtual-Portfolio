@@ -241,7 +241,8 @@ public class SkillsDataLoader implements CommandLineRunner {
             .descriptionEn("Vite - Fast frontend build tool and dev server")
             .descriptionFr(
                 "Vite - Outil de construction frontend rapide et serveur de développement")
-            .descriptionEs("Vite - Herramienta de construcción frontend rápida y servidor de desarrollo")
+            .descriptionEs(
+                "Vite - Herramienta de construcción frontend rápida y servidor de desarrollo")
             .proficiencyLevel("Intermediate")
             .category("Development Tools")
             .build());
@@ -279,7 +280,8 @@ public class SkillsDataLoader implements CommandLineRunner {
                 "Distributed Systems - Design and architecture of distributed applications")
             .descriptionFr(
                 "Systèmes Distribués - Conception et architecture d'applications distribuées")
-            .descriptionEs("Sistemas Distribuidos - Diseño y arquitectura de aplicaciones distribuidas")
+            .descriptionEs(
+                "Sistemas Distribuidos - Diseño y arquitectura de aplicaciones distribuidas")
             .proficiencyLevel("Intermediate")
             .category("Web & Cloud")
             .build());
@@ -292,7 +294,8 @@ public class SkillsDataLoader implements CommandLineRunner {
             .descriptionEn("Docker - Containerization platform for application deployment")
             .descriptionFr(
                 "Docker - Plateforme de conteneurisation pour le déploiement d'applications")
-            .descriptionEs("Docker - Plataforma de contenedorización para el despliegue de aplicaciones")
+            .descriptionEs(
+                "Docker - Plataforma de contenedorización para el despliegue de aplicaciones")
             .proficiencyLevel("Advanced")
             .category("Web & Cloud")
             .build());
@@ -305,7 +308,8 @@ public class SkillsDataLoader implements CommandLineRunner {
             .descriptionEn("Docker Compose - Tool for defining multi-container Docker applications")
             .descriptionFr(
                 "Docker Compose - Outil de définition d'applications Docker multi-conteneurs")
-            .descriptionEs("Docker Compose - Herramienta para definir aplicaciones Docker multi-contenedor")
+            .descriptionEs(
+                "Docker Compose - Herramienta para definir aplicaciones Docker multi-contenedor")
             .proficiencyLevel("Advanced")
             .category("Web & Cloud")
             .build());
