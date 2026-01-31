@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../context/ThemeContext';
 import {
   getApprovedTestimonials,
   submitTestimonial,
@@ -7,6 +8,7 @@ import {
 
 export default function TestimonialsPage() {
   const { t, i18n } = useTranslation();
+  const { isDark } = useTheme();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -65,23 +67,45 @@ export default function TestimonialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-orange-50">
+      <div
+        className={`min-h-screen flex items-center justify-center transition-colors duration-200 ${
+          isDark
+            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+            : 'bg-gradient-to-br from-yellow-50 via-white to-orange-50'
+        }`}
+      >
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <div
+            className={`inline-block animate-spin rounded-full h-12 w-12 border-b-2 ${
+              isDark ? 'border-rose-400' : 'border-rose-600'
+            }`}
+          ></div>
+          <p className={`mt-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            {t('loading')}
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 py-12">
+    <div
+      className={`min-h-screen py-12 transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+          : 'bg-gradient-to-br from-yellow-50 via-white to-orange-50'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 mb-4">
             {t('testimonials')}
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
+          <p
+            className={`text-lg max-w-2xl mx-auto mb-6 ${
+              isDark ? 'text-slate-400' : 'text-slate-600'
+            }`}
+          >
             {t('addTestimonial')}
           </p>
           <button
@@ -106,32 +130,62 @@ export default function TestimonialsPage() {
         </div>
 
         {showForm && (
-          <div className="max-w-2xl mx-auto mb-12 bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+          <div
+            className={`max-w-2xl mx-auto mb-12 rounded-2xl shadow-xl p-8 transition-colors duration-200 ${
+              isDark
+                ? 'bg-slate-800 border border-slate-700'
+                : 'bg-white border border-slate-200'
+            }`}
+          >
+            <h2
+              className={`text-2xl font-bold mb-6 ${
+                isDark ? 'text-slate-100' : 'text-slate-900'
+              }`}
+            >
               Submit a Testimonial
             </h2>
 
             {success && (
-              <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+              <div
+                className={`mb-6 px-4 py-3 rounded-lg border ${
+                  isDark
+                    ? 'bg-emerald-900 border-emerald-700 text-emerald-200'
+                    : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                }`}
+              >
                 Thank you! Your testimonial has been submitted for review.
               </div>
             )}
 
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              <div
+                className={`mb-6 px-4 py-3 rounded-lg border ${
+                  isDark
+                    ? 'bg-rose-900 border-rose-700 text-rose-200'
+                    : 'bg-rose-50 border-rose-200 text-rose-800'
+                }`}
+              >
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   Your Name *
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={formData.authorName}
                   onChange={(e) =>
                     setFormData({ ...formData, authorName: e.target.value })
@@ -139,13 +193,21 @@ export default function TestimonialsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   Your Title *
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={formData.authorTitle}
                   onChange={(e) =>
                     setFormData({ ...formData, authorTitle: e.target.value })
@@ -153,12 +215,20 @@ export default function TestimonialsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   Company
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={formData.company}
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
@@ -166,13 +236,21 @@ export default function TestimonialsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
                   Your Testimonial *
                 </label>
                 <textarea
                   required
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
                   value={formData.content}
                   onChange={(e) =>
                     setFormData({ ...formData, content: e.target.value })
@@ -194,21 +272,37 @@ export default function TestimonialsPage() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+              className={`rounded-2xl shadow-lg p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                   {testimonial.authorName.charAt(0)}
                 </div>
                 <div className="ml-4">
-                  <h3 className="font-bold text-slate-900">
+                  <h3
+                    className={`font-bold ${
+                      isDark ? 'text-slate-100' : 'text-slate-900'
+                    }`}
+                  >
                     {testimonial.authorName}
                   </h3>
-                  <p className="text-sm text-slate-600">
+                  <p
+                    className={`text-sm ${
+                      isDark ? 'text-slate-400' : 'text-slate-600'
+                    }`}
+                  >
                     {testimonial.authorTitle}
                   </p>
                   {testimonial.company && (
-                    <p className="text-sm text-slate-500">
+                    <p
+                      className={`text-sm ${
+                        isDark ? 'text-slate-500' : 'text-slate-500'
+                      }`}
+                    >
                       {testimonial.company}
                     </p>
                   )}
@@ -226,7 +320,11 @@ export default function TestimonialsPage() {
                   </svg>
                 ))}
               </div>
-              <p className="text-slate-600 leading-relaxed italic">
+              <p
+                className={`leading-relaxed italic ${
+                  isDark ? 'text-slate-300' : 'text-slate-600'
+                }`}
+              >
                 &ldquo;
                 {currentLang === 'es' && testimonial.testimonialTextEs
                   ? testimonial.testimonialTextEs
@@ -241,7 +339,13 @@ export default function TestimonialsPage() {
 
         {testimonials.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">{t('noTestimonialsYet')}</p>
+            <p
+              className={`text-lg ${
+                isDark ? 'text-slate-400' : 'text-slate-600'
+              }`}
+            >
+              {t('noTestimonialsYet')}
+            </p>
           </div>
         )}
       </div>
