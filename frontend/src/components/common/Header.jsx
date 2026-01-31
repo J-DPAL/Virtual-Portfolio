@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { downloadResume } from '../../services/filesService';
 
 export default function Header() {
   const { language, switchLanguage } = useLanguage();
   const { isAuthenticated, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -51,14 +53,22 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white/95 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <header
+      className={`${
+        isDark
+          ? 'bg-slate-900/95 border-slate-700 backdrop-blur-lg'
+          : 'bg-white/95 border-slate-200 backdrop-blur-lg'
+      } border-b sticky top-0 z-50 shadow-sm transition-colors duration-200`}
+    >
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">VP</span>
             </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600">
+            <span
+              className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600`}
+            >
               Virtual Portfolio
             </span>
           </Link>
@@ -73,7 +83,9 @@ export default function Header() {
                   `px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
                       ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      : isDark
+                        ? 'text-slate-300 hover:bg-slate-800'
+                        : 'text-slate-700 hover:bg-slate-100'
                   }`
                 }
               >
@@ -106,10 +118,43 @@ export default function Header() {
               {downloading ? 'Downloading...' : 'CV'}
             </button>
 
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className={`px-3 py-2 text-sm font-medium rounded-lg border-2 transition-all flex items-center gap-2 ${
+                isDark
+                  ? 'border-slate-600 hover:border-yellow-500 hover:text-yellow-400 text-slate-300'
+                  : 'border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-700'
+              }`}
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? (
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.657 5.657l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              )}
+            </button>
+
             <div className="relative group">
               <button
                 onClick={() => setLanguageDropdown(!languageDropdown)}
-                className="px-3 py-2 text-sm font-medium rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:text-blue-600 transition-all flex items-center gap-2"
+                className={`px-3 py-2 text-sm font-medium rounded-lg border-2 transition-all flex items-center gap-2 ${
+                  isDark
+                    ? 'border-slate-600 hover:border-blue-500 hover:text-blue-400 text-slate-300'
+                    : 'border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-700'
+                }`}
                 title={t('language')}
               >
                 <svg
@@ -129,14 +174,24 @@ export default function Header() {
               </button>
 
               {languageDropdown && (
-                <div className="absolute right-0 mt-2 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                <div
+                  className={`absolute right-0 mt-2 w-32 ${
+                    isDark
+                      ? 'bg-slate-800 border-slate-700'
+                      : 'bg-white border-slate-200'
+                  } border rounded-lg shadow-lg z-50`}
+                >
                   <button
                     onClick={() => {
                       switchLanguage('en');
                       i18n.changeLanguage('en');
                       setLanguageDropdown(false);
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium rounded-t-lg flex items-center gap-2"
+                    className={`w-full text-left px-4 py-2 text-sm font-medium rounded-t-lg flex items-center gap-2 transition-colors ${
+                      isDark
+                        ? 'hover:bg-slate-700 text-slate-200'
+                        : 'hover:bg-slate-100 text-slate-700'
+                    }`}
                   >
                     🇬🇧 English
                   </button>
@@ -146,7 +201,11 @@ export default function Header() {
                       i18n.changeLanguage('fr');
                       setLanguageDropdown(false);
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium flex items-center gap-2"
+                    className={`w-full text-left px-4 py-2 text-sm font-medium flex items-center gap-2 transition-colors ${
+                      isDark
+                        ? 'hover:bg-slate-700 text-slate-200'
+                        : 'hover:bg-slate-100 text-slate-700'
+                    }`}
                   >
                     🇫🇷 Français
                   </button>
@@ -156,7 +215,11 @@ export default function Header() {
                       i18n.changeLanguage('es');
                       setLanguageDropdown(false);
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium rounded-b-lg flex items-center gap-2"
+                    className={`w-full text-left px-4 py-2 text-sm font-medium rounded-b-lg flex items-center gap-2 transition-colors ${
+                      isDark
+                        ? 'hover:bg-slate-700 text-slate-200'
+                        : 'hover:bg-slate-100 text-slate-700'
+                    }`}
                   >
                     🇪🇸 Español
                   </button>
@@ -168,7 +231,11 @@ export default function Header() {
               <>
                 <Link
                   to="/admin/dashboard"
-                  className="hidden md:flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-slate-700 text-white hover:bg-slate-800 transition"
+                  className={`hidden md:flex items-center px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    isDark
+                      ? 'bg-slate-700 text-white hover:bg-slate-600'
+                      : 'bg-slate-700 text-white hover:bg-slate-800'
+                  }`}
                 >
                   <svg
                     className="w-4 h-4 mr-2"
@@ -210,7 +277,11 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition"
+              className={`lg:hidden p-2 rounded-lg transition ${
+                isDark
+                  ? 'hover:bg-slate-800 text-slate-300'
+                  : 'hover:bg-slate-100 text-slate-900'
+              }`}
             >
               <svg
                 className="w-6 h-6"
@@ -240,7 +311,11 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-4 py-4 border-t border-slate-200">
+          <div
+            className={`lg:hidden mt-4 py-4 ${
+              isDark ? 'border-slate-700' : 'border-slate-200'
+            } border-t transition-colors`}
+          >
             <div className="flex flex-col space-y-2">
               {navItems.map((item) => (
                 <NavLink
@@ -251,7 +326,9 @@ export default function Header() {
                     `px-4 py-3 rounded-lg text-sm font-medium transition ${
                       isActive
                         ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
-                        : 'text-slate-700 hover:bg-slate-100'
+                        : isDark
+                          ? 'text-slate-300 hover:bg-slate-800'
+                          : 'text-slate-700 hover:bg-slate-100'
                     }`
                   }
                 >
@@ -264,7 +341,11 @@ export default function Header() {
                   setMobileMenuOpen(false);
                 }}
                 disabled={downloading}
-                className="px-4 py-3 text-sm font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition text-left"
+                className={`px-4 py-3 text-sm font-medium rounded-lg text-white text-left transition ${
+                  isDark
+                    ? 'bg-emerald-700 hover:bg-emerald-600'
+                    : 'bg-emerald-600 hover:bg-emerald-700'
+                }`}
               >
                 📄 {t('downloadResume')}
               </button>
