@@ -28,7 +28,7 @@ export default function ContactPage() {
       setForm({ senderName: '', senderEmail: '', subject: '', content: '' });
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      setError('Failed to send message. Please try again.');
+      setError(t('sendMessageFailed'));
       console.error('Error sending message:', err);
     } finally {
       setLoading(false);
@@ -36,21 +36,21 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-4">
             {t('contact')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Let&apos;s connect and discuss how we can work together
+            {t('letsConnectDiscuss')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              Send a Message
+              {t('sendMessage')}
             </h2>
 
             {submitted && (
@@ -68,7 +68,7 @@ export default function ContactPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Message sent successfully! I&apos;ll get back to you soon.
+                {t('messageSuccessfully')}
               </div>
             )}
 
@@ -81,11 +81,11 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Your Name *
+                  {t('name')} *
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
+                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.senderName}
                   onChange={(e) => updateField('senderName', e.target.value)}
                   required
@@ -93,11 +93,11 @@ export default function ContactPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email Address *
+                  {t('email')} *
                 </label>
                 <input
                   type="email"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
+                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.senderEmail}
                   onChange={(e) => updateField('senderEmail', e.target.value)}
                   required
@@ -105,11 +105,11 @@ export default function ContactPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Subject *
+                  {t('subject')} *
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
+                  className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.subject}
                   onChange={(e) => updateField('subject', e.target.value)}
                   required
@@ -117,10 +117,10 @@ export default function ContactPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Message *
+                  {t('message')} *
                 </label>
                 <textarea
-                  className="w-full rounded-lg border border-slate-300 px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
+                  className="w-full rounded-lg border border-slate-300 px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.content}
                   onChange={(e) => updateField('content', e.target.value)}
                   required
@@ -129,16 +129,16 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium hover:shadow-lg disabled:opacity-50 transition-all"
+                className="w-full flex justify-center items-center px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium hover:shadow-lg disabled:opacity-50 transition-all"
               >
                 {loading ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Sending...
+                    {t('loading')}
                   </>
                 ) : (
                   <>
-                    Send Message
+                    {t('sendMessage')}
                     <svg
                       className="w-5 h-5 ml-2"
                       fill="none"
@@ -161,9 +161,9 @@ export default function ContactPage() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-violet-100 to-purple-100 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-violet-600"
+                    className="w-6 h-6 text-blue-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -187,9 +187,9 @@ export default function ContactPage() {
 
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-violet-100 to-purple-100 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-violet-600"
+                    className="w-6 h-6 text-blue-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -204,21 +204,19 @@ export default function ContactPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-slate-900">
-                    Response Time
+                    {t('responseTime')}
                   </h3>
-                  <p className="text-slate-600">Within 24 hours</p>
+                  <p className="text-slate-600">{t('within24Hours')}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-violet-600 to-purple-600 rounded-2xl shadow-lg p-8 text-white">
-              <h3 className="text-2xl font-bold mb-3">
-                Let&apos;s Collaborate
-              </h3>
-              <p className="mb-4 text-violet-100">
-                I&apos;m always interested in hearing about new projects and
-                opportunities. Whether you have a question or just want to say
-                hi, feel free to reach out!
+            <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl shadow-lg p-8 text-white">
+              <h2 className="text-2xl font-bold mb-4">
+                {t('letsCollaborate')}
+              </h2>
+              <p className="mb-4 text-blue-100">
+                {t('alwaysInterestedProjects')}
               </p>
               <div className="flex space-x-4">
                 <a

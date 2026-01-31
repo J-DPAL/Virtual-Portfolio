@@ -14,49 +14,49 @@ export default function HomePage() {
     {
       icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
       title: t('projects'),
-      desc: 'Showcase your amazing work and achievements',
+      desc: t('showcaseWork'),
       to: '/projects',
       gradient: 'from-blue-500 to-cyan-500',
     },
     {
       icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
       title: t('skills'),
-      desc: 'Display your expertise and tech stack',
+      desc: t('displayExpertise'),
       to: '/skills',
-      gradient: 'from-purple-500 to-pink-500',
+      gradient: 'from-blue-500 to-cyan-500',
     },
     {
       icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
       title: t('experience'),
-      desc: 'Share your professional journey',
+      desc: t('shareProfessionalJourney'),
       to: '/experience',
       gradient: 'from-orange-500 to-red-500',
     },
     {
       icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
       title: t('contact'),
-      desc: "Let's collaborate on your next project",
+      desc: t('collaborateOnProject'),
       to: '/contact',
       gradient: 'from-green-500 to-teal-500',
     },
   ];
 
   const stats = [
-    { label: 'Projects Completed', value: '50+', icon: '🚀' },
-    { label: 'Technologies Mastered', value: '20+', icon: '💻' },
-    { label: 'Years of Experience', value: '5+', icon: '⏱️' },
-    { label: 'Client Satisfaction', value: '100%', icon: '⭐' },
+    { label: t('projectsCompleted'), value: '50+', icon: '🚀' },
+    { label: t('technologiesMastered'), value: '20+', icon: '💻' },
+    { label: t('yearsExperience'), value: '5+', icon: '⏱️' },
+    { label: t('clientSatisfaction'), value: '100%', icon: '⭐' },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+    <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 min-h-screen">
       {/* Hero Section with Animated Gradient */}
       <section className="relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
         <div
@@ -67,31 +67,29 @@ export default function HomePage() {
             <div className="inline-flex items-center px-4 py-2 bg-white bg-opacity-10 backdrop-blur-md rounded-full border border-white border-opacity-20 mb-8">
               <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
               <span className="text-white text-sm font-medium">
-                Available for new opportunities
+                {t('availableForOpportunities')}
               </span>
             </div>
 
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 animate-gradient">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-green-400 animate-gradient">
                 {t('welcome')}
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Full-stack developer crafting beautiful, performant web
-              experiences with modern technologies. Turning ideas into reality,
-              one line of code at a time.
+              {t('fullStackDeveloper')}
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link
                 to="/projects"
-                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl font-semibold text-white overflow-hidden transition-all hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-1"
+                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white overflow-hidden transition-all hover:shadow-2xl hover:shadow-cyan-500/50 hover:-translate-y-1"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  View My Work
+                  {t('viewMyWork')}
                   <svg
                     className="w-5 h-5 group-hover:translate-x-1 transition-transform"
                     fill="none"
@@ -106,14 +104,14 @@ export default function HomePage() {
                     />
                   </svg>
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </Link>
 
               <Link
                 to="/contact"
                 className="px-8 py-4 bg-white bg-opacity-10 backdrop-blur-md border-2 border-white border-opacity-20 rounded-2xl font-semibold text-white hover:bg-opacity-20 transition-all hover:-translate-y-1"
               >
-                Get In Touch
+                {t('getInTouch')}
               </Link>
             </div>
 
@@ -160,7 +158,7 @@ export default function HomePage() {
                 style={{ animationDelay: `${idx * 150}ms` }}
               >
                 <div className="text-5xl mb-3">{stat.icon}</div>
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-cyan-600 mb-2">
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
                   {stat.value}
                 </div>
                 <div className="text-slate-600 font-medium">{stat.label}</div>
@@ -175,10 +173,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-              Explore My Portfolio
+              {t('exploreMyPortfolio')}
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Discover my projects, skills, and professional journey
+              {t('discoverProjectsSkillsJourney')}
             </p>
           </div>
 
@@ -215,7 +213,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Content */}
-                <h3 className="relative text-2xl font-bold text-slate-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-cyan-600 transition-all">
+                <h3 className="relative text-2xl font-bold text-slate-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-cyan-600 transition-all">
                   {feature.title}
                 </h3>
                 <p className="relative text-slate-600 mb-4">{feature.desc}</p>
@@ -224,7 +222,7 @@ export default function HomePage() {
                 <div
                   className={`relative inline-flex items-center text-sm font-semibold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}
                 >
-                  Explore
+                  {t('explore')}
                   <svg
                     className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
                     fill="none"
@@ -246,18 +244,17 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-purple-900 via-slate-900 to-cyan-900 py-20">
+      <section className="bg-gradient-to-br from-blue-900 via-slate-900 to-cyan-900 py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Start Your Project?
+            {t('readyToStartProject')}
           </h2>
           <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
-            Let&apos;s collaborate to bring your ideas to life with cutting-edge
-            technology and creative solutions.
+            {t('collaborateBringIdeas')}
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl font-bold text-white text-lg hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-1 transition-all"
+            className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-bold text-white text-lg hover:shadow-2xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all"
           >
             <svg
               className="w-6 h-6"
@@ -272,7 +269,7 @@ export default function HomePage() {
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            Let&apos;s Talk
+            {t('letsTalk')}
           </Link>
         </div>
       </section>

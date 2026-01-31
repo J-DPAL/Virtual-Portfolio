@@ -20,7 +20,7 @@ export default function ProjectsPage() {
       const response = await getAllProjects();
       setProjects(response.data);
     } catch (err) {
-      setError('Failed to load projects');
+      setError(t('loadProjectsFailed'));
       console.error('Error fetching projects:', err);
     } finally {
       setLoading(false);
@@ -29,7 +29,7 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-teal-50">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           <p className="mt-4 text-slate-600">{t('loading')}</p>
@@ -39,21 +39,20 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-pink-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 py-12">
       <div className="container mx-auto px-4">
         <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-600 mb-4">
             {t('projects')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
-            Explore my portfolio of projects showcasing innovation and technical
-            expertise
+            {t('explorePortfolioProjects')}
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
           >
-            Get in Touch
+            {t('getInTouchButton')}
             <svg
               className="w-5 h-5 ml-2"
               fill="none"
@@ -72,7 +71,7 @@ export default function ProjectsPage() {
 
         {error && (
           <div className="max-w-2xl mx-auto mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
+            {t('errorOccurred')}
           </div>
         )}
 
@@ -82,7 +81,7 @@ export default function ProjectsPage() {
               key={project.id}
               className="group bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
             >
-              <div className="bg-gradient-to-br from-indigo-500 to-purple-600 h-48 flex items-center justify-center">
+              <div className="bg-gradient-to-br from-blue-500 to-teal-600 h-48 flex items-center justify-center">
                 <svg
                   className="w-20 h-20 text-white opacity-80"
                   fill="none"
@@ -153,9 +152,7 @@ export default function ProjectsPage() {
 
         {projects.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">
-              No projects available at the moment.
-            </p>
+            <p className="text-slate-600 text-lg">{t('noProjectsAvailable')}</p>
           </div>
         )}
       </div>

@@ -23,7 +23,7 @@ export default function EducationPage() {
       );
       setEducation(sorted);
     } catch (err) {
-      setError('Failed to load education');
+      setError(t('errorOccurred'));
       console.error('Error fetching education:', err);
     } finally {
       setLoading(false);
@@ -31,7 +31,7 @@ export default function EducationPage() {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'Present';
+    if (!dateString) return t('presentDate');
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -58,7 +58,7 @@ export default function EducationPage() {
             {t('education')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Academic journey and continuous learning path
+            {t('academicJourneyLearning')}
           </p>
         </div>
 
@@ -84,9 +84,9 @@ export default function EducationPage() {
                       : edu.degreeEn}
                   </h2>
                   <h3 className="text-xl text-emerald-600 font-semibold mb-2">
-                    {currentLang === 'fr' && edu.institutionFr
-                      ? edu.institutionFr
-                      : edu.institutionEn}
+                    {currentLang === 'fr' && edu.institutionNameFr
+                      ? edu.institutionNameFr
+                      : edu.institutionNameEn}
                   </h3>
                   <p className="text-slate-600 mb-4">
                     {currentLang === 'fr' && edu.fieldOfStudyFr
@@ -147,7 +147,7 @@ export default function EducationPage() {
               />
             </svg>
             <p className="text-slate-600 text-lg">
-              No education records available at the moment.
+              {t('noEducationAvailable')}
             </p>
           </div>
         )}

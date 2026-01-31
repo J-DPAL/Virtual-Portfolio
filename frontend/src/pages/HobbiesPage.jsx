@@ -19,7 +19,7 @@ export default function HobbiesPage() {
       const response = await getAllHobbies();
       setHobbies(response.data);
     } catch (err) {
-      setError('Failed to load hobbies');
+      setError(t('errorOccurred'));
       console.error('Error fetching hobbies:', err);
     } finally {
       setLoading(false);
@@ -64,7 +64,7 @@ export default function HobbiesPage() {
             {t('hobbies')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Beyond work, these are the passions that inspire and energize me
+            {t('beyondWorkPassions')}
           </p>
         </div>
 
@@ -126,9 +126,7 @@ export default function HobbiesPage() {
                 d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="text-slate-600 text-lg">
-              No hobbies available at the moment.
-            </p>
+            <p className="text-slate-600 text-lg">{t('noHobbiesAvailable')}</p>
           </div>
         )}
       </div>

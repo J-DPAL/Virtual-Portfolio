@@ -23,7 +23,7 @@ export default function ExperiencePage() {
       );
       setExperiences(sorted);
     } catch (err) {
-      setError('Failed to load experiences');
+      setError(t('errorOccurred'));
       console.error('Error fetching experiences:', err);
     } finally {
       setLoading(false);
@@ -31,7 +31,7 @@ export default function ExperiencePage() {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'Present';
+    if (!dateString) return t('presentDate');
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -58,7 +58,7 @@ export default function ExperiencePage() {
             {t('experience')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Professional journey and career milestones
+            {t('professionalJourneyMilestones')}
           </p>
         </div>
 
@@ -84,11 +84,11 @@ export default function ExperiencePage() {
                       : exp.positionEn}
                   </h2>
                   <h3 className="text-xl text-cyan-600 font-semibold mb-2">
-                    {currentLang === 'fr' && exp.companyFr
-                      ? exp.companyFr
-                      : exp.companyEn}
+                    {currentLang === 'fr' && exp.companyNameFr
+                      ? exp.companyNameFr
+                      : exp.companyNameEn}
                   </h3>
-                  {exp.location && (
+                  {(exp.locationEn || exp.locationFr) && (
                     <p className="text-slate-600 flex items-center mb-3">
                       <svg
                         className="w-4 h-4 mr-2"
@@ -109,7 +109,9 @@ export default function ExperiencePage() {
                           d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                         />
                       </svg>
-                      {exp.location}
+                      {currentLang === 'fr' && exp.locationFr
+                        ? exp.locationFr
+                        : exp.locationEn}
                     </p>
                   )}
                 </div>
@@ -172,7 +174,7 @@ export default function ExperiencePage() {
               />
             </svg>
             <p className="text-slate-600 text-lg">
-              No experience records available at the moment.
+              {t('noExperienceAvailable')}
             </p>
           </div>
         )}

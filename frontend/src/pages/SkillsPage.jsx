@@ -19,7 +19,7 @@ export default function SkillsPage() {
       const response = await getAllSkills();
       setSkills(response.data);
     } catch (err) {
-      setError('Failed to load skills');
+      setError(t('loadSkillsFailed'));
       console.error('Error fetching skills:', err);
     } finally {
       setLoading(false);
@@ -30,7 +30,7 @@ export default function SkillsPage() {
     const levels = {
       beginner: 'bg-green-50 text-green-700 border-green-200',
       intermediate: 'bg-blue-50 text-blue-700 border-blue-200',
-      advanced: 'bg-purple-50 text-purple-700 border-purple-200',
+      advanced: 'bg-teal-50 text-teal-700 border-teal-200',
       expert: 'bg-orange-50 text-orange-700 border-orange-200',
     };
     return (
@@ -40,7 +40,7 @@ export default function SkillsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           <p className="mt-4 text-slate-600">{t('loading')}</p>
@@ -50,20 +50,20 @@ export default function SkillsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-4">
             {t('skills')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Discover the technologies and tools I use to build amazing solutions
+            {t('discoverTechnologiesTools')}
           </p>
         </div>
 
         {error && (
           <div className="max-w-2xl mx-auto mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
+            {t('errorOccurred')}
           </div>
         )}
 
@@ -112,9 +112,7 @@ export default function SkillsPage() {
 
         {skills.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">
-              No skills available at the moment.
-            </p>
+            <p className="text-slate-600 text-lg">{t('noSkillsAvailable')}</p>
           </div>
         )}
       </div>

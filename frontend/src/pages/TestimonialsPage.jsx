@@ -30,7 +30,7 @@ export default function TestimonialsPage() {
       const response = await getApprovedTestimonials();
       setTestimonials(response.data);
     } catch (err) {
-      setError('Failed to load testimonials');
+      setError(t('errorOccurred'));
       console.error('Error fetching testimonials:', err);
     } finally {
       setLoading(false);
@@ -56,7 +56,7 @@ export default function TestimonialsPage() {
         setShowForm(false);
       }, 3000);
     } catch (err) {
-      setError('Failed to submit testimonial. Please try again.');
+      setError(t('submitTestimonialFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -64,7 +64,7 @@ export default function TestimonialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-orange-50">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
           <p className="mt-4 text-slate-600">{t('loading')}</p>
@@ -74,20 +74,20 @@ export default function TestimonialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-rose-600 to-pink-600 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 mb-4">
             {t('testimonials')}
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
-            Hear what colleagues and clients have to say
+            {t('addTestimonial')}
           </p>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
           >
-            {showForm ? 'Hide Form' : 'Share Your Testimonial'}
+            {showForm ? t('close') : t('addTestimonial')}
             <svg
               className="w-5 h-5 ml-2"
               fill="none"
@@ -181,9 +181,9 @@ export default function TestimonialsPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 text-white font-medium hover:shadow-lg disabled:opacity-50 transition-all"
+                className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-medium hover:shadow-lg disabled:opacity-50 transition-all"
               >
-                {submitting ? 'Submitting...' : 'Submit Testimonial'}
+                {submitting ? t('submitting') : t('submitTestimonial')}
               </button>
             </form>
           </div>
@@ -196,7 +196,7 @@ export default function TestimonialsPage() {
               className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
             >
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                   {testimonial.authorName.charAt(0)}
                 </div>
                 <div className="ml-4">
@@ -234,9 +234,7 @@ export default function TestimonialsPage() {
 
         {testimonials.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">
-              No testimonials available yet. Be the first to share!
-            </p>
+            <p className="text-slate-600 text-lg">{t('noTestimonialsYet')}</p>
           </div>
         )}
       </div>
