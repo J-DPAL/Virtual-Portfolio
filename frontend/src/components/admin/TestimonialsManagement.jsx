@@ -16,8 +16,8 @@ const TestimonialsManagement = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const data = await testimonialsService.getAllTestimonials();
-      setTestimonials(data);
+      const response = await testimonialsService.getAllTestimonials();
+      setTestimonials(response.data);
       setError(null);
     } catch (err) {
       setError(t('manageTestimonialsFailedLoad'));

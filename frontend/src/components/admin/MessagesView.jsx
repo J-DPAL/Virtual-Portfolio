@@ -16,8 +16,8 @@ const MessagesView = () => {
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const data = await messagesService.getAllMessages();
-      setMessages(data);
+      const response = await messagesService.getAllMessages();
+      setMessages(response.data);
       setError(null);
     } catch (err) {
       setError(t('manageMessagesFailedLoad'));

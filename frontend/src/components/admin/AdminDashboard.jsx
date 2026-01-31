@@ -154,10 +154,10 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {sections.map((section) => (
-            <div
+            <Link
               key={section.title}
-              className="group relative bg-white rounded-2xl shadow-lg border border-slate-200 p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-not-allowed opacity-75"
-              title="CRUD features coming soon"
+              to={section.link}
+              className="group relative bg-white rounded-2xl shadow-lg border border-slate-200 p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 overflow-hidden"
             >
               <div
                 className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${section.gradient} opacity-10 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-500`}
@@ -192,9 +192,23 @@ export default function AdminDashboard() {
                   {section.count} {section.count === 1 ? 'item' : 'items'}
                 </div>
               )}
-
-              <div className="text-sm text-slate-500 mt-4">Coming soon</div>
-            </div>
+              <div className="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all mt-4">
+                <span>Manage</span>
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </div>
+            </Link>
           ))}
         </div>
 
