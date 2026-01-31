@@ -8,9 +8,10 @@ import { downloadResume } from '../../services/filesService';
 export default function Header() {
   const { language, switchLanguage } = useLanguage();
   const { isAuthenticated, logout } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [languageDropdown, setLanguageDropdown] = useState(false);
 
   const navItems = [
     { label: t('home'), to: '/' },
@@ -27,10 +28,17 @@ export default function Header() {
     try {
       setDownloading(true);
       const response = await downloadResume(language);
+      const fileNameByLanguage = {
+        en: 'CV_JD_EN.pdf',
+        fr: 'CV_JD_FR.pdf',
+        es: 'CV_JD_ES.pdf',
+      };
+      const downloadFileName =
+        fileNameByLanguage[language?.toLowerCase?.()] || 'CV_JD_EN.pdf';
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `resume_${language}.pdf`);
+      link.setAttribute('download', downloadFileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -47,10 +55,10 @@ export default function Header() {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">VP</span>
             </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600">
               Virtual Portfolio
             </span>
           </Link>
@@ -64,7 +72,7 @@ export default function Header() {
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
                       : 'text-slate-700 hover:bg-slate-100'
                   }`
                 }
@@ -98,13 +106,63 @@ export default function Header() {
               {downloading ? 'Downloading...' : 'CV'}
             </button>
 
-            <button
-              onClick={() => switchLanguage(language === 'en' ? 'fr' : 'en')}
-              className="px-3 py-2 text-sm font-medium rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:text-blue-600 transition-all"
-              title={t('language')}
-            >
-              {language === 'en' ? '🇫🇷 FR' : '🇬🇧 EN'}
-            </button>
+            <div className="relative group">
+              <button
+                onClick={() => setLanguageDropdown(!languageDropdown)}
+                className="px-3 py-2 text-sm font-medium rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:text-blue-600 transition-all flex items-center gap-2"
+                title={t('language')}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                {language.toUpperCase()}
+              </button>
+
+              {languageDropdown && (
+                <div className="absolute right-0 mt-2 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      switchLanguage('en');
+                      i18n.changeLanguage('en');
+                      setLanguageDropdown(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium rounded-t-lg flex items-center gap-2"
+                  >
+                    🇬🇧 English
+                  </button>
+                  <button
+                    onClick={() => {
+                      switchLanguage('fr');
+                      i18n.changeLanguage('fr');
+                      setLanguageDropdown(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium flex items-center gap-2"
+                  >
+                    🇫🇷 Français
+                  </button>
+                  <button
+                    onClick={() => {
+                      switchLanguage('es');
+                      i18n.changeLanguage('es');
+                      setLanguageDropdown(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-slate-100 text-sm font-medium rounded-b-lg flex items-center gap-2"
+                  >
+                    🇪🇸 Español
+                  </button>
+                </div>
+              )}
+            </div>
 
             {isAuthenticated ? (
               <>
@@ -143,7 +201,7 @@ export default function Header() {
             ) : (
               <Link
                 to="/login"
-                className="px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg transition-all"
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:shadow-lg transition-all"
               >
                 {t('login')}
               </Link>
@@ -192,7 +250,7 @@ export default function Header() {
                   className={({ isActive }) =>
                     `px-4 py-3 rounded-lg text-sm font-medium transition ${
                       isActive
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
                         : 'text-slate-700 hover:bg-slate-100'
                     }`
                   }
