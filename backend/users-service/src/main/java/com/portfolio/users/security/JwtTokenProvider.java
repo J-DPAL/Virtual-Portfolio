@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -28,7 +27,7 @@ public class JwtTokenProvider {
         .claim("role", role)
         .issuedAt(new Date())
         .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-        .signWith(key, SignatureAlgorithm.HS512)
+        .signWith(key)
         .compact();
   }
 }
