@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 
 const LanguageContext = createContext();
 
@@ -8,9 +9,14 @@ export const LanguageProvider = ({ children }) => {
     localStorage.getItem('language') || 'en'
   );
 
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
+
   const switchLanguage = (lang) => {
     setLanguage(lang);
     localStorage.setItem('language', lang);
+    i18n.changeLanguage(lang);
   };
 
   return (
