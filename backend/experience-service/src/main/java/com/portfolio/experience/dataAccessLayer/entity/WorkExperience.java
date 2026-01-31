@@ -25,23 +25,23 @@ public class WorkExperience {
   private String companyNameEn;
 
   @Column(nullable = false)
-  private String companyNameAr;
+  private String companyNameFr;
 
   @Column(nullable = false)
   private String positionEn;
 
   @Column(nullable = false)
-  private String positionAr;
+  private String positionFr;
 
   @Column(length = 2000)
   private String descriptionEn;
 
   @Column(length = 2000)
-  private String descriptionAr;
+  private String descriptionFr;
 
   private String locationEn;
 
-  private String locationAr;
+  private String locationFr;
 
   @Column(nullable = false)
   private LocalDate startDate;

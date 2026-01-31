@@ -54,6 +54,7 @@ public class WorkExperienceService {
         .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("null")
   public WorkExperienceDTO createExperience(@NonNull WorkExperienceDTO workExperienceDTO) {
     WorkExperience workExperience = workExperienceMapper.toEntity(workExperienceDTO);
     WorkExperience savedExperience = workExperienceRepository.save(workExperience);
@@ -69,13 +70,13 @@ public class WorkExperienceService {
                 () -> new ResourceNotFoundException("Work experience not found with id: " + id));
 
     existingExperience.setCompanyNameEn(workExperienceDTO.getCompanyNameEn());
-    existingExperience.setCompanyNameAr(workExperienceDTO.getCompanyNameAr());
+    existingExperience.setCompanyNameFr(workExperienceDTO.getCompanyNameFr());
     existingExperience.setPositionEn(workExperienceDTO.getPositionEn());
-    existingExperience.setPositionAr(workExperienceDTO.getPositionAr());
+    existingExperience.setPositionFr(workExperienceDTO.getPositionFr());
     existingExperience.setDescriptionEn(workExperienceDTO.getDescriptionEn());
-    existingExperience.setDescriptionAr(workExperienceDTO.getDescriptionAr());
+    existingExperience.setDescriptionFr(workExperienceDTO.getDescriptionFr());
     existingExperience.setLocationEn(workExperienceDTO.getLocationEn());
-    existingExperience.setLocationAr(workExperienceDTO.getLocationAr());
+    existingExperience.setLocationFr(workExperienceDTO.getLocationFr());
     existingExperience.setStartDate(workExperienceDTO.getStartDate());
     existingExperience.setEndDate(workExperienceDTO.getEndDate());
     existingExperience.setIsCurrent(workExperienceDTO.getIsCurrent());

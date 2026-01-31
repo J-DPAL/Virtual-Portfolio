@@ -20,20 +20,20 @@ public class WorkExperienceDTO {
   @NotBlank(message = "Company name in English is required")
   private String companyNameEn;
 
-  @NotBlank(message = "Company name in Arabic is required")
-  private String companyNameAr;
+  @NotBlank(message = "Company name in French is required")
+  private String companyNameFr;
 
   @NotBlank(message = "Position in English is required")
   private String positionEn;
 
-  @NotBlank(message = "Position in Arabic is required")
-  private String positionAr;
+  @NotBlank(message = "Position in French is required")
+  private String positionFr;
 
   private String descriptionEn;
-  private String descriptionAr;
+  private String descriptionFr;
 
   private String locationEn;
-  private String locationAr;
+  private String locationFr;
 
   @NotNull(message = "Start date is required")
   private LocalDate startDate;

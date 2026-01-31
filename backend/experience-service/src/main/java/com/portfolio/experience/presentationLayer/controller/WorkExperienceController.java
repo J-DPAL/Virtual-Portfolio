@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.portfolio.experience.businessLayer.service.WorkExperienceService;
@@ -15,6 +14,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/experience")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
+@SuppressWarnings("null")
 public class WorkExperienceController {
 
   private final WorkExperienceService workExperienceService;
@@ -41,7 +41,6 @@ public class WorkExperienceController {
     return ResponseEntity.ok(experiences);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<WorkExperienceDTO> createExperience(
       @Valid @RequestBody WorkExperienceDTO workExperienceDTO) {
@@ -49,7 +48,6 @@ public class WorkExperienceController {
     return new ResponseEntity<>(createdExperience, HttpStatus.CREATED);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<WorkExperienceDTO> updateExperience(
       @PathVariable Long id, @Valid @RequestBody WorkExperienceDTO workExperienceDTO) {
@@ -58,7 +56,6 @@ public class WorkExperienceController {
     return ResponseEntity.ok(updatedExperience);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteExperience(@PathVariable Long id) {
     workExperienceService.deleteExperience(id);
