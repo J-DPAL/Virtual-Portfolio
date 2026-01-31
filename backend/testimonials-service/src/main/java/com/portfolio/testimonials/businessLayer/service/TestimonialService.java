@@ -15,6 +15,7 @@ import com.portfolio.testimonials.utils.exceptions.ResourceNotFoundException;
 
 @Service
 @Transactional
+@SuppressWarnings("null")
 public class TestimonialService {
 
   private final TestimonialRepository testimonialRepository;
