@@ -52,6 +52,7 @@ public class EducationService {
         .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("null")
   public EducationDTO createEducation(@NonNull EducationDTO educationDTO) {
     Education education = educationMapper.toEntity(educationDTO);
     Education savedEducation = educationRepository.save(education);
@@ -65,13 +66,13 @@ public class EducationService {
             .orElseThrow(() -> new ResourceNotFoundException("Education not found with id: " + id));
 
     existingEducation.setInstitutionNameEn(educationDTO.getInstitutionNameEn());
-    existingEducation.setInstitutionNameAr(educationDTO.getInstitutionNameAr());
+    existingEducation.setInstitutionNameFr(educationDTO.getInstitutionNameFr());
     existingEducation.setDegreeEn(educationDTO.getDegreeEn());
-    existingEducation.setDegreeAr(educationDTO.getDegreeAr());
+    existingEducation.setDegreeFr(educationDTO.getDegreeFr());
     existingEducation.setFieldOfStudyEn(educationDTO.getFieldOfStudyEn());
-    existingEducation.setFieldOfStudyAr(educationDTO.getFieldOfStudyAr());
+    existingEducation.setFieldOfStudyFr(educationDTO.getFieldOfStudyFr());
     existingEducation.setDescriptionEn(educationDTO.getDescriptionEn());
-    existingEducation.setDescriptionAr(educationDTO.getDescriptionAr());
+    existingEducation.setDescriptionFr(educationDTO.getDescriptionFr());
     existingEducation.setStartDate(educationDTO.getStartDate());
     existingEducation.setEndDate(educationDTO.getEndDate());
     existingEducation.setIsCurrent(educationDTO.getIsCurrent());

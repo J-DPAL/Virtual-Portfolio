@@ -26,25 +26,25 @@ public class Education {
   private String institutionNameEn;
 
   @Column(nullable = false)
-  private String institutionNameAr;
+  private String institutionNameFr;
 
   @Column(nullable = false)
   private String degreeEn;
 
   @Column(nullable = false)
-  private String degreeAr;
+  private String degreeFr;
 
   @Column(nullable = false)
   private String fieldOfStudyEn;
 
   @Column(nullable = false)
-  private String fieldOfStudyAr;
+  private String fieldOfStudyFr;
 
   @Column(length = 2000)
   private String descriptionEn;
 
   @Column(length = 2000)
-  private String descriptionAr;
+  private String descriptionFr;
 
   @Column(nullable = false)
   private LocalDate startDate;

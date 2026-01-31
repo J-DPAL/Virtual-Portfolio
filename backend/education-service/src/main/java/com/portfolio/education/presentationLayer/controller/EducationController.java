@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.portfolio.education.businessLayer.service.EducationService;
@@ -15,6 +14,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/education")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
+@SuppressWarnings("null")
 public class EducationController {
 
   private final EducationService educationService;
@@ -41,7 +41,6 @@ public class EducationController {
     return ResponseEntity.ok(educationList);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<EducationDTO> createEducation(
       @Valid @RequestBody EducationDTO educationDTO) {
@@ -49,7 +48,6 @@ public class EducationController {
     return new ResponseEntity<>(createdEducation, HttpStatus.CREATED);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<EducationDTO> updateEducation(
       @PathVariable Long id, @Valid @RequestBody EducationDTO educationDTO) {
@@ -57,7 +55,6 @@ public class EducationController {
     return ResponseEntity.ok(updatedEducation);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteEducation(@PathVariable Long id) {
     educationService.deleteEducation(id);
