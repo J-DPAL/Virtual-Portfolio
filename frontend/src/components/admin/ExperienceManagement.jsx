@@ -46,7 +46,7 @@ export default function ExperienceManagement() {
       const response = await getAllExperiences();
       setExperiences(response.data);
     } catch (error) {
-      setErrorMessage('Failed to fetch experiences');
+      setErrorMessage(t('experiencesFetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -92,11 +92,11 @@ export default function ExperienceManagement() {
     if (window.confirm(t('confirmDelete'))) {
       try {
         await deleteExperience(id);
-        setSuccessMessage('Experience deleted successfully');
+        setSuccessMessage(t('experienceDeleteSuccess'));
         fetchExperiences();
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
-        setErrorMessage('Failed to delete experience');
+        setErrorMessage(t('experienceDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
     }
@@ -115,10 +115,10 @@ export default function ExperienceManagement() {
 
       if (editingExperience) {
         await updateExperience(editingExperience.id, submitData);
-        setSuccessMessage('Experience updated successfully');
+        setSuccessMessage(t('experienceUpdateSuccess'));
       } else {
         await createExperience(submitData);
-        setSuccessMessage('Experience created successfully');
+        setSuccessMessage(t('experienceCreateSuccess'));
       }
       setShowModal(false);
       fetchExperiences();
@@ -126,8 +126,8 @@ export default function ExperienceManagement() {
     } catch (error) {
       setErrorMessage(
         editingExperience
-          ? 'Failed to update experience'
-          : 'Failed to create experience'
+          ? t('experienceUpdateFailed')
+          : t('experienceCreateFailed')
       );
       setTimeout(() => setErrorMessage(''), 3000);
     }
@@ -169,7 +169,7 @@ export default function ExperienceManagement() {
               {t('manageExperience')}
             </h1>
             <p className="text-slate-600 mt-2">
-              Create, update, and manage your work experience
+              {t('manageExperienceDescription')}
             </p>
           </div>
           <button
@@ -339,7 +339,8 @@ export default function ExperienceManagement() {
             <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingExperience ? t('edit') : t('add')} Experience
+                  {editingExperience ? t('edit') : t('add')}{' '}
+                  {t('experienceItem')}
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}

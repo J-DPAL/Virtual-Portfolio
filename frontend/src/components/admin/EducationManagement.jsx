@@ -46,7 +46,7 @@ export default function EducationManagement() {
       const response = await getAllEducation();
       setEducation(response.data);
     } catch (error) {
-      setErrorMessage('Failed to fetch education');
+      setErrorMessage(t('educationFetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -90,11 +90,11 @@ export default function EducationManagement() {
     if (window.confirm(t('confirmDelete'))) {
       try {
         await deleteEducation(id);
-        setSuccessMessage('Education deleted successfully');
+        setSuccessMessage(t('educationDeleteSuccess'));
         fetchEducation();
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
-        setErrorMessage('Failed to delete education');
+        setErrorMessage(t('educationDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
     }
@@ -105,10 +105,10 @@ export default function EducationManagement() {
     try {
       if (editingEducation) {
         await updateEducation(editingEducation.id, formData);
-        setSuccessMessage('Education updated successfully');
+        setSuccessMessage(t('educationUpdateSuccess'));
       } else {
         await createEducation(formData);
-        setSuccessMessage('Education created successfully');
+        setSuccessMessage(t('educationCreateSuccess'));
       }
       setShowModal(false);
       fetchEducation();
@@ -116,8 +116,8 @@ export default function EducationManagement() {
     } catch (error) {
       setErrorMessage(
         editingEducation
-          ? 'Failed to update education'
-          : 'Failed to create education'
+          ? t('educationUpdateFailed')
+          : t('educationCreateFailed')
       );
       setTimeout(() => setErrorMessage(''), 3000);
     }
@@ -144,7 +144,7 @@ export default function EducationManagement() {
               {t('manageEducation')}
             </h1>
             <p className="text-slate-600 mt-2">
-              Create, update, and manage your education records
+              {t('manageEducationDescription')}
             </p>
           </div>
           <button
@@ -311,7 +311,7 @@ export default function EducationManagement() {
             <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingEducation ? t('edit') : t('add')} Education
+                  {editingEducation ? t('edit') : t('add')} {t('educationItem')}
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}

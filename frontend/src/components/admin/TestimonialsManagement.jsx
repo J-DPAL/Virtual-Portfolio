@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as testimonialsService from '../../services/testimonialsService';
 
 const TestimonialsManagement = () => {
+  const { t } = useTranslation();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ const TestimonialsManagement = () => {
       setTestimonials(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load testimonials');
+      setError(t('manageTestimonialsFailedLoad'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -30,18 +32,18 @@ const TestimonialsManagement = () => {
       await testimonialsService.approveTestimonial(id);
       await fetchTestimonials();
     } catch (err) {
-      setError('Failed to approve testimonial');
+      setError(t('manageTestimonialsFailedApprove'));
       console.error(err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this testimonial?')) {
+    if (window.confirm(t('confirmDeleteTestimonial'))) {
       try {
         await testimonialsService.deleteTestimonial(id);
         await fetchTestimonials();
       } catch (err) {
-        setError('Failed to delete testimonial');
+        setError(t('manageTestimonialsFailedDelete'));
         console.error(err);
       }
     }
@@ -80,11 +82,9 @@ const TestimonialsManagement = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-rose-600 to-pink-600 text-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold">Testimonials Management</h2>
-        <p className="mt-2 opacity-90">
-          Review and approve testimonials submitted by visitors
-        </p>
+      <div className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold">{t('testimonialManagement')}</h2>
+        <p className="mt-2 opacity-90">{t('reviewApproveTestimonials')}</p>
       </div>
 
       {error && (

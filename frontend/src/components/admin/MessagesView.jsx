@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as messagesService from '../../services/messagesService';
 
 const MessagesView = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ const MessagesView = () => {
       setMessages(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load messages');
+      setError(t('manageMessagesFailedLoad'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -26,12 +28,12 @@ const MessagesView = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this message?')) {
+    if (window.confirm(t('confirmDeleteMessage'))) {
       try {
         await messagesService.deleteMessage(id);
         await fetchMessages();
       } catch (err) {
-        setError('Failed to delete message');
+        setError(t('manageMessagesFailedDelete'));
         console.error(err);
       }
     }
@@ -49,18 +51,16 @@ const MessagesView = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold">Contact Messages</h2>
-        <p className="mt-2 opacity-90">
-          View and manage messages received from the contact form
-        </p>
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold">{t('contactMessages')}</h2>
+        <p className="mt-2 opacity-90">{t('viewManageMessages')}</p>
       </div>
 
       {error && (
@@ -75,19 +75,19 @@ const MessagesView = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Sender Name
+                  {t('senderName')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
+                  {t('email')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Subject
+                  {t('subject')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
+                  {t('dateSubmitted')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  {t('actions')}
                 </th>
               </tr>
             </thead>
@@ -115,7 +115,7 @@ const MessagesView = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleExpand(message.id)}
-                          className="text-violet-600 hover:text-violet-900 font-medium"
+                          className="text-blue-600 hover:text-blue-900 font-medium"
                         >
                           {expandedId === message.id
                             ? 'Hide Message'
@@ -190,7 +190,7 @@ const MessagesView = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => toggleExpand(message.id)}
-                className="text-violet-600 hover:text-violet-900 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
               >
                 {expandedId === message.id ? 'Hide' : 'Read More'}
               </button>

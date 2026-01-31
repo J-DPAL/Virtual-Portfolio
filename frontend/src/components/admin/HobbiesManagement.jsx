@@ -40,7 +40,7 @@ export default function HobbiesManagement() {
       const response = await getAllHobbies();
       setHobbies(response.data);
     } catch (error) {
-      setErrorMessage('Failed to fetch hobbies');
+      setErrorMessage(t('hobbiesFetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -72,11 +72,11 @@ export default function HobbiesManagement() {
     if (window.confirm(t('confirmDelete'))) {
       try {
         await deleteHobby(id);
-        setSuccessMessage('Hobby deleted successfully');
+        setSuccessMessage(t('hobbyDeleteSuccess'));
         fetchHobbies();
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
-        setErrorMessage('Failed to delete hobby');
+        setErrorMessage(t('hobbyDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
     }
@@ -87,17 +87,17 @@ export default function HobbiesManagement() {
     try {
       if (editingHobby) {
         await updateHobby(editingHobby.id, formData);
-        setSuccessMessage('Hobby updated successfully');
+        setSuccessMessage(t('hobbyUpdateSuccess'));
       } else {
         await createHobby(formData);
-        setSuccessMessage('Hobby created successfully');
+        setSuccessMessage(t('hobbyCreateSuccess'));
       }
       setShowModal(false);
       fetchHobbies();
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
       setErrorMessage(
-        editingHobby ? 'Failed to update hobby' : 'Failed to create hobby'
+        editingHobby ? t('hobbyUpdateFailed') : t('hobbyCreateFailed')
       );
       setTimeout(() => setErrorMessage(''), 3000);
     }
@@ -124,7 +124,7 @@ export default function HobbiesManagement() {
               {t('manageHobbies')}
             </h1>
             <p className="text-slate-600 mt-2">
-              Create, update, and manage your hobbies
+              {t('manageHobbiesDescription')}
             </p>
           </div>
           <button
@@ -279,7 +279,7 @@ export default function HobbiesManagement() {
             <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-amber-600 to-orange-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingHobby ? t('edit') : t('add')} Hobby
+                  {editingHobby ? t('edit') : t('add')} {t('hobby')}
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}

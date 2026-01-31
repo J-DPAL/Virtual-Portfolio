@@ -75,14 +75,14 @@ export default function AdminDashboard() {
       title: t('manageSkills'),
       icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
       count: stats.skills,
-      gradient: 'from-blue-500 to-purple-600',
+      gradient: 'from-blue-500 to-cyan-600',
       link: '/admin/skills',
     },
     {
       title: t('manageProjects'),
       icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
       count: stats.projects,
-      gradient: 'from-indigo-500 to-pink-600',
+      gradient: 'from-blue-600 to-teal-600',
       link: '/admin/projects',
     },
     {
@@ -110,14 +110,14 @@ export default function AdminDashboard() {
       title: t('manageTestimonials'),
       icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
       count: stats.testimonials,
-      gradient: 'from-rose-500 to-pink-600',
+      gradient: 'from-yellow-600 to-orange-600',
       link: '/admin/testimonials',
     },
     {
       title: t('viewMessages'),
       icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
       count: stats.messages,
-      gradient: 'from-violet-500 to-purple-600',
+      gradient: 'from-blue-600 to-cyan-600',
       link: '/admin/messages',
     },
     {
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-100 py-12">
       <div className="container mx-auto px-4">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 mb-4">
             {t('adminDashboard')}
           </h1>
           <p className="text-lg text-slate-600">

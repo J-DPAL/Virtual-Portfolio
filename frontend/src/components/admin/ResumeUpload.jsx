@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as filesService from '../../services/filesService';
 
 const ResumeUpload = () => {
+  const { t } = useTranslation();
   const [enFile, setEnFile] = useState(null);
   const [frFile, setFrFile] = useState(null);
   const [enUploading, setEnUploading] = useState(false);
@@ -18,13 +20,13 @@ const ResumeUpload = () => {
 
   const validateFile = (file) => {
     if (!file) {
-      return 'Please select a file';
+      return t('pleasSelectFile');
     }
     if (file.type !== 'application/pdf') {
-      return 'Only PDF files are allowed';
+      return t('onlyPDFAllowed');
     }
     if (file.size > MAX_FILE_SIZE) {
-      return 'File size must be less than 5MB';
+      return t('fileSizeMustBeLess');
     }
     return null;
   };
@@ -114,7 +116,7 @@ const ResumeUpload = () => {
 
       clearInterval(progressInterval);
       setProgress(100);
-      setSuccess(`Resume uploaded successfully!`);
+      setSuccess(t('uploadSuccessfully'));
 
       // Reset after 3 seconds
       setTimeout(() => {
@@ -127,9 +129,7 @@ const ResumeUpload = () => {
         setProgress(0);
       }, 3000);
     } catch (err) {
-      setError(
-        `Failed to upload ${language.toUpperCase()} resume: ${err.message}`
-      );
+      setError(t('uploadFailedTryAgain'));
       console.error(err);
     } finally {
       setUploading(false);
@@ -154,7 +154,9 @@ const ResumeUpload = () => {
     dragActive
   ) => {
     const isEnglish = language === 'en';
-    const title = isEnglish ? 'English Resume' : 'French Resume';
+    const title = isEnglish
+      ? `${t('language')}: English`
+      : `${t('language')}: Français`;
 
     return (
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -189,7 +191,7 @@ const ResumeUpload = () => {
               htmlFor={`file-upload-${language}`}
               className="cursor-pointer bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2 rounded-md hover:from-green-700 hover:to-emerald-700 transition"
             >
-              Select PDF File
+              {t('selectPDFFile')}
               <input
                 id={`file-upload-${language}`}
                 type="file"
@@ -200,8 +202,7 @@ const ResumeUpload = () => {
               />
             </label>
           </div>
-          <p className="mt-2 text-sm text-gray-600">or drag and drop</p>
-          <p className="text-xs text-gray-500 mt-1">PDF files only (max 5MB)</p>
+          <p className="mt-2 text-sm text-gray-600">{t('dragDropResume')}</p>
         </div>
 
         {file && (
@@ -258,7 +259,7 @@ const ResumeUpload = () => {
             {uploading && (
               <div className="mt-3">
                 <div className="flex justify-between text-sm text-gray-600 mb-1">
-                  <span>Uploading...</span>
+                  <span>{t('uploading')}</span>
                   <span>{progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -296,10 +297,8 @@ const ResumeUpload = () => {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold">Resume Upload</h2>
-        <p className="mt-2 opacity-90">
-          Upload your resume files for English and French versions
-        </p>
+        <h2 className="text-3xl font-bold">{t('uploadResumePDF')}</h2>
+        <p className="mt-2 opacity-90">{t('uploadResume')}</p>
       </div>
 
       {error && (
