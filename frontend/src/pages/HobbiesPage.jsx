@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../context/ThemeContext';
 import { getAllHobbies } from '../services/hobbiesService';
 
 export default function HobbiesPage() {
   const { t, i18n } = useTranslation();
+  const { isDark } = useTheme();
   const [hobbies, setHobbies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,29 +49,57 @@ export default function HobbiesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div
+        className={`min-h-screen flex items-center justify-center transition-colors duration-200 ${
+          isDark
+            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+            : 'bg-gradient-to-br from-amber-50 via-white to-orange-50'
+        }`}
+      >
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <div
+            className={`inline-block animate-spin rounded-full h-12 w-12 border-b-2 ${
+              isDark ? 'border-amber-400' : 'border-amber-600'
+            }`}
+          ></div>
+          <p className={`mt-4 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            {t('loading')}
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 py-12">
+    <div
+      className={`min-h-screen py-12 transition-colors duration-200 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+          : 'bg-gradient-to-br from-amber-50 via-white to-orange-50'
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-orange-600 mb-4">
             {t('hobbies')}
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p
+            className={`text-lg max-w-2xl mx-auto ${
+              isDark ? 'text-slate-400' : 'text-slate-600'
+            }`}
+          >
             {t('beyondWorkPassions')}
           </p>
         </div>
 
         {error && (
-          <div className="max-w-2xl mx-auto mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div
+            className={`max-w-2xl mx-auto mb-6 border px-4 py-3 rounded-lg ${
+              isDark
+                ? 'bg-red-900/30 border-red-700 text-red-300'
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}
+          >
             {error}
           </div>
         )}
@@ -78,12 +108,24 @@ export default function HobbiesPage() {
           {hobbies.map((hobby, index) => (
             <div
               key={hobby.id}
-              className="group bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+              className={`group rounded-2xl shadow-lg p-6 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+                isDark
+                  ? 'bg-slate-800 border border-slate-700'
+                  : 'bg-white border border-slate-200'
+              }`}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl">
+                <div
+                  className={`p-3 rounded-xl ${
+                    isDark
+                      ? 'bg-amber-900/30'
+                      : 'bg-gradient-to-br from-amber-100 to-orange-100'
+                  }`}
+                >
                   <svg
-                    className="w-8 h-8 text-amber-600"
+                    className={`w-8 h-8 ${
+                      isDark ? 'text-amber-400' : 'text-amber-600'
+                    }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -97,14 +139,22 @@ export default function HobbiesPage() {
                   </svg>
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition">
+              <h2
+                className={`text-2xl font-bold mb-3 group-hover:text-amber-600 transition ${
+                  isDark ? 'text-slate-100' : 'text-slate-900'
+                }`}
+              >
                 {currentLang === 'es' && hobby.nameEs
                   ? hobby.nameEs
                   : currentLang === 'fr' && hobby.nameFr
                     ? hobby.nameFr
                     : hobby.nameEn}
               </h2>
-              <p className="text-slate-600 leading-relaxed">
+              <p
+                className={`leading-relaxed ${
+                  isDark ? 'text-slate-400' : 'text-slate-600'
+                }`}
+              >
                 {currentLang === 'es' && hobby.descriptionEs
                   ? hobby.descriptionEs
                   : currentLang === 'fr' && hobby.descriptionFr
@@ -118,7 +168,9 @@ export default function HobbiesPage() {
         {hobbies.length === 0 && !loading && (
           <div className="text-center py-12">
             <svg
-              className="w-24 h-24 mx-auto text-slate-300 mb-4"
+              className={`w-24 h-24 mx-auto mb-4 ${
+                isDark ? 'text-slate-700' : 'text-slate-300'
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -130,7 +182,13 @@ export default function HobbiesPage() {
                 d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="text-slate-600 text-lg">{t('noHobbiesAvailable')}</p>
+            <p
+              className={`text-lg ${
+                isDark ? 'text-slate-400' : 'text-slate-600'
+              }`}
+            >
+              {t('noHobbiesAvailable')}
+            </p>
           </div>
         )}
       </div>
