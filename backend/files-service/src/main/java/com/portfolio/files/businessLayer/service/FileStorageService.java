@@ -24,11 +24,15 @@ import com.portfolio.files.utils.exceptions.ResourceNotFoundException;
 public class FileStorageService {
 
   private final Path fileStorageLocation;
+  private final Path cvStorageLocation;
   private final ResumeRepository resumeRepository;
 
   public FileStorageService(
-      @Value("${file.upload.dir}") String uploadDir, ResumeRepository resumeRepository) {
+      @Value("${file.upload.dir}") String uploadDir,
+      @Value("${file.cv.dir:../../CV}") @SuppressWarnings("null") String cvDir,
+      ResumeRepository resumeRepository) {
     this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+    this.cvStorageLocation = Paths.get(cvDir).toAbsolutePath().normalize();
     this.resumeRepository = resumeRepository;
 
     try {
@@ -39,6 +43,7 @@ public class FileStorageService {
     }
   }
 
+  @SuppressWarnings("null")
   public Resume storeFile(MultipartFile file) {
     // Normalize file name
     String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -79,6 +84,7 @@ public class FileStorageService {
   public Resource loadFileAsResource(String fileName) {
     try {
       Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      @SuppressWarnings("null")
       Resource resource = new UrlResource(filePath.toUri());
 
       if (resource.exists()) {
@@ -88,6 +94,22 @@ public class FileStorageService {
       }
     } catch (Exception ex) {
       throw new ResourceNotFoundException("File not found: " + fileName);
+    }
+  }
+
+  public Resource loadCvAsResource(String fileName) {
+    try {
+      Path filePath = this.cvStorageLocation.resolve(fileName).normalize();
+      @SuppressWarnings("null")
+      Resource resource = new UrlResource(filePath.toUri());
+
+      if (resource.exists()) {
+        return resource;
+      } else {
+        throw new ResourceNotFoundException("CV file not found: " + fileName);
+      }
+    } catch (Exception ex) {
+      throw new ResourceNotFoundException("CV file not found: " + fileName);
     }
   }
 

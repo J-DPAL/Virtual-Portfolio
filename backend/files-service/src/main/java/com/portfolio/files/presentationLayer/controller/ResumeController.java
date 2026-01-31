@@ -44,24 +44,26 @@ public class ResumeController {
   }
 
   @GetMapping("/download")
-  public ResponseEntity<Resource> downloadResume(HttpServletRequest request) {
-    // Get current resume
-    Resume resume = fileStorageService.getCurrentResume();
+  @SuppressWarnings("null")
+  public ResponseEntity<Resource> downloadResume(
+      @RequestParam(value = "language", defaultValue = "en") String language,
+      HttpServletRequest request) {
+    // Map language code to existing CV filename
+    String cvFileName =
+        switch (language.toLowerCase()) {
+          case "fr" -> "CV_JD_FR.pdf";
+          case "es" -> "CV_JD_ES.pdf";
+          default -> "CV_JD_EN.pdf";
+        };
 
-    // Load file as Resource
-    Resource resource = fileStorageService.loadFileAsResource(resume.getFilePath());
+    // Load file from CV folder
+    Resource resource = fileStorageService.loadCvAsResource(cvFileName);
 
-    // Try to determine file's content type
-    String contentType = resume.getContentType();
-    if (contentType == null) {
-      contentType = "application/octet-stream";
-    }
-
+    @SuppressWarnings("null")
+    MediaType mediaType = MediaType.APPLICATION_PDF;
     return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(contentType))
-        .header(
-            HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=\"" + resume.getFileName() + "\"")
+        .contentType(mediaType)
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cvFileName + "\"")
         .body(resource);
   }
 
