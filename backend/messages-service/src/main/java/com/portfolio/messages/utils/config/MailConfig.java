@@ -2,6 +2,7 @@ package com.portfolio.messages.utils.config;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,18 @@ public class MailConfig {
 
   @Bean
   @ConditionalOnProperty(name = "spring.mail.host")
-  public JavaMailSender javaMailSender() {
-    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+  public JavaMailSender javaMailSender(
+      @Value("${spring.mail.host}") String host,
+      @Value("${spring.mail.port}") int port,
+      @Value("${spring.mail.username}") String username,
+      @Value("${spring.mail.password}") String password) {
 
-    // Mail server properties will be auto-configured from application.yml
+    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    mailSender.setHost(host);
+    mailSender.setPort(port);
+    mailSender.setUsername(username);
+    mailSender.setPassword(password);
+
     Properties props = mailSender.getJavaMailProperties();
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.starttls.enable", "true");
