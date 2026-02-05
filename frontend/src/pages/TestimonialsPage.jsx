@@ -17,10 +17,14 @@ export default function TestimonialsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    authorName: '',
-    authorTitle: '',
-    content: '',
-    company: '',
+    clientName: '',
+    clientPosition: '',
+    testimonialTextEn: '',
+    testimonialTextFr: '',
+    testimonialTextEs: '',
+    clientCompany: '',
+    rating: 5,
+    clientImageUrl: '',
   });
 
   useEffect(() => {
@@ -49,10 +53,14 @@ export default function TestimonialsPage() {
       await submitTestimonial(formData);
       setSuccess(true);
       setFormData({
-        authorName: '',
-        authorTitle: '',
-        content: '',
-        company: '',
+        clientName: '',
+        clientPosition: '',
+        testimonialTextEn: '',
+        testimonialTextFr: '',
+        testimonialTextEs: '',
+        clientCompany: '',
+        rating: 5,
+        clientImageUrl: '',
       });
       setTimeout(() => {
         setSuccess(false);
@@ -186,9 +194,9 @@ export default function TestimonialsPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
                   }`}
-                  value={formData.authorName}
+                  value={formData.clientName}
                   onChange={(e) =>
-                    setFormData({ ...formData, authorName: e.target.value })
+                    setFormData({ ...formData, clientName: e.target.value })
                   }
                 />
               </div>
@@ -208,9 +216,9 @@ export default function TestimonialsPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
                   }`}
-                  value={formData.authorTitle}
+                  value={formData.clientPosition}
                   onChange={(e) =>
-                    setFormData({ ...formData, authorTitle: e.target.value })
+                    setFormData({ ...formData, clientPosition: e.target.value })
                   }
                 />
               </div>
@@ -229,9 +237,9 @@ export default function TestimonialsPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
                   }`}
-                  value={formData.company}
+                  value={formData.clientCompany}
                   onChange={(e) =>
-                    setFormData({ ...formData, company: e.target.value })
+                    setFormData({ ...formData, clientCompany: e.target.value })
                   }
                 />
               </div>
@@ -241,7 +249,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Your Testimonial *
+                  Your Testimonial in English *
                 </label>
                 <textarea
                   required
@@ -251,9 +259,89 @@ export default function TestimonialsPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
                   }`}
-                  value={formData.content}
+                  value={formData.testimonialTextEn}
                   onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
+                    setFormData({
+                      ...formData,
+                      testimonialTextEn: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
+                  Your Testimonial in French *
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
+                  value={formData.testimonialTextFr}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      testimonialTextFr: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
+                  Your Testimonial in Spanish *
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
+                  value={formData.testimonialTextEs}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      testimonialTextEs: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-slate-300' : 'text-slate-700'
+                  }`}
+                >
+                  Rating (1-5) *
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  required
+                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
+                    isDark
+                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
+                      : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
+                  }`}
+                  value={formData.rating}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      rating: parseInt(e.target.value),
+                    })
                   }
                 />
               </div>
@@ -280,7 +368,7 @@ export default function TestimonialsPage() {
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                  {testimonial.authorName.charAt(0)}
+                  {testimonial.clientName?.charAt(0) || 'A'}
                 </div>
                 <div className="ml-4">
                   <h3
@@ -288,22 +376,22 @@ export default function TestimonialsPage() {
                       isDark ? 'text-slate-100' : 'text-slate-900'
                     }`}
                   >
-                    {testimonial.authorName}
+                    {testimonial.clientName}
                   </h3>
                   <p
                     className={`text-sm ${
                       isDark ? 'text-slate-400' : 'text-slate-600'
                     }`}
                   >
-                    {testimonial.authorTitle}
+                    {testimonial.clientPosition}
                   </p>
-                  {testimonial.company && (
+                  {testimonial.clientCompany && (
                     <p
                       className={`text-sm ${
                         isDark ? 'text-slate-500' : 'text-slate-500'
                       }`}
                     >
-                      {testimonial.company}
+                      {testimonial.clientCompany}
                     </p>
                   )}
                 </div>
@@ -330,7 +418,7 @@ export default function TestimonialsPage() {
                   ? testimonial.testimonialTextEs
                   : currentLang === 'fr' && testimonial.testimonialTextFr
                     ? testimonial.testimonialTextFr
-                    : testimonial.testimonialTextEn || testimonial.content}
+                    : testimonial.testimonialTextEn}
                 &rdquo;
               </p>
             </div>

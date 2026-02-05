@@ -29,6 +29,7 @@ public class TestimonialController {
     return ResponseEntity.ok(testimonials);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/pending")
   public ResponseEntity<List<TestimonialDTO>> getPendingTestimonials() {
     List<TestimonialDTO> testimonials = testimonialService.getPendingTestimonials();
@@ -41,7 +42,6 @@ public class TestimonialController {
     return ResponseEntity.ok(testimonial);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<TestimonialDTO> createTestimonial(
       @Valid @RequestBody TestimonialDTO testimonialDTO) {

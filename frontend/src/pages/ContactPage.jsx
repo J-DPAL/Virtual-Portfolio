@@ -267,7 +267,7 @@ export default function ContactPage() {
                       isDark ? 'text-slate-400' : 'text-slate-600'
                     }`}
                   >
-                    admin@portfolio.com
+                    jeandavid.pallares@gmail.com
                   </p>
                 </div>
               </div>

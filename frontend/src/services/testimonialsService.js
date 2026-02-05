@@ -4,6 +4,9 @@ export const getAllTestimonials = () => apiClient.get('/testimonials');
 
 export const getApprovedTestimonials = () => apiClient.get('/testimonials'); // Backend /testimonials already returns approved ones
 
+export const getPendingTestimonials = () =>
+  apiClient.get('/testimonials/pending');
+
 export const getTestimonialById = (id) => apiClient.get(`/testimonials/${id}`);
 
 export const submitTestimonial = (testimonialData) =>

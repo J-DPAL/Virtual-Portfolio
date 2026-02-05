@@ -11,9 +11,9 @@ const TestimonialsManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    title: '',
-    company: '',
+    clientName: '',
+    clientPosition: '',
+    clientCompany: '',
     rating: 5,
     testimonialTextEn: '',
     testimonialTextFr: '',
@@ -27,7 +27,7 @@ const TestimonialsManagement = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await testimonialsService.getAllTestimonials();
+      const response = await testimonialsService.getPendingTestimonials();
       setTestimonials(response.data);
       setError(null);
     } catch (err) {
@@ -51,9 +51,9 @@ const TestimonialsManagement = () => {
   const handleAdd = () => {
     setEditingTestimonial(null);
     setFormData({
-      name: '',
-      title: '',
-      company: '',
+      clientName: '',
+      clientPosition: '',
+      clientCompany: '',
       rating: 5,
       testimonialTextEn: '',
       testimonialTextFr: '',
@@ -65,12 +65,11 @@ const TestimonialsManagement = () => {
   const handleEdit = (testimonial) => {
     setEditingTestimonial(testimonial);
     setFormData({
-      name: testimonial.name || '',
-      title: testimonial.title || '',
-      company: testimonial.company || '',
+      clientName: testimonial.clientName || '',
+      clientPosition: testimonial.clientPosition || '',
+      clientCompany: testimonial.clientCompany || '',
       rating: testimonial.rating || 5,
-      testimonialTextEn:
-        testimonial.testimonialTextEn || testimonial.content || '',
+      testimonialTextEn: testimonial.testimonialTextEn || '',
       testimonialTextFr: testimonial.testimonialTextFr || '',
       testimonialTextEs: testimonial.testimonialTextEs || '',
     });
@@ -207,14 +206,18 @@ const TestimonialsManagement = () => {
                   <tr key={testimonial.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900">
-                        {testimonial.name}
+                        {testimonial.clientName}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-900">{testimonial.title}</div>
+                      <div className="text-gray-900">
+                        {testimonial.clientPosition}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-900">{testimonial.company}</div>
+                      <div className="text-gray-900">
+                        {testimonial.clientCompany}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {renderStars(testimonial.rating)}
@@ -323,9 +326,9 @@ const TestimonialsManagement = () => {
                   </label>
                   <input
                     type="text"
-                    value={formData.name}
+                    value={formData.clientName}
                     onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
+                      setFormData({ ...formData, clientName: e.target.value })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
@@ -337,9 +340,12 @@ const TestimonialsManagement = () => {
                   </label>
                   <input
                     type="text"
-                    value={formData.title}
+                    value={formData.clientPosition}
                     onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
+                      setFormData({
+                        ...formData,
+                        clientPosition: e.target.value,
+                      })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
@@ -354,9 +360,12 @@ const TestimonialsManagement = () => {
                   </label>
                   <input
                     type="text"
-                    value={formData.company}
+                    value={formData.clientCompany}
                     onChange={(e) =>
-                      setFormData({ ...formData, company: e.target.value })
+                      setFormData({
+                        ...formData,
+                        clientCompany: e.target.value,
+                      })
                     }
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
