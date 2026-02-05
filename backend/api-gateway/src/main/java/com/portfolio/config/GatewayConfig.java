@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerRequest;
@@ -50,7 +51,9 @@ public class GatewayConfig {
 
   @Bean
   public RestTemplate restTemplate() {
-    return new RestTemplate();
+    HttpComponentsClientHttpRequestFactory requestFactory =
+        new HttpComponentsClientHttpRequestFactory();
+    return new RestTemplate(requestFactory);
   }
 
   @Bean
@@ -278,7 +281,18 @@ public class GatewayConfig {
       byte[] responseBody = response.getBody();
 
       return ServerResponse.status(response.getStatusCode())
-          .headers(h -> h.addAll(response.getHeaders()))
+          .headers(
+              h -> {
+                // Copy response headers except CORS headers (handled by Spring Security)
+                response
+                    .getHeaders()
+                    .forEach(
+                        (key, value) -> {
+                          if (key != null && !key.toLowerCase().startsWith("access-control-")) {
+                            h.addAll(key, value);
+                          }
+                        });
+              })
           .body(responseBody != null ? responseBody : new byte[0]);
 
     } catch (org.springframework.web.client.HttpClientErrorException
