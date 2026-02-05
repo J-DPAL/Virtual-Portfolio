@@ -110,7 +110,8 @@ CREATE TABLE IF NOT EXISTS testimonials (
     client_position VARCHAR(255),
     client_company VARCHAR(255),
     testimonial_text_en TEXT NOT NULL,
-    testimonial_text_ar TEXT NOT NULL,
+    testimonial_text_fr TEXT NOT NULL,
+    testimonial_text_es TEXT NOT NULL,
     rating INTEGER CHECK (rating >= 1 AND rating <= 5),
     client_image_url VARCHAR(500),
     status VARCHAR(50) DEFAULT 'PENDING',
@@ -127,8 +128,5 @@ CREATE INDEX IF NOT EXISTS idx_education_dates ON education(start_date, end_date
 CREATE INDEX IF NOT EXISTS idx_messages_read ON messages(is_read);
 CREATE INDEX IF NOT EXISTS idx_testimonials_status ON testimonials(status);
 
--- Insert default admin user (password: admin123 - should be changed in production)
--- BCrypt hash generated with cost 10
-INSERT INTO users (email, password, full_name, role, active) 
-VALUES ('admin@portfolio.com', '$2a$10$DNrpFf/oVX7ug4BkCTgVv.xEscg7I2Ri5D5qO9NEgXif/pneqs92C', 'Admin User', 'ADMIN', true)
-ON CONFLICT DO NOTHING;
+-- Admin user is inserted via init-admin.sh script using environment variables
+-- This ensures credentials are not hardcoded in version control

@@ -21,9 +21,14 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
       POSTGRES_DB: virtual_portfolio
+      # Admin user credentials from .env
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-Admin User}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./database/init-admin.sh:/docker-entrypoint-initdb.d/02-init-admin.sh
     ports:
       - "5432:5432"
     healthcheck:
@@ -221,6 +226,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:

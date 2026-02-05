@@ -207,9 +207,23 @@ All requests should go through the API Gateway at `http://localhost:8080/api`
 - Testimonials Service: `http://localhost:8087/api`
 - Messages Service: `http://localhost:8088/api`
 
-## Default Credentials
-- Email: `admin@portfolio.com`
-- Password: `admin123` (⚠️ Change this in production!)
+## Admin Credentials
+
+Admin credentials are configured via environment variables in the `.env` file (not committed to git). 
+
+**For local development**, the default credentials are set in `.env`. 
+**For production**, copy `.env.example` to `.env.production` and set:
+- `ADMIN_EMAIL`: Your admin email address
+- `ADMIN_PASSWORD_HASH`: BCrypt hash of your password (cost factor 10)
+- `ADMIN_FULL_NAME`: Admin user's full name
+
+To generate a BCrypt password hash:
+```bash
+# Using htpasswd (requires apache2-utils)
+htpasswd -bnBC 10 "" your_password | tr -d ':\n' | sed 's/$2y/$2a/'
+
+# Or use an online BCrypt generator with cost factor 10
+```
 
 ## Microservices Communication
 
