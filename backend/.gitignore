@@ -1,0 +1,13 @@
+.env
+.env.local
+.env.production.local
+
+target/
+.classpath
+.project
+.settings/
+.vscode/
+.idea/
+*.iml
+*.log
+*.swp
