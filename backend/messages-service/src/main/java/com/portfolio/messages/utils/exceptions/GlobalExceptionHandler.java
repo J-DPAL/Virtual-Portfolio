@@ -11,12 +11,16 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
       ResourceNotFoundException ex) {
+    log.error("Resource not found: {}", ex.getMessage());
     ErrorResponse error =
         ErrorResponse.builder()
             .status(HttpStatus.NOT_FOUND.value())
@@ -29,6 +33,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handleValidationExceptions(
       MethodArgumentNotValidException ex) {
+    log.error("Validation error: {}", ex.getMessage());
     Map<String, String> errors = new HashMap<>();
     ex.getBindingResult()
         .getAllErrors()
@@ -52,10 +57,15 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+    log.error("Unexpected error occurred", ex);
+    
+    // Include detailed error message for debugging
+    String errorMessage = ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred";
+    
     ErrorResponse error =
         ErrorResponse.builder()
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .message("An unexpected error occurred")
+            .message(errorMessage)
             .timestamp(LocalDateTime.now())
             .build();
 

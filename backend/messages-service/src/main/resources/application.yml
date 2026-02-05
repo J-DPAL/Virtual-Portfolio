@@ -16,6 +16,21 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
 server:
   port: 8088
   servlet:
@@ -24,7 +39,7 @@ server:
 logging:
   level:
     root: INFO
-    com.portfolio: DEBUG
+    com.portfolio: TRACE
 
 jwt:
   secret: ${JWT_SECRET:dev-secret-key-never-use-in-production-12345678901234567890123456789}

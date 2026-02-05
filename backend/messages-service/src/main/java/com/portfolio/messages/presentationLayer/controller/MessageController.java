@@ -41,7 +41,6 @@ public class MessageController {
     return ResponseEntity.ok(messages);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ResponseEntity<MessageDTO> createMessage(@Valid @RequestBody MessageDTO messageDTO) {
     MessageDTO createdMessage = messageService.createMessage(messageDTO);

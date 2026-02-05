@@ -10,7 +10,7 @@ export default function ContactPage() {
     senderName: '',
     senderEmail: '',
     subject: '',
-    content: '',
+    message: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ export default function ContactPage() {
     try {
       await sendMessage(form);
       setSubmitted(true);
-      setForm({ senderName: '', senderEmail: '', subject: '', content: '' });
+      setForm({ senderName: '', senderEmail: '', subject: '', message: '' });
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
       setError(t('sendMessageFailed'));
@@ -187,8 +187,8 @@ export default function ContactPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-white text-slate-900 placeholder-slate-500'
                   }`}
-                  value={form.content}
-                  onChange={(e) => updateField('content', e.target.value)}
+                  value={form.message}
+                  onChange={(e) => updateField('message', e.target.value)}
                   required
                 />
               </div>
