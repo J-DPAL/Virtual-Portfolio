@@ -31,6 +31,7 @@
         <module>messages-service</module>
         <module>files-service</module>
         <module>eureka-server</module>
+        <module>jacoco-aggregate</module>
     </modules>
 
     <properties>
@@ -41,6 +42,7 @@
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spotless.version>2.43.0</spotless.version>
         <jacoco.version>0.8.11</jacoco.version>
+        <jacoco.skip.check>false</jacoco.skip.check>
     </properties>
 
     <dependencyManagement>
@@ -121,6 +123,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <skip>${jacoco.skip.check}</skip>
                             <rules>
                                 <rule>
                                     <element>PACKAGE</element>
@@ -151,6 +154,23 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+
+    <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.portfolio</groupId>
+    <artifactId>virtual-portfolio-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>jacoco-aggregate</artifactId>
+  <packaging>pom</packaging>
+  <name>JaCoCo Aggregate Report</name>
+
+  <dependencies>
+    <!-- Add all service modules as dependencies -->
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>api-gateway</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>users-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>skills-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>projects-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>experience-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>education-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>hobbies-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>testimonials-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>messages-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>files-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.portfolio</groupId>
+      <artifactId>eureka-server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>report-aggregate</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+            <configuration>
+              <title>Virtual Portfolio - Aggregate Coverage Report</title>
+              <footer>Virtual Portfolio Backend Services</footer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
