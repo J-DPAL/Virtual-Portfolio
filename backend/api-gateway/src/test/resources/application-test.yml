@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: api-gateway
+  main:
+    web-application-type: none
+
+eureka:
+  client:
+    enabled: false
+    registerWithEureka: false
+    fetchRegistry: false
