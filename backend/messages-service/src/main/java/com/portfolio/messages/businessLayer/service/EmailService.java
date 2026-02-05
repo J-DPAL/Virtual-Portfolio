@@ -19,7 +19,8 @@ public class EmailService {
   private final JavaMailSender mailSender;
   private final String adminEmail;
 
-  public EmailService(JavaMailSender mailSender, @Value("${ADMIN_EMAIL:admin@example.com}") String adminEmail) {
+  public EmailService(
+      JavaMailSender mailSender, @Value("${ADMIN_EMAIL:admin@example.com}") String adminEmail) {
     this.mailSender = mailSender;
     this.adminEmail = adminEmail;
   }
@@ -50,7 +51,8 @@ public class EmailService {
       log.info("Email notification sent to admin for message from: {}", messageDTO.getSenderName());
 
     } catch (MailException e) {
-      log.error("Failed to send email notification for message from: {}", messageDTO.getSenderName(), e);
+      log.error(
+          "Failed to send email notification for message from: {}", messageDTO.getSenderName(), e);
       // Don't throw exception - we don't want email failures to break message saving
     }
   }

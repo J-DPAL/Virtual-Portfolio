@@ -58,10 +58,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
     log.error("Unexpected error occurred", ex);
-    
+
     // Include detailed error message for debugging
-    String errorMessage = ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred";
-    
+    String errorMessage =
+        ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred";
+
     ErrorResponse error =
         ErrorResponse.builder()
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
