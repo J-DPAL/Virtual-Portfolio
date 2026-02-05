@@ -1,6 +1,7 @@
 package com.portfolio.messages.businessLayer.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,17 +13,25 @@ import com.portfolio.messages.mappingLayer.dto.MessageDTO;
 import com.portfolio.messages.mappingLayer.mapper.MessageMapper;
 import com.portfolio.messages.utils.exceptions.ResourceNotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Transactional
+@Slf4j
 @SuppressWarnings("null")
 public class MessageService {
 
   private final MessageRepository messageRepository;
   private final MessageMapper messageMapper;
+  private final Optional<EmailService> emailService;
 
-  public MessageService(MessageRepository messageRepository, MessageMapper messageMapper) {
+  public MessageService(
+      MessageRepository messageRepository,
+      MessageMapper messageMapper,
+      Optional<EmailService> emailService) {
     this.messageRepository = messageRepository;
     this.messageMapper = messageMapper;
+    this.emailService = emailService;
   }
 
   public List<MessageDTO> getAllMessages() {
@@ -48,7 +57,18 @@ public class MessageService {
   public MessageDTO createMessage(MessageDTO messageDTO) {
     Message message = messageMapper.toEntity(messageDTO);
     Message savedMessage = messageRepository.save(message);
-    return messageMapper.toDTO(savedMessage);
+    MessageDTO savedDTO = messageMapper.toDTO(savedMessage);
+
+    emailService.ifPresent(
+        service -> {
+          try {
+            service.sendMessageNotification(savedDTO);
+          } catch (Exception e) {
+            log.warn("Email notification failed, but message was saved successfully", e);
+          }
+        });
+
+    return savedDTO;
   }
 
   public MessageDTO updateMessage(Long id, MessageDTO messageDTO) {
