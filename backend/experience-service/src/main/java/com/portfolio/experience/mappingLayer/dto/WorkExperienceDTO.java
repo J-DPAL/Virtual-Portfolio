@@ -53,4 +53,7 @@ public class WorkExperienceDTO {
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+  private String skillsUsed;
+
+  private String icon;
 }
