@@ -22,7 +22,10 @@
   ],
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "plugins": ["react"],
   "settings": {
@@ -32,6 +35,8 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "react/jsx-uses-vars": "error",
+    "no-unused-vars": "off"
   }
 }
