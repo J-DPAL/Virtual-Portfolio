@@ -61,7 +61,9 @@ class WorkExperienceDTOTest {
             LocalDate.of(2021, 1, 1),
             false,
             now,
-            now);
+            now,
+            "React, Java",
+            "💻");
 
     assertEquals(1L, dto.getId());
     assertEquals("Company EN", dto.getCompanyNameEn());
@@ -81,6 +83,8 @@ class WorkExperienceDTOTest {
     assertFalse(dto.getIsCurrent());
     assertEquals(now, dto.getCreatedAt());
     assertEquals(now, dto.getUpdatedAt());
+    assertEquals("React, Java", dto.getSkillsUsed());
+    assertEquals("💻", dto.getIcon());
   }
 
   @Test
@@ -133,6 +137,8 @@ class WorkExperienceDTOTest {
     dto.setIsCurrent(false);
     dto.setCreatedAt(LocalDateTime.of(2023, 1, 1, 10, 0));
     dto.setUpdatedAt(LocalDateTime.of(2023, 1, 2, 10, 0));
+    dto.setSkillsUsed("React, Java");
+    dto.setIcon("💻");
 
     assertEquals(5L, dto.getId());
     assertEquals("Company EN", dto.getCompanyNameEn());
@@ -152,6 +158,8 @@ class WorkExperienceDTOTest {
     assertFalse(dto.getIsCurrent());
     assertEquals(LocalDateTime.of(2023, 1, 1, 10, 0), dto.getCreatedAt());
     assertEquals(LocalDateTime.of(2023, 1, 2, 10, 0), dto.getUpdatedAt());
+    assertEquals("React, Java", dto.getSkillsUsed());
+    assertEquals("💻", dto.getIcon());
   }
 
   @Test
@@ -311,7 +319,9 @@ class WorkExperienceDTOTest {
             (Consumer<WorkExperienceDTO>) d -> d.setCreatedAt(LocalDateTime.of(2024, 1, 1, 1, 1))),
         Arguments.of(
             "updatedAt",
-            (Consumer<WorkExperienceDTO>) d -> d.setUpdatedAt(LocalDateTime.of(2024, 1, 2, 1, 1))));
+            (Consumer<WorkExperienceDTO>) d -> d.setUpdatedAt(LocalDateTime.of(2024, 1, 2, 1, 1))),
+        Arguments.of("skillsUsed", (Consumer<WorkExperienceDTO>) d -> d.setSkillsUsed("Other")),
+        Arguments.of("icon", (Consumer<WorkExperienceDTO>) d -> d.setIcon("🎯")));
   }
 
   private WorkExperienceDTO createValidDto() {
@@ -334,6 +344,8 @@ class WorkExperienceDTOTest {
         .isCurrent(false)
         .createdAt(LocalDateTime.of(2023, 1, 1, 10, 0))
         .updatedAt(LocalDateTime.of(2023, 1, 2, 10, 0))
+        .skillsUsed("React, Java")
+        .icon("💻")
         .build();
   }
 }
