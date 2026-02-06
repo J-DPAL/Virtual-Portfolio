@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -11,6 +11,7 @@ export default function Header() {
   const { isAuthenticated, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [languageDropdown, setLanguageDropdown] = useState(false);
@@ -52,12 +53,18 @@ export default function Header() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    setMobileMenuOpen(false);
+    navigate('/login');
+  };
+
   return (
     <header
       className={`${
         isDark
           ? 'bg-slate-900/95 border-slate-700 backdrop-blur-lg'
-          : 'bg-white/95 border-slate-200 backdrop-blur-lg'
+          : 'bg-gradient-to-r from-slate-50/95 via-blue-50/90 to-slate-50/95 border-slate-200 backdrop-blur-lg'
       } border-b sticky top-0 z-50 shadow-sm transition-colors duration-200`}
     >
       <nav className="container mx-auto px-4 py-4">
@@ -178,7 +185,7 @@ export default function Header() {
                   className={`absolute right-0 mt-2 w-32 ${
                     isDark
                       ? 'bg-slate-800 border-slate-700'
-                      : 'bg-white border-slate-200'
+                      : 'bg-slate-50/95 border-slate-200'
                   } border rounded-lg shadow-lg z-50`}
                 >
                   <button
@@ -259,7 +266,7 @@ export default function Header() {
                   Admin
                 </Link>
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="px-4 py-2 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
                 >
                   {t('logout')}
