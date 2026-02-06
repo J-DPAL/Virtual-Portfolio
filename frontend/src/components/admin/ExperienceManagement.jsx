@@ -34,6 +34,8 @@ export default function ExperienceManagement() {
     descriptionFr: '',
     descriptionEs: '',
     responsibilities: '',
+    skillsUsed: '',
+    icon: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -77,6 +79,8 @@ export default function ExperienceManagement() {
       descriptionFr: '',
       descriptionEs: '',
       responsibilities: '',
+      skillsUsed: '',
+      icon: '',
     });
     setShowModal(true);
   };
@@ -102,6 +106,8 @@ export default function ExperienceManagement() {
       responsibilities: Array.isArray(experience.responsibilities)
         ? experience.responsibilities.join(', ')
         : '',
+      skillsUsed: experience.skillsUsed || '',
+      icon: experience.icon || '',
     });
     setShowModal(true);
   };
@@ -568,6 +574,47 @@ export default function ExperienceManagement() {
                     rows="3"
                     required
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Skills Used (comma-separated)
+                  </label>
+                  <textarea
+                    value={formData.skillsUsed}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        skillsUsed: e.target.value,
+                      })
+                    }
+                    placeholder="React, Node.js, PostgreSQL, Docker"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    rows="2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Icon/Emoji (single character or emoji)
+                  </label>
+                  <input
+                    type="text"
+                    maxLength="4"
+                    value={formData.icon}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        icon: e.target.value,
+                      })
+                    }
+                    placeholder="👨‍💻 or 📊 or 🍳"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                  />
+                  <p className="text-xs text-slate-500 mt-1">
+                    Examples: 👨‍💻 (developer), 🍳 (chef), 📊 (analyst), 🎯
+                    (manager), 🚀 (startup), etc.
+                  </p>
                 </div>
 
                 <div>
