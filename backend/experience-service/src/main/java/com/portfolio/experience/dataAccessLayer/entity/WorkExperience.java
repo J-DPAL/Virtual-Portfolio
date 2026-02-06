@@ -68,6 +68,12 @@ public class WorkExperience {
   @Column(nullable = false)
   private LocalDateTime updatedAt;
 
+  @Column(length = 500)
+  private String skillsUsed;
+
+  @Column(length = 100)
+  private String icon;
+
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
