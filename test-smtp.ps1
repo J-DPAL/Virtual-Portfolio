@@ -1,8 +1,13 @@
 # Test SMTP connection to Gmail
-$smtpServer = "smtp.gmail.com"
-$smtpPort = 587
-$username = "jeandavid.pallares@gmail.com"
-$password = "hpghyloofpqlvbeb"  # App password without spaces
+$smtpServer = $env:MAIL_HOST
+$smtpPort = $env:MAIL_PORT
+$username = $env:MAIL_USERNAME
+$password = $env:MAIL_PASSWORD
+
+if (-not $smtpServer -or -not $smtpPort -or -not $username -or -not $password) {
+    Write-Host "Missing SMTP environment variables. Set MAIL_HOST, MAIL_PORT, MAIL_USERNAME, and MAIL_PASSWORD." -ForegroundColor Yellow
+    exit 1
+}
 
 try {
     $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
