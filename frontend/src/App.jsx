@@ -36,7 +36,7 @@ function App() {
         className={`min-h-screen flex flex-col ${
           isDark
             ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100'
-            : 'bg-gradient-to-br from-slate-50 via-white to-slate-50 text-slate-900'
+            : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50 text-slate-900'
         }`}
         dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
       >
