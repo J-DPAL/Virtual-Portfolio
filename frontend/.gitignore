@@ -7,5 +7,10 @@ dist/
 build/
 target/
 
+# Playwright test artifacts
+playwright-report/
+test-results/
+.playwright/
+
 *.log
 .DS_Store
