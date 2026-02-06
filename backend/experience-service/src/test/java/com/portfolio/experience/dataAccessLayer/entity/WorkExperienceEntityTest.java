@@ -46,7 +46,9 @@ class WorkExperienceEntityTest {
             LocalDate.of(2021, 1, 1),
             false,
             now,
-            now);
+            now,
+            "React, Java",
+            "💻");
 
     assertEquals(1L, experience.getId());
     assertEquals("Company EN", experience.getCompanyNameEn());
@@ -66,6 +68,8 @@ class WorkExperienceEntityTest {
     assertFalse(experience.getIsCurrent());
     assertEquals(now, experience.getCreatedAt());
     assertEquals(now, experience.getUpdatedAt());
+    assertEquals("React, Java", experience.getSkillsUsed());
+    assertEquals("💻", experience.getIcon());
   }
 
   @Test
@@ -118,6 +122,8 @@ class WorkExperienceEntityTest {
     experience.setIsCurrent(false);
     experience.setCreatedAt(LocalDateTime.of(2023, 1, 1, 10, 0));
     experience.setUpdatedAt(LocalDateTime.of(2023, 1, 2, 10, 0));
+    experience.setSkillsUsed("React, Java");
+    experience.setIcon("💻");
 
     assertEquals(5L, experience.getId());
     assertEquals("Company EN", experience.getCompanyNameEn());
@@ -137,6 +143,8 @@ class WorkExperienceEntityTest {
     assertFalse(experience.getIsCurrent());
     assertEquals(LocalDateTime.of(2023, 1, 1, 10, 0), experience.getCreatedAt());
     assertEquals(LocalDateTime.of(2023, 1, 2, 10, 0), experience.getUpdatedAt());
+    assertEquals("React, Java", experience.getSkillsUsed());
+    assertEquals("💻", experience.getIcon());
   }
 
   @Test
@@ -150,6 +158,8 @@ class WorkExperienceEntityTest {
     experience.setLocationFr(null);
     experience.setLocationEs(null);
     experience.setEndDate(null);
+    experience.setSkillsUsed(null);
+    experience.setIcon(null);
 
     assertNull(experience.getDescriptionEn());
     assertNull(experience.getDescriptionFr());
@@ -158,6 +168,8 @@ class WorkExperienceEntityTest {
     assertNull(experience.getLocationFr());
     assertNull(experience.getLocationEs());
     assertNull(experience.getEndDate());
+    assertNull(experience.getSkillsUsed());
+    assertNull(experience.getIcon());
   }
 
   @Test
@@ -237,7 +249,9 @@ class WorkExperienceEntityTest {
             (Consumer<WorkExperience>) e -> e.setCreatedAt(LocalDateTime.of(2024, 1, 1, 1, 1))),
         Arguments.of(
             "updatedAt",
-            (Consumer<WorkExperience>) e -> e.setUpdatedAt(LocalDateTime.of(2024, 1, 2, 1, 1))));
+            (Consumer<WorkExperience>) e -> e.setUpdatedAt(LocalDateTime.of(2024, 1, 2, 1, 1))),
+        Arguments.of("skillsUsed", (Consumer<WorkExperience>) e -> e.setSkillsUsed("Other")),
+        Arguments.of("icon", (Consumer<WorkExperience>) e -> e.setIcon("🎯")));
   }
 
   private static WorkExperience createBaseEntity() {
@@ -260,6 +274,8 @@ class WorkExperienceEntityTest {
         .isCurrent(false)
         .createdAt(LocalDateTime.of(2023, 1, 1, 10, 0))
         .updatedAt(LocalDateTime.of(2023, 1, 2, 10, 0))
+        .skillsUsed("React, Java")
+        .icon("💻")
         .build();
   }
 }
