@@ -29,6 +29,58 @@ export default function ProjectsPage() {
     }
   };
 
+  const techPatternStyle = {
+    backgroundImage: isDark
+      ? `linear-gradient(90deg, rgba(14, 165, 233, 0.12) 1px, transparent 1px),
+         linear-gradient(rgba(14, 165, 233, 0.12) 1px, transparent 1px),
+         radial-gradient(circle at 18% 22%, rgba(34, 211, 238, 0.28) 0 2px, transparent 2px),
+         radial-gradient(circle at 68% 68%, rgba(59, 130, 246, 0.25) 0 2px, transparent 2px),
+         radial-gradient(circle at 82% 28%, rgba(56, 189, 248, 0.2) 0 1.5px, transparent 1.5px)`
+      : `linear-gradient(90deg, rgba(37, 99, 235, 0.12) 1px, transparent 1px),
+         linear-gradient(rgba(37, 99, 235, 0.12) 1px, transparent 1px),
+         radial-gradient(circle at 16% 24%, rgba(59, 130, 246, 0.25) 0 2px, transparent 2px),
+         radial-gradient(circle at 72% 70%, rgba(14, 165, 233, 0.22) 0 2px, transparent 2px),
+         radial-gradient(circle at 84% 26%, rgba(56, 189, 248, 0.18) 0 1.5px, transparent 1.5px)`,
+    backgroundSize:
+      '80px 80px, 80px 80px, 220px 220px, 260px 260px, 200px 200px',
+    backgroundPosition: 'center, center, left top, right bottom, right top',
+    maskImage:
+      'radial-gradient(circle at top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 55%, transparent 80%)',
+    WebkitMaskImage:
+      'radial-gradient(circle at top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 55%, transparent 80%)',
+  };
+
+  const circuitPatternStyle = {
+    backgroundImage: isDark
+      ? `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'><g fill='none' stroke='%2322d3ee' stroke-width='1' opacity='0.35'><path d='M10 18h36v22h32'/><path d='M78 40v30h48'/><path d='M22 92h38v28h46'/><path d='M58 120h28'/></g><g fill='%2322d3ee' opacity='0.55'><circle cx='10' cy='18' r='2'/><circle cx='46' cy='40' r='2'/><circle cx='78' cy='40' r='2'/><circle cx='22' cy='92' r='2'/><circle cx='60' cy='120' r='2'/><circle cx='106' cy='120' r='2'/></g></svg>")`
+      : `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'><g fill='none' stroke='%233b82f6' stroke-width='1' opacity='0.3'><path d='M10 18h36v22h32'/><path d='M78 40v30h48'/><path d='M22 92h38v28h46'/><path d='M58 120h28'/></g><g fill='%233b82f6' opacity='0.5'><circle cx='10' cy='18' r='2'/><circle cx='46' cy='40' r='2'/><circle cx='78' cy='40' r='2'/><circle cx='22' cy='92' r='2'/><circle cx='60' cy='120' r='2'/><circle cx='106' cy='120' r='2'/></g></svg>")`,
+    backgroundSize: '260px 260px',
+    backgroundPosition: 'center',
+  };
+
+  const dataStreamStyle = {
+    backgroundImage: isDark
+      ? `repeating-linear-gradient(120deg, rgba(45, 212, 191, 0.18) 0 1px, transparent 1px 14px),
+         repeating-linear-gradient(60deg, rgba(59, 130, 246, 0.16) 0 1px, transparent 1px 18px)`
+      : `repeating-linear-gradient(120deg, rgba(37, 99, 235, 0.18) 0 1px, transparent 1px 14px),
+         repeating-linear-gradient(60deg, rgba(14, 165, 233, 0.16) 0 1px, transparent 1px 18px)`,
+    backgroundSize: '100% 100%',
+    maskImage:
+      'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 55%, transparent 85%)',
+    WebkitMaskImage:
+      'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.25) 55%, transparent 85%)',
+  };
+
+  const glowFieldStyle = {
+    backgroundImage: isDark
+      ? `radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.35), transparent 45%),
+         radial-gradient(circle at 78% 32%, rgba(99, 102, 241, 0.28), transparent 48%),
+         radial-gradient(circle at 48% 80%, rgba(14, 165, 233, 0.25), transparent 50%)`
+      : `radial-gradient(circle at 12% 18%, rgba(59, 130, 246, 0.25), transparent 45%),
+         radial-gradient(circle at 78% 32%, rgba(14, 165, 233, 0.22), transparent 48%),
+         radial-gradient(circle at 48% 80%, rgba(99, 102, 241, 0.18), transparent 50%)`,
+  };
+
   if (loading) {
     return (
       <div
@@ -54,14 +106,61 @@ export default function ProjectsPage() {
 
   return (
     <div
-      className={`min-h-screen py-12 transition-colors duration-200 ${
+      className={`min-h-screen py-12 transition-colors duration-200 relative overflow-hidden ${
         isDark
           ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
           : 'bg-gradient-to-br from-blue-50 via-white to-teal-50'
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+          className={`absolute -top-24 -right-24 h-80 w-80 rounded-full blur-3xl opacity-30 ${
+            isDark ? 'bg-blue-700' : 'bg-blue-300'
+          }`}
+        ></div>
+        <div
+          className={`absolute -bottom-32 -left-16 h-96 w-96 rounded-full blur-3xl opacity-30 ${
+            isDark ? 'bg-teal-700' : 'bg-teal-300'
+          }`}
+        ></div>
+      </div>
+      <div
+        className={`pointer-events-none absolute inset-0 opacity-60 ${
+          isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+        }`}
+        aria-hidden="true"
+        style={techPatternStyle}
+      ></div>
+      <div
+        className={`pointer-events-none absolute inset-0 opacity-35 ${
+          isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+        }`}
+        aria-hidden="true"
+        style={circuitPatternStyle}
+      ></div>
+      <div
+        className={`pointer-events-none absolute inset-0 opacity-40 ${
+          isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+        }`}
+        aria-hidden="true"
+        style={dataStreamStyle}
+      ></div>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        aria-hidden="true"
+        style={glowFieldStyle}
+      ></div>
+      <div className="container mx-auto px-4 relative z-10">
         <header className="text-center mb-12">
+          <span
+            className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold border mb-4 ${
+              isDark
+                ? 'bg-slate-800/60 border-slate-700 text-slate-200'
+                : 'bg-slate-50/70 border-slate-200 text-slate-700'
+            }`}
+          >
+            Curated Work
+          </span>
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-600 mb-4">
             {t('projects')}
           </h1>
@@ -74,7 +173,7 @@ export default function ProjectsPage() {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+            className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 shadow-lg shadow-blue-600/20"
           >
             {t('getInTouchButton')}
             <svg
@@ -109,13 +208,16 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <div
               key={project.id}
-              className={`group rounded-3xl shadow-lg overflow-hidden hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+              className={`group relative rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 ring-1 ${
                 isDark
-                  ? 'bg-slate-800 border border-slate-700'
-                  : 'bg-white border border-slate-200'
+                  ? 'bg-slate-900/70 ring-slate-800 hover:ring-blue-500/50'
+                  : 'bg-slate-50/80 ring-slate-200 hover:ring-blue-400/40'
               }`}
             >
-              <div className="bg-gradient-to-br from-blue-500 to-teal-600 h-48 flex items-center justify-center">
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
+              </div>
+              <div className="bg-gradient-to-br from-blue-500 to-teal-600 h-48 flex items-center justify-center relative">
                 <svg
                   className="w-20 h-20 text-white opacity-80"
                   fill="none"
@@ -130,9 +232,9 @@ export default function ProjectsPage() {
                   />
                 </svg>
               </div>
-              <div className="p-6">
+              <div className="p-6 backdrop-blur-sm">
                 <h2
-                  className={`text-2xl font-bold mb-3 group-hover:text-indigo-600 transition ${
+                  className={`text-2xl font-bold mb-3 group-hover:text-indigo-400 transition ${
                     isDark ? 'text-slate-100' : 'text-slate-900'
                   }`}
                 >
@@ -179,7 +281,7 @@ export default function ProjectsPage() {
                     rel="noopener noreferrer"
                     className={`inline-flex items-center font-medium transition ${
                       isDark
-                        ? 'text-indigo-400 hover:text-indigo-300'
+                        ? 'text-indigo-300 hover:text-indigo-200'
                         : 'text-indigo-600 hover:text-indigo-700'
                     }`}
                   >
