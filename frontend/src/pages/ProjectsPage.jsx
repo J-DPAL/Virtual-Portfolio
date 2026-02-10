@@ -10,6 +10,7 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
   const currentLang = i18n.language;
 
   useEffect(() => {
@@ -27,6 +28,92 @@ export default function ProjectsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const getProjectTitle = (project) =>
+    currentLang === 'es' && project.titleEs
+      ? project.titleEs
+      : currentLang === 'fr' && project.titleFr
+        ? project.titleFr
+        : project.titleEn;
+
+  const getProjectDescription = (project) =>
+    currentLang === 'es' && project.descriptionEs
+      ? project.descriptionEs
+      : currentLang === 'fr' && project.descriptionFr
+        ? project.descriptionFr
+        : project.descriptionEn;
+
+  const handleProjectOpen = (project) => {
+    setSelectedProject(project);
+  };
+
+  const handleProjectClose = () => {
+    setSelectedProject(null);
+  };
+
+  const getProjectVisual = (project) => {
+    const title = `${project?.titleEn || ''} ${project?.titleFr || ''} ${
+      project?.titleEs || ''
+    }`;
+    const description = `${project?.descriptionEn || ''} ${
+      project?.descriptionFr || ''
+    } ${project?.descriptionEs || ''}`;
+    const tech = project?.technologies || '';
+    const haystack = `${title} ${description} ${tech}`.toLowerCase();
+
+    if (haystack.includes('mobile') || haystack.includes('android')) {
+      return {
+        gradient: 'from-emerald-500 to-teal-600',
+        iconPath:
+          'M7 2h10a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V4a2 2 0 012-2zm5 16h.01M8 5h8',
+      };
+    }
+
+    if (haystack.includes('weather')) {
+      return {
+        gradient: 'from-sky-500 to-blue-600',
+        iconPath:
+          'M3 15a4 4 0 014-4 5 5 0 019.9 1.5A3.5 3.5 0 0118 19H7a4 4 0 01-4-4z',
+      };
+    }
+
+    if (haystack.includes('e-commerce') || haystack.includes('commerce')) {
+      return {
+        gradient: 'from-orange-500 to-amber-500',
+        iconPath:
+          'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7H19M7 13l1.5 7M10 21a1 1 0 100-2 1 1 0 000 2zm8 1a1 1 0 100-2 1 1 0 000 2z',
+      };
+    }
+
+    if (haystack.includes('game') || haystack.includes('unity')) {
+      return {
+        gradient: 'from-violet-500 to-indigo-600',
+        iconPath:
+          'M6 8h12a4 4 0 014 4v4a3 3 0 01-3 3h-2l-3-3H10l-3 3H5a3 3 0 01-3-3v-4a4 4 0 014-4zm2 4h2m-1-1v2m8-1h2',
+      };
+    }
+
+    if (haystack.includes('microservice') || haystack.includes('rest')) {
+      return {
+        gradient: 'from-cyan-500 to-blue-600',
+        iconPath:
+          'M4 6h6v6H4V6zm10 0h6v6h-6V6zM4 16h6v6H4v-6zm10 0h6v6h-6v-6z',
+      };
+    }
+
+    if (haystack.includes('design') || haystack.includes('uml')) {
+      return {
+        gradient: 'from-rose-500 to-pink-600',
+        iconPath:
+          'M4 6h16M4 12h10M4 18h7',
+      };
+    }
+
+    return {
+      gradient: 'from-blue-500 to-teal-600',
+      iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+    };
   };
 
   const techPatternStyle = {
@@ -208,7 +295,16 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <div
               key={project.id}
-              className={`group relative rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 ring-1 ${
+              onClick={() => handleProjectOpen(project)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleProjectOpen(project);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              className={`group relative rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 ring-1 text-left w-full cursor-pointer ${
                 isDark
                   ? 'bg-slate-900/70 ring-slate-800 hover:ring-blue-500/50'
                   : 'bg-slate-50/80 ring-slate-200 hover:ring-blue-400/40'
@@ -217,7 +313,9 @@ export default function ProjectsPage() {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
               </div>
-              <div className="bg-gradient-to-br from-blue-500 to-teal-600 h-48 flex items-center justify-center relative">
+              <div
+                className={`bg-gradient-to-br ${getProjectVisual(project).gradient} h-48 flex items-center justify-center relative`}
+              >
                 <svg
                   className="w-20 h-20 text-white opacity-80"
                   fill="none"
@@ -228,7 +326,7 @@ export default function ProjectsPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={1.5}
-                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                    d={getProjectVisual(project).iconPath}
                   />
                 </svg>
               </div>
@@ -238,22 +336,14 @@ export default function ProjectsPage() {
                     isDark ? 'text-slate-100' : 'text-slate-900'
                   }`}
                 >
-                  {currentLang === 'es' && project.titleEs
-                    ? project.titleEs
-                    : currentLang === 'fr' && project.titleFr
-                      ? project.titleFr
-                      : project.titleEn}
+                  {getProjectTitle(project)}
                 </h2>
                 <p
                   className={`mb-4 line-clamp-3 ${
                     isDark ? 'text-slate-400' : 'text-slate-600'
                   }`}
                 >
-                  {currentLang === 'es' && project.descriptionEs
-                    ? project.descriptionEs
-                    : currentLang === 'fr' && project.descriptionFr
-                      ? project.descriptionFr
-                      : project.descriptionEn}
+                  {getProjectDescription(project)}
                 </p>
                 {project.technologies && (
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -279,6 +369,7 @@ export default function ProjectsPage() {
                     href={project.projectUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(event) => event.stopPropagation()}
                     className={`inline-flex items-center font-medium transition ${
                       isDark
                         ? 'text-indigo-300 hover:text-indigo-200'
@@ -318,6 +409,158 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
+
+      {selectedProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label={getProjectTitle(selectedProject)}
+        >
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/60"
+            onClick={handleProjectClose}
+            aria-label="Close project details"
+          ></button>
+          <div
+            className={`relative max-w-3xl w-full rounded-3xl shadow-2xl overflow-hidden ring-1 ${
+              isDark
+                ? 'bg-slate-900 ring-slate-800'
+                : 'bg-slate-50 ring-slate-200'
+            }`}
+          >
+            <div
+              className={`bg-gradient-to-br ${getProjectVisual(selectedProject).gradient} h-28 flex items-center justify-between px-6`}
+            >
+              <div className="flex items-center gap-3 text-white">
+                <svg
+                  className="w-10 h-10 opacity-90"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d={getProjectVisual(selectedProject).iconPath}
+                  />
+                </svg>
+                <div>
+                  <h2 className="text-2xl font-bold">
+                    {getProjectTitle(selectedProject)}
+                  </h2>
+                  <p className="text-white/80 text-sm">{t('projects')}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleProjectClose}
+                className="text-white/80 hover:text-white transition"
+                aria-label="Close project details"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+              <p
+                className={`text-base leading-relaxed ${
+                  isDark ? 'text-slate-300' : 'text-slate-600'
+                }`}
+              >
+                {getProjectDescription(selectedProject)}
+              </p>
+
+              {selectedProject.technologies && (
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.technologies.split(',').map((tech, idx) => (
+                    <span
+                      key={idx}
+                      className={`text-xs px-3 py-1 rounded-full font-medium border ${
+                        isDark
+                          ? 'bg-indigo-900/30 text-indigo-300 border-indigo-700'
+                          : 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                      }`}
+                    >
+                      {tech.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-4">
+                {selectedProject.projectUrl && (
+                  <a
+                    href={selectedProject.projectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center font-semibold transition ${
+                      isDark
+                        ? 'text-indigo-300 hover:text-indigo-200'
+                        : 'text-indigo-600 hover:text-indigo-700'
+                    }`}
+                  >
+                    View Project
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                )}
+                {selectedProject.githubUrl && (
+                  <a
+                    href={selectedProject.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center font-semibold transition ${
+                      isDark
+                        ? 'text-emerald-300 hover:text-emerald-200'
+                        : 'text-emerald-600 hover:text-emerald-700'
+                    }`}
+                  >
+                    View GitHub Repo
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
