@@ -2,14 +2,61 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
+import { getAllProjects } from '../services/projectsService';
+import { getAllSkills } from '../services/skillsService';
+import { getAllExperiences } from '../services/experienceService';
+import { getAllEducation } from '../services/educationService';
 
 export default function HomePage() {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
+  const [statsCounts, setStatsCounts] = useState({
+    projects: 0,
+    skills: 0,
+    experiences: 0,
+    education: 0,
+  });
 
   useEffect(() => {
     setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchStatsCounts = async () => {
+      try {
+        const [
+          projectsResponse,
+          skillsResponse,
+          experiencesResponse,
+          educationResponse,
+        ] = await Promise.all([
+          getAllProjects(),
+          getAllSkills(),
+          getAllExperiences(),
+          getAllEducation(),
+        ]);
+
+        if (!isMounted) return;
+
+        setStatsCounts({
+          projects: projectsResponse.data?.length ?? 0,
+          skills: skillsResponse.data?.length ?? 0,
+          experiences: experiencesResponse.data?.length ?? 0,
+          education: educationResponse.data?.length ?? 0,
+        });
+      } catch (error) {
+        console.error('Error fetching home stats:', error);
+      }
+    };
+
+    fetchStatsCounts();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const features = [
@@ -44,10 +91,14 @@ export default function HomePage() {
   ];
 
   const stats = [
-    { label: t('projectsCompleted'), value: '50+', icon: '🚀' },
-    { label: t('technologiesMastered'), value: '20+', icon: '💻' },
-    { label: t('yearsExperience'), value: '5+', icon: '⏱️' },
-    { label: t('clientSatisfaction'), value: '100%', icon: '⭐' },
+    { label: t('projectsCompleted'), value: statsCounts.projects, icon: '🚀' },
+    { label: t('technologiesMastered'), value: statsCounts.skills, icon: '💻' },
+    { label: t('yearsExperience'), value: statsCounts.experiences, icon: '⏱️' },
+    {
+      label: t('clientSatisfaction'),
+      value: statsCounts.education,
+      icon: '⭐',
+    },
   ];
 
   const techPatternStyle = {
@@ -205,7 +256,7 @@ export default function HomePage() {
 
             {/* Floating Tech Stack Pills */}
             <div className="flex flex-wrap gap-3 justify-center">
-              {['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'AWS'].map(
+              {['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'Expo'].map(
                 (tech, idx) => (
                   <div
                     key={tech}
@@ -237,10 +288,38 @@ export default function HomePage() {
 
       {/* Stats Section */}
       <section
-        className={`py-20 transition-colors duration-200 ${
-          isDark ? 'bg-slate-900' : 'bg-slate-50'
+        className={`relative overflow-hidden py-20 transition-colors duration-200 ${
+          isDark
+            ? 'bg-slate-900'
+            : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50'
         }`}
       >
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-45 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={techPatternStyle}
+        ></div>
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-25 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={circuitPatternStyle}
+        ></div>
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-30 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={dataStreamStyle}
+        ></div>
+        <div
+          className="pointer-events-none absolute inset-0 opacity-45"
+          aria-hidden="true"
+          style={glowFieldStyle}
+        ></div>
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, idx) => (
@@ -268,10 +347,38 @@ export default function HomePage() {
 
       {/* Features Grid */}
       <section
-        className={`py-20 transition-colors duration-200 ${
-          isDark ? 'bg-slate-900' : 'bg-slate-50'
+        className={`relative overflow-hidden py-20 transition-colors duration-200 ${
+          isDark
+            ? 'bg-slate-900'
+            : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50'
         }`}
       >
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-45 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={techPatternStyle}
+        ></div>
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-25 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={circuitPatternStyle}
+        ></div>
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-30 ${
+            isDark ? 'mix-blend-screen' : 'mix-blend-multiply'
+          }`}
+          aria-hidden="true"
+          style={dataStreamStyle}
+        ></div>
+        <div
+          className="pointer-events-none absolute inset-0 opacity-45"
+          aria-hidden="true"
+          style={glowFieldStyle}
+        ></div>
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2
