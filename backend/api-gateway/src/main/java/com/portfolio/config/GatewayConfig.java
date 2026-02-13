@@ -59,13 +59,13 @@ public class GatewayConfig {
   @Bean
   public RouterFunction<ServerResponse> gatewayRoutes(RestTemplate restTemplate) {
     return route()
-        // Auth & Users routes (users-service has no /api context-path)
-        .GET("/v1/auth/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
-        .POST("/v1/auth/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
-        .GET("/users/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
-        .POST("/users/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
-        .PUT("/users/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
-        .DELETE("/users/**", req -> proxyRequestNoContextPath(req, usersServiceUrl, restTemplate))
+        // Auth & Users routes
+        .GET("/v1/auth/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
+        .POST("/v1/auth/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
+        .GET("/users/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
+        .POST("/users/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
+        .PUT("/users/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
+        .DELETE("/users/**", req -> proxyRequest(req, usersServiceUrl, restTemplate))
 
         // Skills routes
         .path(
@@ -176,29 +176,6 @@ public class GatewayConfig {
           ServerResponse.status(e.getStatusCode())
               .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
       return response;
-    } catch (Exception e) {
-      return ServerResponse.status(500)
-          .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
-    }
-  }
-
-  @SuppressWarnings("null")
-  private ServerResponse proxyRequestNoContextPath(
-      ServerRequest request, String targetUrl, RestTemplate restTemplate) {
-    try {
-      // Build target URI without adding /api prefix (for services without context-path)
-      URI uri =
-          UriComponentsBuilder.fromHttpUrl(targetUrl)
-              .path(request.path())
-              .query(request.uri().getRawQuery())
-              .build(true)
-              .toUri();
-
-      return executeProxyRequest(request, uri, restTemplate);
-    } catch (org.springframework.web.client.HttpClientErrorException
-        | org.springframework.web.client.HttpServerErrorException e) {
-      return ServerResponse.status(e.getStatusCode())
-          .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
     } catch (Exception e) {
       return ServerResponse.status(500)
           .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");

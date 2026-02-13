@@ -1,0 +1,4 @@
+spring:
+  security:
+    jwt:
+      secret: dev-secret-only-use-locally

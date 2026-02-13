@@ -4,7 +4,7 @@ spring:
 
   security:
     jwt:
-      secret: ${JWT_SECRET:your-secret-key-change-in-production}
+      secret: ${JWT_SECRET}
 
 server:
   port: 8080
@@ -14,9 +14,9 @@ server:
 logging:
   level:
     root: INFO
-    com.portfolio: DEBUG
+    com.portfolio: INFO
 
-# Service URLs for routing (NO /api suffix - services run at root context)
+# Service URLs for routing (gateway adds /api prefix to downstream requests)
 services:
   users:
     url: http://users-service:8081
