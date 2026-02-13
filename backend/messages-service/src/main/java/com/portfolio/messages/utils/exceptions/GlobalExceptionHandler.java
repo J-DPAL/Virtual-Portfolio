@@ -55,6 +55,33 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(MailNotificationException.class)
+  public ResponseEntity<ErrorResponse> handleMailNotificationException(
+      MailNotificationException ex) {
+    log.error("Mail notification exception: {} - {}", ex.getErrorCode(), ex.getMessage());
+
+    // Determine HTTP status based on error code
+    HttpStatus status = determineMailErrorStatus(ex.getErrorCode());
+
+    ErrorResponse error =
+        ErrorResponse.builder()
+            .status(status.value())
+            .message(ex.getMessage())
+            .timestamp(LocalDateTime.now())
+            .build();
+
+    return new ResponseEntity<>(error, status);
+  }
+
+  private HttpStatus determineMailErrorStatus(String errorCode) {
+    return switch (errorCode) {
+      case "CIRCUIT_BREAKER_OPEN" -> HttpStatus.SERVICE_UNAVAILABLE; // 503
+      case "RETRY_EXHAUSTED" -> HttpStatus.GATEWAY_TIMEOUT; // 504
+      case "MAIL_PROVIDER_ERROR" -> HttpStatus.BAD_GATEWAY; // 502
+      default -> HttpStatus.INTERNAL_SERVER_ERROR; // 500
+    };
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
     log.error("Unexpected error occurred", ex);

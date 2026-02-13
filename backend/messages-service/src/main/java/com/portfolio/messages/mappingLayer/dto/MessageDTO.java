@@ -31,4 +31,10 @@ public class MessageDTO {
   private Boolean isRead;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  /**
+   * Mail notification status - only populated in responses, not in requests. Provides frontend with
+   * visibility into email delivery status.
+   */
+  private MailNotificationStatus mailNotificationStatus;
 }

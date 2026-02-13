@@ -62,9 +62,20 @@ public class MessageService {
     emailService.ifPresent(
         service -> {
           try {
-            service.sendMessageNotification(savedDTO);
+            var notificationStatus = service.sendMessageNotification(savedDTO);
+            if (notificationStatus.isSuccess()) {
+              log.info(
+                  "Email notification sent successfully for message id: {}", savedMessage.getId());
+            } else {
+              log.warn(
+                  "Email notification returned non-success status: {}",
+                  notificationStatus.getStatus());
+            }
           } catch (Exception e) {
-            log.warn("Email notification failed, but message was saved successfully", e);
+            log.warn(
+                "Email notification failed, but message was saved successfully. Error: {}",
+                e.getMessage(),
+                e);
           }
         });
 
