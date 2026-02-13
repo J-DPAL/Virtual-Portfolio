@@ -8,6 +8,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfToken;
+
+import jakarta.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +27,10 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
+    http.csrf(
+            csrf ->
+                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .ignoringRequestMatchers("/actuator/health"))
         .cors(cors -> cors.disable())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -35,8 +43,19 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(csrfCookieFilter(), CsrfFilter.class);
 
     return http.build();
+  }
+
+  private Filter csrfCookieFilter() {
+    return (request, response, chain) -> {
+      CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+      if (token != null) {
+        token.getToken();
+      }
+      chain.doFilter(request, response);
+    };
   }
 }
