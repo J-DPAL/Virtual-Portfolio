@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="app"/>
+
+  <property name="MASKED_MSG" value="%replace(%replace(%replace(%msg){'(?i)Bearer\\s+[A-Za-z0-9-_.]+','Bearer ***'}){'(?i)(authorization|token|jwt|password|secret)\\s*[:=]\\s*([^\\s,;]+)','$1=***'}){'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}','***@***'}"/>
+
+  <springProfile name="dev">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [${APP_NAME}] [%thread] %logger{36} - ${MASKED_MSG}%n%ex</pattern>
+      </encoder>
+    </appender>
+
+    <root level="DEBUG">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="com.portfolio" level="TRACE"/>
+  </springProfile>
+
+  <springProfile name="!dev">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>ts=%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} level=%level service=${APP_NAME} traceId=%X{traceId:-} spanId=%X{spanId:-} thread=%thread logger=%logger{36} msg="%replace(%replace(${MASKED_MSG}){'\"',''}){'[\\r\\n]+','\\n'}" exception="%replace(%replace(%ex{full}){'\"',''}){'[\\r\\n]+','\\n'}"%n</pattern>
+      </encoder>
+    </appender>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="com.portfolio" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
+  </springProfile>
+</configuration>
