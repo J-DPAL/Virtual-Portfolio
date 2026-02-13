@@ -7,6 +7,7 @@ import com.portfolio.users.dataAccessLayer.entity.User;
 import com.portfolio.users.dataAccessLayer.repository.UserRepository;
 import com.portfolio.users.mappingLayer.dto.LoginRequest;
 import com.portfolio.users.mappingLayer.dto.LoginResponse;
+import com.portfolio.users.mappingLayer.dto.UserDTO;
 import com.portfolio.users.mappingLayer.mapper.UserMapper;
 import com.portfolio.users.security.JwtTokenProvider;
 
@@ -50,5 +51,11 @@ public class AuthService {
         .user(userMapper.toDTO(user))
         .message("Login successful")
         .build();
+  }
+
+  public UserDTO getCurrentUser(String email) {
+    User user =
+        userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    return userMapper.toDTO(user);
   }
 }

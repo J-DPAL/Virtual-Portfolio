@@ -23,6 +23,8 @@ import com.portfolio.users.mappingLayer.dto.UserDTO;
 import com.portfolio.users.mappingLayer.mapper.UserMapper;
 import com.portfolio.users.security.JwtTokenProvider;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -97,7 +99,9 @@ class AuthControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.token").value("jwt_token_123"))
+        .andExpect(
+            header()
+                .stringValues("Set-Cookie", hasItem(containsString("auth_token=jwt_token_123"))))
         .andExpect(jsonPath("$.user.email").value("test@example.com"))
         .andExpect(jsonPath("$.message").value("Login successful"));
   }
@@ -241,6 +245,7 @@ class AuthControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.token").value("jwt_token"));
+        .andExpect(
+            header().stringValues("Set-Cookie", hasItem(containsString("auth_token=jwt_token"))));
   }
 }
