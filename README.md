@@ -1,12 +1,12 @@
-# Virtual Portfolio - Bilingual Dynamic Portfolio Application
+# Virtual Portfolio - Trilingual Dynamic Portfolio Application
 
 ## Project Description
-A fully dynamic, bilingual portfolio website built with Java microservices architecture and React frontend, featuring an API Gateway router and independent microservices for different portfolio components.
+A fully dynamic, trilingual portfolio website built with Java microservices architecture and React frontend, featuring an API Gateway router and independent microservices for different portfolio components.
 
 ## Feature Checklist (this branch)
 - ✅ Docker-based deployment: `docker-compose up --build` brings up Postgres (with seeded admin), Eureka, gateway, all microservices, frontend; persistent volumes for Postgres and resume uploads.
 - ✅ Public/Admin separation: admin routes are behind auth (`ProtectedRoute`), public pages remain open; admin UI not rendered without a token.
-- ✅ Internationalization: frontend uses i18next (EN/FR) with RTL toggle; backend models store multilingual fields (e.g., `*_en` / `*_ar`).
+- ✅ Internationalization: frontend uses i18next (EN/FR/ES); backend models store multilingual fields (e.g., `*_en` / `*_fr` / `*_es`).
 - ⚠️ Automated testing: backend `./mvnw test` is supported but no authored suites; add JUnit/WebTestClient coverage per service. Frontend lint/format scripts exist; add unit/E2E.
 - ⚠️ End-to-end tests: not yet implemented—recommend Playwright/Cypress hitting the Docker stack (admin login, CRUD flows, contact/testimonials).
 - ⚠️ Documentation: this README documents setup/architecture; extend with troubleshooting and E2E steps as tests are added.
@@ -72,7 +72,8 @@ Virtual Portfolio/
 │   │   └── [Similar structure]
 │   ├── pom.xml                       # Parent POM (Multi-module project)
 │   └── database/
-│       └── init.sql                  # Database initialization
+│       ├── init-databases.sh          # Per-service database initialization
+│       └── schemas/                   # Per-service schema files
 ├── frontend/                         # React Frontend
 │   ├── src/
 │   │   ├── components/               # React components
@@ -109,7 +110,7 @@ docker-compose up --build
 ```
 
 This will start all 9 services:
-- PostgreSQL database on port 5432
+- PostgreSQL database on port 5432 (per-service databases initialized)
 - API Gateway on port 8080
 - Users Service on port 8081
 - Skills Service on port 8082
@@ -176,11 +177,29 @@ npm run dev
 
 ### Database Setup (Local):
 ```sql
--- Create database
-CREATE DATABASE virtual_portfolio;
+-- Create per-service databases
+CREATE DATABASE users_db;
+CREATE DATABASE skills_db;
+CREATE DATABASE projects_db;
+CREATE DATABASE experience_db;
+CREATE DATABASE education_db;
+CREATE DATABASE hobbies_db;
+CREATE DATABASE testimonials_db;
+CREATE DATABASE messages_db;
+CREATE DATABASE files_db;
+```
 
--- Run init.sql script
-psql -U postgres -d virtual_portfolio -f ../database/init.sql
+```bash
+# Run per-service schema scripts
+psql -U postgres -d users_db -f ../database/schemas/users.sql
+psql -U postgres -d skills_db -f ../database/schemas/skills.sql
+psql -U postgres -d projects_db -f ../database/schemas/projects.sql
+psql -U postgres -d experience_db -f ../database/schemas/experience.sql
+psql -U postgres -d education_db -f ../database/schemas/education.sql
+psql -U postgres -d hobbies_db -f ../database/schemas/hobbies.sql
+psql -U postgres -d testimonials_db -f ../database/schemas/testimonials.sql
+psql -U postgres -d messages_db -f ../database/schemas/messages.sql
+psql -U postgres -d files_db -f ../database/schemas/files.sql
 ```
 
 ## API Routes
@@ -188,7 +207,7 @@ psql -U postgres -d virtual_portfolio -f ../database/init.sql
 ### Through API Gateway (Recommended)
 All requests should go through the API Gateway at `http://localhost:8080/api`
 
-- **Users Service**: `POST /api/users/login`, `GET /api/users/{id}`
+- **Users Service**: `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`
 - **Skills Service**: `GET /api/skills`, `POST /api/skills`, `PUT /api/skills/{id}`
 - **Projects Service**: `GET /api/projects`, `POST /api/projects`
 - **Experience Service**: `GET /api/experience`, `POST /api/experience`
@@ -237,8 +256,8 @@ Each microservice can communicate with other services through direct REST calls 
 ```java
 // Direct call to users-service
 RestTemplate restTemplate = new RestTemplate();
-String usersServiceUrl = "http://users-service:8081/api/users/" + userId;
-User user = restTemplate.getForObject(usersServiceUrl, User.class);
+String usersServiceUrl = "http://users-service:8081/api/v1/auth/health";
+String health = restTemplate.getForObject(usersServiceUrl, String.class);
 ```
 
 ## Data Model (To Be Implemented)
@@ -338,7 +357,7 @@ docker-compose up --build -d
 
 ### Frontend can't reach API Gateway:
 - Ensure API Gateway is running: `docker-compose logs api-gateway`
-- Check `REACT_APP_API_BASE_URL` in frontend environment
+- Check `VITE_API_BASE_URL` in frontend environment
 - Verify network connectivity between containers
 
 ### Individual service debugging:
@@ -347,8 +366,8 @@ docker-compose up --build -d
 docker-compose logs -f users-service
 docker-compose logs -f api-gateway
 
-# Connect to database for testing
-psql -h localhost -U postgres -d virtual_portfolio
+# Connect to a service database for testing
+psql -h localhost -U postgres -d users_db
 ```
 
 ## Project Roadmap
