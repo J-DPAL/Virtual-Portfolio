@@ -13,22 +13,18 @@ services:
     networks:
       - portfolio-network
 
-  # PostgreSQL Database - Shared across all services
+  # PostgreSQL Database - Separate databases per service
   postgres:
     image: postgres:16-alpine
     container_name: portfolio-postgres
     environment:
-      POSTGRES_USER: ${DB_USERNAME:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
-      POSTGRES_DB: virtual_portfolio
-      # Admin user credentials from .env
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
-      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-Admin User}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: postgres
+      USERS_DB_NAME: users_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
-      - ./database/init-admin.sh:/docker-entrypoint-initdb.d/02-init-admin.sh
+      - ./database/init-databases.sh:/docker-entrypoint-initdb.d/00-init-databases.sh
     ports:
       - "5432:5432"
     healthcheck:
@@ -49,8 +45,7 @@ services:
       SPRING_APPLICATION_NAME: api-gateway
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: prod
-      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
+      JWT_SECRET: ${JWT_SECRET}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
       - "8080:8080"
@@ -77,11 +72,13 @@ services:
     environment:
       SPRING_APPLICATION_NAME: users-service
       SERVER_PORT: 8081
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
-      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-Admin User}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -103,9 +100,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: skills-service
       SERVER_PORT: 8082
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skills_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -127,9 +125,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: projects-service
       SERVER_PORT: 8083
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/projects_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -151,9 +150,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: experience-service
       SERVER_PORT: 8084
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/experience_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -175,9 +175,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: education-service
       SERVER_PORT: 8085
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/education_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -199,9 +200,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: hobbies-service
       SERVER_PORT: 8086
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hobbies_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -223,11 +225,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: testimonials-service
       SERVER_PORT: 8087
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
-      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testimonials_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
@@ -249,14 +250,15 @@ services:
     environment:
       SPRING_APPLICATION_NAME: messages-service
       SERVER_PORT: 8088
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/messages_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       # Email configuration
-      SPRING_MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
-      SPRING_MAIL_PORT: ${MAIL_PORT:-587}
+      SPRING_MAIL_HOST: ${MAIL_HOST}
+      SPRING_MAIL_PORT: ${MAIL_PORT}
       SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
@@ -279,11 +281,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: files-service
       SERVER_PORT: 8090
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/virtual_portfolio
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
-      # ⚠️ Set JWT_SECRET via env or .env.production for non-dev; never commit real secrets
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-only-use-locally}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/files_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       FILE_CV_DIR: /app/CV
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
