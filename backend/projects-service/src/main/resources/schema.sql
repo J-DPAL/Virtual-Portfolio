@@ -1,5 +1,1 @@
-ALTER TABLE IF EXISTS projects
-    ALTER COLUMN title_ar DROP NOT NULL;
-
-ALTER TABLE IF EXISTS projects
-    ALTER COLUMN description_ar DROP NOT NULL;
+-- No schema overrides required for EN/FR/ES alignment.
