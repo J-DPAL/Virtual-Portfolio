@@ -66,7 +66,7 @@ export default function TestimonialsPage() {
         setSuccess(false);
         setShowForm(false);
       }, 3000);
-    } catch (err) {
+    } catch {
       setError(t('submitTestimonialFailed'));
     } finally {
       setSubmitting(false);

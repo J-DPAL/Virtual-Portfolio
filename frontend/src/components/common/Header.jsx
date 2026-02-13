@@ -53,8 +53,8 @@ export default function Header() {
     }
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setMobileMenuOpen(false);
     navigate('/login');
   };

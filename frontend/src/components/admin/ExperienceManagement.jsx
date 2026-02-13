@@ -53,7 +53,7 @@ export default function ExperienceManagement() {
       setLoading(true);
       const response = await getAllExperiences();
       setExperiences(response.data);
-    } catch (error) {
+    } catch {
       setErrorMessage(t('experiencesFetchFailed'));
     } finally {
       setLoading(false);
@@ -119,7 +119,7 @@ export default function ExperienceManagement() {
         setSuccessMessage(t('experienceDeleteSuccess'));
         fetchExperiences();
         setTimeout(() => setSuccessMessage(''), 3000);
-      } catch (error) {
+      } catch {
         setErrorMessage(t('experienceDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
@@ -147,7 +147,7 @@ export default function ExperienceManagement() {
       setShowModal(false);
       fetchExperiences();
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
+    } catch {
       setErrorMessage(
         editingExperience
           ? t('experienceUpdateFailed')

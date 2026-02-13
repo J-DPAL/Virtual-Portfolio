@@ -42,7 +42,7 @@ export default function SkillsManagement() {
       setLoading(true);
       const response = await getAllSkills();
       setSkills(response.data);
-    } catch (error) {
+    } catch {
       setErrorMessage(t('skillsFetchFailed'));
     } finally {
       setLoading(false);
@@ -84,7 +84,7 @@ export default function SkillsManagement() {
         setSuccessMessage(t('skillDeleteSuccess'));
         fetchSkills();
         setTimeout(() => setSuccessMessage(''), 3000);
-      } catch (error) {
+      } catch {
         setErrorMessage(t('skillDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
@@ -104,7 +104,7 @@ export default function SkillsManagement() {
       setShowModal(false);
       fetchSkills();
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
+    } catch {
       setErrorMessage(
         editingSkill ? t('skillUpdateFailed') : t('skillCreateFailed')
       );

@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from './context/ThemeContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -27,7 +26,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import './index.css';
 
 function App() {
-  const { i18n } = useTranslation();
   const { isDark } = useTheme();
 
   return (
@@ -38,7 +36,7 @@ function App() {
             ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100'
             : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50 text-slate-900'
         }`}
-        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        dir="ltr"
       >
         <Header />
         <main className="flex-grow">

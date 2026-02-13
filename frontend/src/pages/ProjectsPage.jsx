@@ -97,16 +97,14 @@ export default function ProjectsPage() {
     if (haystack.includes('microservice') || haystack.includes('rest')) {
       return {
         gradient: 'from-cyan-500 to-blue-600',
-        iconPath:
-          'M4 6h6v6H4V6zm10 0h6v6h-6V6zM4 16h6v6H4v-6zm10 0h6v6h-6v-6z',
+        iconPath: 'M4 6h6v6H4V6zm10 0h6v6h-6V6zM4 16h6v6H4v-6zm10 0h6v6h-6v-6z',
       };
     }
 
     if (haystack.includes('design') || haystack.includes('uml')) {
       return {
         gradient: 'from-rose-500 to-pink-600',
-        iconPath:
-          'M4 6h16M4 12h10M4 18h7',
+        iconPath: 'M4 6h16M4 12h10M4 18h7',
       };
     }
 

@@ -6,11 +6,13 @@ import { getAllProjects } from '../services/projectsService';
 import { getAllSkills } from '../services/skillsService';
 import { getAllExperiences } from '../services/experienceService';
 import { getAllEducation } from '../services/educationService';
+import { StatSkeletonPlaceholder } from '../components/common/SkeletonLoader';
 
 export default function HomePage() {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [statsCounts, setStatsCounts] = useState({
     projects: 0,
     skills: 0,
@@ -49,6 +51,10 @@ export default function HomePage() {
         });
       } catch (error) {
         console.error('Error fetching home stats:', error);
+      } finally {
+        if (isMounted) {
+          setIsLoadingStats(false);
+        }
       }
     };
 
@@ -328,17 +334,23 @@ export default function HomePage() {
                 className="text-center transform hover:scale-105 transition-transform"
                 style={{ animationDelay: `${idx * 150}ms` }}
               >
-                <div className="text-5xl mb-3">{stat.icon}</div>
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
-                  {stat.value}
-                </div>
-                <div
-                  className={`font-medium ${
-                    isDark ? 'text-slate-400' : 'text-slate-600'
-                  }`}
-                >
-                  {stat.label}
-                </div>
+                {isLoadingStats ? (
+                  <StatSkeletonPlaceholder />
+                ) : (
+                  <>
+                    <div className="text-5xl mb-3">{stat.icon}</div>
+                    <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
+                      {stat.value}
+                    </div>
+                    <div
+                      className={`font-medium ${
+                        isDark ? 'text-slate-400' : 'text-slate-600'
+                      }`}
+                    >
+                      {stat.label}
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>

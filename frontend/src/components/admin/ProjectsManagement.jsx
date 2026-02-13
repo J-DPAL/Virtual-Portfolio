@@ -44,7 +44,7 @@ export default function ProjectsManagement() {
       setLoading(true);
       const response = await getAllProjects();
       setProjects(response.data);
-    } catch (error) {
+    } catch {
       setErrorMessage(t('projectsFetchFailed'));
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function ProjectsManagement() {
         setSuccessMessage(t('projectDeleteSuccess'));
         fetchProjects();
         setTimeout(() => setSuccessMessage(''), 3000);
-      } catch (error) {
+      } catch {
         setErrorMessage(t('projectDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
@@ -120,7 +120,7 @@ export default function ProjectsManagement() {
       setShowModal(false);
       fetchProjects();
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
+    } catch {
       setErrorMessage(
         editingProject ? t('projectUpdateFailed') : t('projectCreateFailed')
       );

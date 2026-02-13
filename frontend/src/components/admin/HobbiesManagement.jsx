@@ -41,7 +41,7 @@ export default function HobbiesManagement() {
       setLoading(true);
       const response = await getAllHobbies();
       setHobbies(response.data);
-    } catch (error) {
+    } catch {
       setErrorMessage(t('hobbiesFetchFailed'));
     } finally {
       setLoading(false);
@@ -81,7 +81,7 @@ export default function HobbiesManagement() {
         setSuccessMessage(t('hobbyDeleteSuccess'));
         fetchHobbies();
         setTimeout(() => setSuccessMessage(''), 3000);
-      } catch (error) {
+      } catch {
         setErrorMessage(t('hobbyDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
@@ -101,7 +101,7 @@ export default function HobbiesManagement() {
       setShowModal(false);
       fetchHobbies();
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
+    } catch {
       setErrorMessage(
         editingHobby ? t('hobbyUpdateFailed') : t('hobbyCreateFailed')
       );

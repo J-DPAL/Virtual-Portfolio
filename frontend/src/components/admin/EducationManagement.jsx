@@ -51,7 +51,7 @@ export default function EducationManagement() {
       setLoading(true);
       const response = await getAllEducation();
       setEducation(response.data);
-    } catch (error) {
+    } catch {
       setErrorMessage(t('educationFetchFailed'));
     } finally {
       setLoading(false);
@@ -111,7 +111,7 @@ export default function EducationManagement() {
         setSuccessMessage(t('educationDeleteSuccess'));
         fetchEducation();
         setTimeout(() => setSuccessMessage(''), 3000);
-      } catch (error) {
+      } catch {
         setErrorMessage(t('educationDeleteFailed'));
         setTimeout(() => setErrorMessage(''), 3000);
       }
@@ -131,7 +131,7 @@ export default function EducationManagement() {
       setShowModal(false);
       fetchEducation();
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
+    } catch {
       setErrorMessage(
         editingEducation
           ? t('educationUpdateFailed')
