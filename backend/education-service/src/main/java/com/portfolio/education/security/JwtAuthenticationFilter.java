@@ -13,11 +13,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+  private static final String AUTH_COOKIE_NAME = "auth_token";
 
   private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,24 +35,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
 
-    String authHeader = request.getHeader("Authorization");
+    String token = resolveToken(request);
 
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-      String token = authHeader.substring(7);
+    if (token != null && jwtTokenProvider.validateToken(token)) {
+      String email = jwtTokenProvider.getEmailFromToken(token);
+      String role = jwtTokenProvider.getRoleFromToken(token);
 
-      if (jwtTokenProvider.validateToken(token)) {
-        String email = jwtTokenProvider.getEmailFromToken(token);
-        String role = jwtTokenProvider.getRoleFromToken(token);
+      UsernamePasswordAuthenticationToken authentication =
+          new UsernamePasswordAuthenticationToken(
+              email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
 
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
-
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-      }
+      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     filterChain.doFilter(request, response);
+  }
+
+  private String resolveToken(HttpServletRequest request) {
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      return authHeader.substring(7);
+    }
+
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return null;
+    }
+
+    for (Cookie cookie : cookies) {
+      if (AUTH_COOKIE_NAME.equals(cookie.getName())) {
+        return cookie.getValue();
+      }
+    }
+
+    return null;
   }
 }
