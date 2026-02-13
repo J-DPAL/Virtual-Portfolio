@@ -16,8 +16,10 @@ ADMIN_FULL_NAME=${ADMIN_FULL_NAME:-"Admin User"}
 
 echo "Creating admin user with email: $ADMIN_EMAIL"
 
+USERS_DB_NAME=${USERS_DB_NAME:-"users_db"}
+
 # Insert admin user using environment variables
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$USERS_DB_NAME" <<-EOSQL
     INSERT INTO users (email, password, full_name, role, active) 
     VALUES ('$ADMIN_EMAIL', '$ADMIN_PASSWORD_HASH', '$ADMIN_FULL_NAME', 'ADMIN', true)
     ON CONFLICT (email) DO UPDATE 

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS resumes (
+    id BIGSERIAL PRIMARY KEY,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    file_size BIGINT NOT NULL,
+    content_type VARCHAR(255) NOT NULL
+);
