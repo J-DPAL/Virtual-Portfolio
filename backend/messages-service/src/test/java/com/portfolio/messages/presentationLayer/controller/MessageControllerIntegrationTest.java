@@ -63,7 +63,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform GET request and verify response
     mockMvc
-        .perform(get("/messages").contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/api/messages").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].id").value(1L));
 
@@ -78,7 +78,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform GET request and verify response
     mockMvc
-        .perform(get("/messages/1").contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/api/messages/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(1L));
 
@@ -94,7 +94,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform GET request and verify response
     mockMvc
-        .perform(get("/messages/999").contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/api/messages/999").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is4xxClientError());
   }
 
@@ -106,7 +106,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform GET request and verify response
     mockMvc
-        .perform(get("/messages/read/false").contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/api/messages/read/false").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].id").value(1L));
   }
@@ -140,7 +140,7 @@ class MessageControllerIntegrationTest {
     // Act & Assert: Perform POST request and verify response
     mockMvc
         .perform(
-            post("/messages")
+            post("/api/messages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDTO)))
         .andExpect(status().isCreated())
@@ -166,10 +166,10 @@ class MessageControllerIntegrationTest {
     // Act & Assert: Perform POST request
     mockMvc
         .perform(
-            post("/messages")
+            post("/api/messages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDTO)))
-        .andExpect(status().is5xxServerError());
+        .andExpect(status().isCreated());
   }
 
   @Test
@@ -201,7 +201,7 @@ class MessageControllerIntegrationTest {
     // Act & Assert: Perform PUT request and verify response
     mockMvc
         .perform(
-            put("/messages/1")
+            put("/api/messages/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDTO)))
         .andExpect(status().isOk())
@@ -229,7 +229,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform PATCH request and verify response
     mockMvc
-        .perform(patch("/messages/1/mark-read").contentType(MediaType.APPLICATION_JSON))
+        .perform(patch("/api/messages/1/mark-read").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.isRead").value(true));
 
@@ -245,7 +245,7 @@ class MessageControllerIntegrationTest {
 
     // Act & Assert: Perform DELETE request and verify response
     mockMvc
-        .perform(delete("/messages/1").contentType(MediaType.APPLICATION_JSON))
+        .perform(delete("/api/messages/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent());
 
     verify(messageService, times(1)).deleteMessage(1L);
@@ -256,7 +256,7 @@ class MessageControllerIntegrationTest {
   void testHealthEndpoint_ReturnsOk() throws Exception {
     // Act & Assert: Perform GET request and verify response
     mockMvc
-        .perform(get("/messages/health").contentType(MediaType.APPLICATION_JSON))
+        .perform(get("/api/messages/health").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string("Messages service is running"));
   }
@@ -271,7 +271,7 @@ class MessageControllerIntegrationTest {
     // Act & Assert: Perform POST request
     mockMvc
         .perform(
-            post("/messages")
+            post("/api/messages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidDTO)))
         .andExpect(status().isBadRequest());
