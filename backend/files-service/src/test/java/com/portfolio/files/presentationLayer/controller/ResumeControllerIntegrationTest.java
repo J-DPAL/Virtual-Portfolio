@@ -23,6 +23,7 @@ import com.portfolio.files.dataAccessLayer.entity.Resume;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,7 +52,7 @@ class ResumeControllerIntegrationTest {
 
     // Act & Assert: Perform multipart upload and verify response
     mockMvc
-        .perform(multipart("/api/resume/upload").file(file))
+        .perform(multipart("/api/resume/upload").file(file).with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.success").value(true))
         .andExpect(jsonPath("$.fileName").value("resume.pdf"));
@@ -68,7 +69,9 @@ class ResumeControllerIntegrationTest {
         new MockMultipartFile("file", "resume.pdf", "application/pdf", "data".getBytes());
 
     // Act & Assert: Perform multipart upload
-    mockMvc.perform(multipart("/api/resume/upload").file(file)).andExpect(status().isForbidden());
+    mockMvc
+        .perform(multipart("/api/resume/upload").file(file).with(csrf()))
+        .andExpect(status().isForbidden());
 
     verify(fileStorageService, never()).storeFile(any());
   }
