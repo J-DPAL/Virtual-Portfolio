@@ -42,7 +42,14 @@ public class SecurityConfig {
     http.csrf(
             csrf ->
                 csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringRequestMatchers("/actuator/health"))
+                    .ignoringRequestMatchers(
+                        "/actuator/health",
+                        "/v1/auth/login",
+                        "/v1/auth/logout",
+                        "/v1/auth/csrf",
+                        "/messages",
+                        "/api/messages",
+                        "/api/messages/**"))
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(CSP_POLICY)))
         .sessionManagement(
