@@ -7,14 +7,18 @@ import { ThemeProvider } from './context/ThemeContext';
 import './i18n';
 import './index.css';
 
+import { BrowserRouter as Router } from 'react-router-dom';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <LanguageProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </Router>
   </React.StrictMode>
 );
