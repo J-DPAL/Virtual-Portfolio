@@ -3,6 +3,8 @@ spring:
     name: eureka-server
   main:
     web-application-type: servlet
+server:
+  port: 0
 
 eureka:
   client:
@@ -10,4 +12,3 @@ eureka:
     fetchRegistry: false
   server:
     enableSelfPreservation: false
-    port: 8761
