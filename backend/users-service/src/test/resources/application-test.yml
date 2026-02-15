@@ -15,9 +15,12 @@ spring:
     console:
       enabled: true
 
-eureka:
-  client:
-    enabled: false
+  flyway:
+    locations: classpath:db/test-migration
+    placeholders:
+      admin_email: test-admin@example.com
+      admin_password_hash: $2a$10$DNrpFf/oVX7ug4BkCTgVv.xEscg7I2Ri5D5qO9NEgXif/pneqs92C
+      admin_full_name: Test Admin
 
 jwt:
   secret: test-secret-key-that-is-long-enough-for-testing-purposes
