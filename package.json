@@ -4,5 +4,8 @@
     "eslint": "^9.39.2",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^17.2.0"
+  },
+  "dependencies": {
+    "framer-motion": "^12.34.0"
   }
 }
