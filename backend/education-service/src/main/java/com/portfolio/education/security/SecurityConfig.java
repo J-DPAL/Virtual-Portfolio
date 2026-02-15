@@ -30,7 +30,7 @@ public class SecurityConfig {
     http.csrf(
             csrf ->
                 csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringRequestMatchers("/actuator/health"))
+                    .ignoringRequestMatchers("/actuator/health", "/education/**"))
         .cors(cors -> cors.disable())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
