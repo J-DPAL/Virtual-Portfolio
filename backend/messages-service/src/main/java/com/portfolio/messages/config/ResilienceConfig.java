@@ -43,7 +43,6 @@ public class ResilienceConfig {
     RetryConfig mailRetryConfig =
         RetryConfig.custom()
             .maxAttempts(3) // Initial attempt + 2 retries
-            .waitDuration(Duration.ofMillis(1000))
             .intervalFunction(
                 io.github.resilience4j.core.IntervalFunction.ofExponentialBackoff(
                     1000, // Initial interval: 1 second
