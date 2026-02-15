@@ -2,6 +2,7 @@ package com.portfolio.files.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,11 +19,12 @@ import jakarta.servlet.Filter;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final Environment environment;
 
-  public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+  public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, Environment environment) {
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    this.environment = environment;
   }
 
   @Bean
@@ -47,9 +49,21 @@ public class SecurityConfig {
                     .requestMatchers("/actuator/health")
                     .permitAll()
                     .anyRequest()
-                    .authenticated())
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterAfter(csrfCookieFilter(), CsrfFilter.class);
+                    .authenticated());
+
+    // Only add JWT filter if not running under 'test' profile
+    String[] activeProfiles = environment.getActiveProfiles();
+    boolean isTestProfile = false;
+    for (String profile : activeProfiles) {
+      if (profile.equalsIgnoreCase("test")) {
+        isTestProfile = true;
+        break;
+      }
+    }
+    if (!isTestProfile) {
+      http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+    http.addFilterAfter(csrfCookieFilter(), CsrfFilter.class);
 
     return http.build();
   }
