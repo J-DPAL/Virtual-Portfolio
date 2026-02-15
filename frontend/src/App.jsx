@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useTheme } from './context/ThemeContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -23,24 +23,26 @@ import TestimonialsManagement from './components/admin/TestimonialsManagement';
 import MessagesView from './components/admin/MessagesView';
 import ResumeUpload from './components/admin/ResumeUpload';
 import ProtectedRoute from './components/ProtectedRoute';
+import { PageTransitionWrapper } from './components/common/PageTransitionWrapper';
 import './index.css';
 
 function App() {
   const { isDark } = useTheme();
+  const location = useLocation();
 
   return (
-    <Router>
-      <div
-        className={`min-h-screen flex flex-col ${
-          isDark
-            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100'
-            : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50 text-slate-900'
-        }`}
-        dir="ltr"
-      >
-        <Header />
-        <main className="flex-grow">
-          <Routes>
+    <div
+      className={`min-h-screen flex flex-col ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100'
+          : 'bg-gradient-to-br from-blue-50 via-slate-50 to-teal-50 text-slate-900'
+      }`}
+      dir="ltr"
+    >
+      <Header />
+      <main className="flex-grow">
+        <PageTransitionWrapper location={location}>
+          <Routes location={location} key={location.pathname}>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
@@ -128,10 +130,10 @@ function App() {
 
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+        </PageTransitionWrapper>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
