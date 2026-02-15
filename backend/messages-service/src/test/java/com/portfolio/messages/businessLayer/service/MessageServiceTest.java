@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,8 +27,8 @@ class MessageServiceTest {
 
   @Mock private MessageRepository messageRepository;
   @Mock private MessageMapper messageMapper;
-
-  @InjectMocks private MessageService messageService;
+  @Mock private EmailService emailService;
+  private MessageService messageService;
 
   private Message testMessage;
   private MessageDTO testMessageDTO;
@@ -56,6 +55,10 @@ class MessageServiceTest {
             .message("Test message")
             .isRead(false)
             .build();
+
+    // Inject mocks into MessageService, including Optional<EmailService>
+    messageService =
+        new MessageService(messageRepository, messageMapper, Optional.of(emailService));
   }
 
   @Test
