@@ -13,7 +13,7 @@ import com.portfolio.messages.mappingLayer.dto.MessageDTO;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/api/messages")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class MessageController {
 
