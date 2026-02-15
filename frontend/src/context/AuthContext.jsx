@@ -20,9 +20,16 @@ export const AuthProvider = ({ children }) => {
         const response = await getCurrentUser();
         setUser(response.data);
         setIsAuthenticated(true);
-      } catch {
-        setUser(null);
-        setIsAuthenticated(false);
+      } catch (err) {
+        if (err?.response?.status === 403) {
+          // Not authenticated, prompt login
+          setUser(null);
+          setIsAuthenticated(false);
+        } else {
+          // Other errors
+          setUser(null);
+          setIsAuthenticated(false);
+        }
       } finally {
         setIsAuthLoading(false);
       }
