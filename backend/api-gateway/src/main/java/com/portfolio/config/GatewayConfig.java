@@ -3,6 +3,8 @@ package com.portfolio.config;
 import java.net.URI;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,8 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 @Configuration
 public class GatewayConfig {
+
+  private static final Logger log = LoggerFactory.getLogger(GatewayConfig.class);
 
   @Value("${services.users.url:http://localhost:8081}")
   private String usersServiceUrl;
@@ -176,9 +180,15 @@ public class GatewayConfig {
           ServerResponse.status(e.getStatusCode())
               .body(Objects.requireNonNullElse(e.getResponseBodyAsString(), ""));
       return response;
-    } catch (Exception e) {
+    } catch (Throwable t) {
+      log.error("Gateway proxy error (targetUrl={}, requestPath={}): {}", targetUrl, request.path(), t.toString(), t);
       return ServerResponse.status(500)
-          .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
+          .body(
+              "{\"error\":\"Gateway error: "
+                  + t.getClass().getSimpleName()
+                  + ": "
+                  + Objects.toString(t.getMessage(), "")
+                  + "\"}");
     }
   }
 
@@ -210,9 +220,22 @@ public class GatewayConfig {
       @SuppressWarnings("null")
       String body = Objects.requireNonNullElse(e.getResponseBodyAsString(), "");
       return ServerResponse.status(e.getStatusCode()).body(body);
-    } catch (Exception e) {
+    } catch (Throwable t) {
+      log.error(
+          "Gateway proxy error (targetUrl={}, requestPath={}, apiPrefix={}, stripPrefix={}): {}",
+          targetUrl,
+          request.path(),
+          apiPrefix,
+          stripPrefix,
+          t.toString(),
+          t);
       return ServerResponse.status(500)
-          .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
+          .body(
+              "{\"error\":\"Gateway error: "
+                  + t.getClass().getSimpleName()
+                  + ": "
+                  + Objects.toString(t.getMessage(), "")
+                  + "\"}");
     }
   }
 
@@ -299,9 +322,15 @@ public class GatewayConfig {
       @SuppressWarnings("null")
       String body = Objects.requireNonNullElse(e.getResponseBodyAsString(), "");
       return ServerResponse.status(e.getStatusCode()).body(body);
-    } catch (Exception e) {
+    } catch (Throwable t) {
+      log.error("Gateway executeProxyRequest error (uri={}, method={}): {}", uri, request.method(), t.toString(), t);
       return ServerResponse.status(500)
-          .body("{\"error\":\"Gateway error: " + e.getMessage() + "\"}");
+          .body(
+              "{\"error\":\"Gateway error: "
+                  + t.getClass().getSimpleName()
+                  + ": "
+                  + Objects.toString(t.getMessage(), "")
+                  + "\"}");
     }
   }
 }
