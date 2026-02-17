@@ -256,6 +256,9 @@ public class GatewayConfig {
                     && !key.equalsIgnoreCase("host")
                     && !key.equalsIgnoreCase("origin")
                     && !key.equalsIgnoreCase("referer")
+                    // Avoid forwarding browser compression preferences (br/zstd) to downstream.
+                    // RestTemplate/HttpClient support varies, and we also don't want to forward content-encoding back.
+                    && !key.equalsIgnoreCase("accept-encoding")
                     && !key.equalsIgnoreCase("access-control-request-method")
                     && !key.equalsIgnoreCase("access-control-request-headers")
                     && !key.equalsIgnoreCase("sec-fetch-site")
@@ -310,7 +313,13 @@ public class GatewayConfig {
                     .getHeaders()
                     .forEach(
                         (key, value) -> {
-                          if (key != null && !key.toLowerCase().startsWith("access-control-")) {
+                          // CORS is handled by Spring Security at the gateway.
+                          // Also, don't forward encoding/length headers since RestTemplate may have already decoded.
+                          if (key != null
+                              && !key.toLowerCase().startsWith("access-control-")
+                              && !key.equalsIgnoreCase("content-encoding")
+                              && !key.equalsIgnoreCase("content-length")
+                              && !key.equalsIgnoreCase("transfer-encoding")) {
                             h.addAll(key, value);
                           }
                         });
