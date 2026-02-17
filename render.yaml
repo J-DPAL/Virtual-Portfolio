@@ -300,7 +300,8 @@ services:
       - key: SERVICES_FILES_URL
         value: http://files-service:8090
 
-  - type: static
+  - type: web
+    runtime: static
     name: virtual-portfolio-frontend
     rootDir: frontend
     buildCommand: npm ci && npm run build
