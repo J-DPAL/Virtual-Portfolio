@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getCsrfToken, loginUser } from '../../services/authService';
+import { loginUser } from '../../services/authService';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -21,7 +21,6 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      await getCsrfToken();
       const response = await loginUser(email, password);
       const { user } = response.data;
       login(user);

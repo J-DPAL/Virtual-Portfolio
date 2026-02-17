@@ -22,19 +22,13 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(
-            csrf ->
-                csrf.ignoringRequestMatchers(
-                        "/api/messages", "/api/messages/**", "/messages/**", "/actuator/health")
-                    .disable())
+    http.csrf(csrf -> csrf.disable())
         .cors(cors -> cors.disable())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/messages", "/api/messages/**")
-                    .permitAll()
-                    .requestMatchers("/messages/**")
+                auth.requestMatchers("/messages", "/messages/**")
                     .permitAll()
                     .requestMatchers("/actuator/health")
                     .permitAll()

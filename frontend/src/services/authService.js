@@ -8,10 +8,6 @@ export const checkHealth = () => {
   return apiClient.get('/v1/auth/health');
 };
 
-export const getCsrfToken = () => {
-  return apiClient.get('/v1/auth/csrf');
-};
-
 export const getCurrentUser = () => {
   return apiClient.get('/v1/auth/me');
 };

@@ -9,13 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfToken;
 
 import com.portfolio.users.security.JwtAuthenticationFilter;
-
-import jakarta.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,10 +29,7 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(
-            csrf ->
-                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringRequestMatchers("/v1/auth/login", "/actuator/health"))
+    http.csrf(csrf -> csrf.disable())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
@@ -45,25 +37,13 @@ public class SecurityConfig {
                 auth.requestMatchers(
                         "/v1/auth/login",
                         "/v1/auth/logout",
-                        "/v1/auth/csrf",
                         "/v1/auth/health",
                         "/actuator/health")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterAfter(csrfCookieFilter(), CsrfFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-  }
-
-  private Filter csrfCookieFilter() {
-    return (request, response, chain) -> {
-      CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-      if (token != null) {
-        token.getToken();
-      }
-      chain.doFilter(request, response);
-    };
   }
 }

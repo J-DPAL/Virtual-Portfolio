@@ -33,4 +33,4 @@ eureka:
 
 app:
   cors:
-    allowed-origins: https://virtual-portfolio-frontend.onrender.com,https://jeandavid.dev,https://www.jeandavid.dev
+    allowed-origins: http://localhost:3000,http://localhost:5173,https://virtual-portfolio-frontend.onrender.com,https://jeandavid.dev,https://www.jeandavid.dev

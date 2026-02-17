@@ -1,7 +1,6 @@
 package com.portfolio.users.presentationLayer.controller;
 
 import java.time.Duration;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import com.portfolio.users.businessLayer.service.AuthService;
@@ -28,7 +26,6 @@ import jakarta.validation.Valid;
 public class AuthController {
 
   private static final String AUTH_COOKIE_NAME = "auth_token";
-  private static final String CSRF_COOKIE_NAME = "XSRF-TOKEN";
 
   private final AuthService authService;
 
@@ -69,25 +66,7 @@ public class AuthController {
             .path("/")
             .maxAge(Duration.ZERO)
             .build();
-
-    ResponseCookie csrfCookie =
-        ResponseCookie.from(CSRF_COOKIE_NAME, "")
-            .httpOnly(false)
-            .secure(request.isSecure())
-            .sameSite("Lax")
-            .path("/")
-            .maxAge(Duration.ZERO)
-            .build();
-
-    return ResponseEntity.ok()
-        .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-        .header(HttpHeaders.SET_COOKIE, csrfCookie.toString())
-        .build();
-  }
-
-  @GetMapping("/csrf")
-  public ResponseEntity<Map<String, String>> csrf(CsrfToken token) {
-    return ResponseEntity.ok(Map.of("token", token.getToken()));
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, authCookie.toString()).build();
   }
 
   @GetMapping("/me")

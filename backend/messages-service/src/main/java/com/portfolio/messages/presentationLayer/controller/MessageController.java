@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/messages")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class MessageController {
 

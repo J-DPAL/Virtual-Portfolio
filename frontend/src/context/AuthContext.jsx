@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   getCurrentUser,
-  getCsrfToken,
   logoutUser,
 } from '../services/authService';
 
@@ -16,7 +15,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        await getCsrfToken();
         const response = await getCurrentUser();
         setUser(response.data);
         setIsAuthenticated(true);
