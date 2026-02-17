@@ -19,7 +19,9 @@ class SecurityConfigTest {
   @DisplayName("Should configure CORS with allowed origins and methods")
   void testCorsConfigurationSource() {
     // Arrange: Create security config
-    SecurityConfig config = new SecurityConfig(new RateLimitFilter());
+    SecurityConfig config =
+        new SecurityConfig(
+            new RateLimitFilter(), List.of("http://localhost:3000", "http://localhost:5173"));
     MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/test");
 
     // Act: Build CORS configuration
