@@ -227,7 +227,19 @@ public class GatewayConfig {
           .asHttpHeaders()
           .forEach(
               (key, value) -> {
-                if (key != null && !key.equalsIgnoreCase("host") && value != null) {
+                // Do not forward browser CORS headers to downstream services.
+                // CORS must be handled at the gateway only.
+                if (key != null
+                    && !key.equalsIgnoreCase("host")
+                    && !key.equalsIgnoreCase("origin")
+                    && !key.equalsIgnoreCase("referer")
+                    && !key.equalsIgnoreCase("access-control-request-method")
+                    && !key.equalsIgnoreCase("access-control-request-headers")
+                    && !key.equalsIgnoreCase("sec-fetch-site")
+                    && !key.equalsIgnoreCase("sec-fetch-mode")
+                    && !key.equalsIgnoreCase("sec-fetch-dest")
+                    && !key.equalsIgnoreCase("sec-fetch-storage-access")
+                    && value != null) {
                   headers.addAll(key, value);
                 }
               });
