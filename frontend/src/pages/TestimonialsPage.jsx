@@ -19,9 +19,7 @@ export default function TestimonialsPage() {
   const [formData, setFormData] = useState({
     clientName: '',
     clientPosition: '',
-    testimonialTextEn: '',
-    testimonialTextFr: '',
-    testimonialTextEs: '',
+    testimonialText: '',
     clientCompany: '',
     rating: 5,
     clientImageUrl: '',
@@ -50,14 +48,18 @@ export default function TestimonialsPage() {
     setError(null);
 
     try {
-      await submitTestimonial(formData);
+      const payload = {
+        ...formData,
+        testimonialTextEn: formData.testimonialText,
+        testimonialTextFr: formData.testimonialText,
+        testimonialTextEs: formData.testimonialText,
+      };
+      await submitTestimonial(payload);
       setSuccess(true);
       setFormData({
         clientName: '',
         clientPosition: '',
-        testimonialTextEn: '',
-        testimonialTextFr: '',
-        testimonialTextEs: '',
+        testimonialText: '',
         clientCompany: '',
         rating: 5,
         clientImageUrl: '',
@@ -203,7 +205,7 @@ export default function TestimonialsPage() {
                 : 'bg-slate-50/70 border-slate-200 text-slate-700'
             }`}
           >
-            Client Voices
+            {t('clientVoices')}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 mb-4">
             {t('testimonials')}
@@ -249,7 +251,7 @@ export default function TestimonialsPage() {
                 isDark ? 'text-slate-100' : 'text-slate-900'
               }`}
             >
-              Submit a Testimonial
+              {t('submitTestimonialTitle')}
             </h2>
 
             {success && (
@@ -260,7 +262,7 @@ export default function TestimonialsPage() {
                     : 'bg-emerald-50 border-emerald-200 text-emerald-800'
                 }`}
               >
-                Thank you! Your testimonial has been submitted for review.
+                {t('testimonialSubmittedForReview')}
               </div>
             )}
 
@@ -283,7 +285,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Your Name *
+                  {t('yourNameRequired')}
                 </label>
                 <input
                   type="text"
@@ -305,7 +307,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Your Title *
+                  {t('yourTitleRequired')}
                 </label>
                 <input
                   type="text"
@@ -327,7 +329,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Company
+                  {t('company')}
                 </label>
                 <input
                   type="text"
@@ -348,7 +350,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Your Testimonial in English *
+                  {t('yourTestimonialRequired')}
                 </label>
                 <textarea
                   required
@@ -358,11 +360,11 @@ export default function TestimonialsPage() {
                       ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
                       : 'border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-500'
                   }`}
-                  value={formData.testimonialTextEn}
+                  value={formData.testimonialText}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      testimonialTextEn: e.target.value,
+                      testimonialText: e.target.value,
                     })
                   }
                 />
@@ -373,57 +375,7 @@ export default function TestimonialsPage() {
                     isDark ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Your Testimonial in French *
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
-                    isDark
-                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
-                      : 'border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-500'
-                  }`}
-                  value={formData.testimonialTextFr}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      testimonialTextFr: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-slate-300' : 'text-slate-700'
-                  }`}
-                >
-                  Your Testimonial in Spanish *
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition ${
-                    isDark
-                      ? 'bg-slate-700 border border-slate-600 text-slate-100 placeholder-slate-400'
-                      : 'border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-500'
-                  }`}
-                  value={formData.testimonialTextEs}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      testimonialTextEs: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-slate-300' : 'text-slate-700'
-                  }`}
-                >
-                  Rating (1-5) *
+                  {t('ratingRangeRequired')}
                 </label>
                 <input
                   type="number"

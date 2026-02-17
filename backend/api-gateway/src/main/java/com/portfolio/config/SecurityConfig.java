@@ -1,9 +1,11 @@
 package com.portfolio.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,12 +31,19 @@ public class SecurityConfig {
           + "img-src 'self' data: blob:; "
           + "style-src 'self' 'unsafe-inline'; "
           + "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-          + "connect-src 'self' http://localhost:3000 http://localhost:5173";
+          + "connect-src 'self' http://localhost:3000 http://localhost:5173 "
+          + "https://virtual-portfolio-frontend.onrender.com https://api-gateway-sit5.onrender.com";
 
   private final RateLimitFilter rateLimitFilter;
+  private final List<String> allowedOrigins;
 
-  public SecurityConfig(RateLimitFilter rateLimitFilter) {
+  public SecurityConfig(
+      RateLimitFilter rateLimitFilter,
+      @Value(
+              "${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173,https://virtual-portfolio-frontend.onrender.com}")
+          List<String> allowedOrigins) {
     this.rateLimitFilter = rateLimitFilter;
+    this.allowedOrigins = allowedOrigins;
   }
 
   @Bean
@@ -79,8 +88,7 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(
-        Arrays.asList("http://localhost:3000", "http://localhost:5173"));
+    configuration.setAllowedOrigins(allowedOrigins);
     configuration.setAllowedMethods(
         Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));

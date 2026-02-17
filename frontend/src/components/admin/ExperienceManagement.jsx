@@ -168,23 +168,23 @@ export default function ExperienceManagement() {
           month: 'short',
           year: 'numeric',
         })
-      : 'Present';
+      : t('presentDate');
     return `${start} - ${end}`;
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <p className="mt-4 text-slate-600 dark:text-slate-300">{t('loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -192,7 +192,7 @@ export default function ExperienceManagement() {
             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600">
               {t('manageExperience')}
             </h1>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
               {t('manageExperienceDescription')}
             </p>
           </div>
@@ -219,7 +219,7 @@ export default function ExperienceManagement() {
 
         {/* Success/Error Messages */}
         {successMessage && (
-          <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -237,7 +237,7 @@ export default function ExperienceManagement() {
           </div>
         )}
         {errorMessage && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -256,34 +256,34 @@ export default function ExperienceManagement() {
         )}
 
         {/* Experience Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-slate-50 to-slate-100">
+              <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Position (EN)
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('positionEnLabel')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Company
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('company')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Location
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('location')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Duration
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('duration')}
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                     {t('actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {experiences.length === 0 ? (
                   <tr>
                     <td
                       colSpan="5"
-                      className="px-6 py-12 text-center text-slate-500"
+                      className="px-6 py-12 text-center text-slate-500 dark:text-slate-400"
                     >
                       {t('noData')}
                     </td>
@@ -292,18 +292,18 @@ export default function ExperienceManagement() {
                   experiences.map((experience) => (
                     <tr
                       key={experience.id}
-                      className="hover:bg-slate-50 transition-colors"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                      <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
                         {experience.positionEn}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">
+                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {experience.companyEn}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">
+                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {experience.location}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">
+                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {formatDuration(
                           experience.startDate,
                           experience.endDate
@@ -312,7 +312,7 @@ export default function ExperienceManagement() {
                       <td className="px-6 py-4 text-right space-x-2">
                         <button
                           onClick={() => handleEdit(experience)}
-                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -331,7 +331,7 @@ export default function ExperienceManagement() {
                         </button>
                         <button
                           onClick={() => handleDelete(experience.id)}
-                          className="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -360,7 +360,7 @@ export default function ExperienceManagement() {
         {/* Add/Edit Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
                   {editingExperience ? t('edit') : t('add')}{' '}
@@ -389,8 +389,8 @@ export default function ExperienceManagement() {
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Position (English)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('positionEnglish')}
                     </label>
                     <input
                       type="text"
@@ -398,13 +398,13 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, positionEn: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Position (French)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('positionFrench')}
                     </label>
                     <input
                       type="text"
@@ -412,13 +412,13 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, positionFr: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Position (Spanish)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('positionSpanish')}
                     </label>
                     <input
                       type="text"
@@ -426,7 +426,7 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, positionEs: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
@@ -434,8 +434,8 @@ export default function ExperienceManagement() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Company (English)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('companyEnglish')}
                     </label>
                     <input
                       type="text"
@@ -443,13 +443,13 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, companyEn: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Company (French)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('companyFrench')}
                     </label>
                     <input
                       type="text"
@@ -457,13 +457,13 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, companyFr: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Company (Spanish)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('companySpanish')}
                     </label>
                     <input
                       type="text"
@@ -471,15 +471,15 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, companyEs: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Location
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('location')}
                   </label>
                   <input
                     type="text"
@@ -487,15 +487,15 @@ export default function ExperienceManagement() {
                     onChange={(e) =>
                       setFormData({ ...formData, location: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Start Date
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('startDate')}
                     </label>
                     <input
                       type="date"
@@ -503,13 +503,13 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, startDate: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      End Date
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('endDate')}
                     </label>
                     <input
                       type="date"
@@ -517,14 +517,14 @@ export default function ExperienceManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, endDate: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (English)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionEnglish')}
                   </label>
                   <textarea
                     value={formData.descriptionEn}
@@ -534,15 +534,15 @@ export default function ExperienceManagement() {
                         descriptionEn: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (French)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionFrench')}
                   </label>
                   <textarea
                     value={formData.descriptionFr}
@@ -552,15 +552,15 @@ export default function ExperienceManagement() {
                         descriptionFr: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (Spanish)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionSpanish')}
                   </label>
                   <textarea
                     value={formData.descriptionEs}
@@ -570,15 +570,15 @@ export default function ExperienceManagement() {
                         descriptionEs: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Skills Used (comma-separated)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('skillsUsedCommaSeparated')}
                   </label>
                   <textarea
                     value={formData.skillsUsed}
@@ -588,15 +588,15 @@ export default function ExperienceManagement() {
                         skillsUsed: e.target.value,
                       })
                     }
-                    placeholder="React, Node.js, PostgreSQL, Docker"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    placeholder={t('skillsPlaceholder')}
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     rows="2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Icon/Emoji (single character or emoji)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('iconEmojiLabel')}
                   </label>
                   <input
                     type="text"
@@ -608,18 +608,17 @@ export default function ExperienceManagement() {
                         icon: e.target.value,
                       })
                     }
-                    placeholder="👨‍💻 or 📊 or 🍳"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    placeholder={t('iconEmojiPlaceholder')}
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   />
-                  <p className="text-xs text-slate-500 mt-1">
-                    Examples: 👨‍💻 (developer), 🍳 (chef), 📊 (analyst), 🎯
-                    (manager), 🚀 (startup), etc.
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    {t('iconEmojiExamples')}
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Responsibilities (comma-separated)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('responsibilitiesCommaSeparated')}
                   </label>
                   <textarea
                     value={formData.responsibilities}
@@ -629,8 +628,8 @@ export default function ExperienceManagement() {
                         responsibilities: e.target.value,
                       })
                     }
-                    placeholder="Led team, Developed features, Improved performance"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
+                    placeholder={t('responsibilitiesPlaceholder')}
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     rows="3"
                   />
                 </div>
@@ -645,7 +644,7 @@ export default function ExperienceManagement() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                    className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
                   >
                     {t('close')}
                   </button>
@@ -658,3 +657,4 @@ export default function ExperienceManagement() {
     </div>
   );
 }
+

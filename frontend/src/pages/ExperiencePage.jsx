@@ -101,33 +101,36 @@ export default function ExperiencePage() {
     } ${responsibilitiesText}`.toLowerCase();
 
     const softSkills = [
-      { match: ['team', 'collaborat'], label: '🤝 Teamwork' },
+      { match: ['team', 'collaborat'], label: `🤝 ${t('teamwork')}` },
       {
         match: ['time', 'schedule', 'deadline', 'shift'],
-        label: '⏱️ Time Management',
+        label: `⏱️ ${t('timeManagement')}`,
       },
       {
         match: ['customer', 'client', 'service', 'voter'],
-        label: '🗣️ Communication',
+        label: `🗣️ ${t('communication')}`,
       },
       {
         match: ['detail', 'accuracy', 'record', 'audit'],
-        label: '🔍 Attention to Detail',
+        label: `🔍 ${t('attentionToDetail')}`,
       },
       {
         match: ['problem', 'resolve', 'troubleshoot'],
-        label: '🧠 Problem Solving',
+        label: `🧠 ${t('problemSolving')}`,
       },
-      { match: ['lead', 'manage', 'supervise'], label: '🎯 Leadership' },
-      { match: ['adapt', 'fast-paced', 'change'], label: '🌊 Adaptability' },
+      { match: ['lead', 'manage', 'supervise'], label: `🎯 ${t('leadership')}` },
+      {
+        match: ['adapt', 'fast-paced', 'change'],
+        label: `🌊 ${t('adaptability')}`,
+      },
       {
         match: ['compliance', 'policy', 'safety', 'protocol'],
-        label: '✅ Compliance',
+        label: `✅ ${t('compliance')}`,
       },
-      { match: ['reliab', 'punctual'], label: '🧭 Reliability' },
+      { match: ['reliab', 'punctual'], label: `🧭 ${t('reliability')}` },
       {
         match: ['election', 'integrity', 'confidential'],
-        label: '🧾 Integrity',
+        label: `🧾 ${t('integrity')}`,
       },
     ]
       .filter((rule) => rule.match.some((m) => haystack.includes(m)))
@@ -272,7 +275,7 @@ export default function ExperiencePage() {
                 : 'bg-slate-50/70 border-slate-200 text-slate-700'
             }`}
           >
-            Career Timeline
+            {t('careerTimeline')}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600 mb-4">
             {t('experience')}
@@ -351,7 +354,7 @@ export default function ExperiencePage() {
                             : 'bg-slate-100 text-slate-600 border-slate-200'
                       }`}
                     >
-                      {isCurrentRole ? t('presentDate') : 'Past Role'}
+                      {isCurrentRole ? t('presentDate') : t('pastRole')}
                     </span>
                   </div>
 
@@ -488,7 +491,7 @@ export default function ExperiencePage() {
                             d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
                           />
                         </svg>
-                        Skills & Strengths:
+                        {t('skillsAndStrengths')}
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {skills.map((skill, idx) => (
@@ -514,7 +517,7 @@ export default function ExperiencePage() {
                           isDark ? 'text-slate-100' : 'text-slate-900'
                         }`}
                       >
-                        Key Responsibilities:
+                        {t('keyResponsibilities')}
                       </h4>
                       <div className="grid gap-2">
                         {exp.responsibilities.map((resp, idx) => (

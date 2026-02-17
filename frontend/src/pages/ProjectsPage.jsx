@@ -275,7 +275,7 @@ export default function ProjectsPage() {
                 onChange={(e) => setFilterTech(e.target.value)}
               >
                 <option value="">
-                  {t('filterByTechnology') || 'Filter by Technology'}
+                  {t('filterByTechnology')}
                 </option>
                 {/* Build unique tech list from projects */}
                 {Array.from(
@@ -300,9 +300,9 @@ export default function ProjectsPage() {
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
               >
-                <option value="newest">{t('sortNewest') || 'Newest'}</option>
+                <option value="newest">{t('sortNewest')}</option>
                 <option value="alphabetical">
-                  {t('sortAlphabetical') || 'Alphabetical'}
+                  {t('sortAlphabetical')}
                 </option>
               </select>
               {filterTech && (
@@ -310,7 +310,7 @@ export default function ProjectsPage() {
                   className="px-3 py-1 rounded border bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-xs"
                   onClick={() => setFilterTech('')}
                 >
-                  {t('clearFilter') || 'Clear Filter'}
+                  {t('clearFilter')}
                 </button>
               )}
             </div>
@@ -322,7 +322,7 @@ export default function ProjectsPage() {
                 : 'bg-slate-50/70 border-slate-200 text-slate-700'
             }`}
           >
-            Curated Work
+            {t('curatedWork')}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-600 mb-4">
             {t('projects')}
@@ -452,7 +452,7 @@ export default function ProjectsPage() {
                         : 'text-indigo-600 hover:text-indigo-700'
                     }`}
                   >
-                    View Project
+                    {t('viewProject')}
                     <svg
                       className="w-4 h-4 ml-1"
                       fill="none"
@@ -479,7 +479,7 @@ export default function ProjectsPage() {
                 isDark ? 'text-slate-400' : 'text-slate-600'
               }`}
             >
-              {t('noProjectsAvailable') || 'No projects available'}
+              {t('noProjectsAvailable')}
             </p>
           </div>
         )}
@@ -496,7 +496,7 @@ export default function ProjectsPage() {
             type="button"
             className="absolute inset-0 bg-black/60"
             onClick={handleProjectClose}
-            aria-label="Close project details"
+            aria-label={t('closeProjectDetails')}
           ></button>
           <div
             className={`relative max-w-3xl w-full rounded-3xl shadow-2xl overflow-hidden ring-1 ${
@@ -533,7 +533,7 @@ export default function ProjectsPage() {
                 type="button"
                 onClick={handleProjectClose}
                 className="text-white/80 hover:text-white transition"
-                aria-label="Close project details"
+                aria-label={t('closeProjectDetails')}
               >
                 <svg
                   className="w-6 h-6"
@@ -588,7 +588,7 @@ export default function ProjectsPage() {
                         : 'text-indigo-600 hover:text-indigo-700'
                     }`}
                   >
-                    View Project
+                    {t('viewProject')}
                     <svg
                       className="w-4 h-4 ml-1"
                       fill="none"
@@ -615,7 +615,7 @@ export default function ProjectsPage() {
                         : 'text-emerald-600 hover:text-emerald-700'
                     }`}
                   >
-                    View GitHub Repo
+                    {t('viewGithubRepo')}
                     <svg
                       className="w-4 h-4 ml-1"
                       fill="none"

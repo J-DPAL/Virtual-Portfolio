@@ -64,50 +64,50 @@ const MessagesView = () => {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow overflow-hidden border border-slate-200 dark:border-slate-700">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <thead className="bg-gray-50 dark:bg-slate-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   {t('senderName')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   {t('email')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   {t('subject')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   {t('dateSubmitted')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                   {t('actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-700">
               {messages.map((message) => (
                 <>
-                  <tr key={message.id} className="hover:bg-gray-50">
+                  <tr key={message.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-900 dark:text-slate-100">
                         {message.name}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-900">{message.email}</div>
+                      <div className="text-gray-900 dark:text-slate-100">{message.email}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-gray-900">{message.subject}</div>
+                      <div className="text-gray-900 dark:text-slate-100">{message.subject}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-500 text-sm">
+                      <div className="text-gray-500 dark:text-slate-400 text-sm">
                         {formatDate(message.createdAt || message.date)}
                       </div>
                     </td>
@@ -115,39 +115,39 @@ const MessagesView = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleExpand(message.id)}
-                          className="text-blue-600 hover:text-blue-900 font-medium"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium"
                         >
                           {expandedId === message.id
-                            ? 'Hide Message'
-                            : 'View Message'}
+                            ? t('hideMessage')
+                            : t('viewMessage')}
                         </button>
                         <button
                           onClick={() => handleDelete(message.id)}
                           className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
                         >
-                          Delete
+                          {t('delete')}
                         </button>
                       </div>
                     </td>
                   </tr>
                   {expandedId === message.id && (
                     <tr>
-                      <td colSpan="5" className="px-6 py-4 bg-gray-50">
+                      <td colSpan="5" className="px-6 py-4 bg-gray-50 dark:bg-slate-800">
                         <div className="space-y-3">
                           <div>
-                            <h4 className="font-semibold text-gray-900">
-                              Full Message:
+                            <h4 className="font-semibold text-gray-900 dark:text-slate-100">
+                              {t('fullMessage')}
                             </h4>
-                            <p className="text-gray-700 whitespace-pre-wrap mt-2">
+                            <p className="text-gray-700 dark:text-slate-300 whitespace-pre-wrap mt-2">
                               {message.message || message.content}
                             </p>
                           </div>
                           {message.phone && (
                             <div>
-                              <h4 className="font-semibold text-gray-900">
-                                Phone:
+                              <h4 className="font-semibold text-gray-900 dark:text-slate-100">
+                                {t('phone')}
                               </h4>
-                              <p className="text-gray-700">{message.phone}</p>
+                              <p className="text-gray-700 dark:text-slate-300">{message.phone}</p>
                             </div>
                           )}
                         </div>
@@ -159,8 +159,8 @@ const MessagesView = () => {
             </tbody>
           </table>
           {messages.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No messages found
+            <div className="text-center py-8 text-gray-500 dark:text-slate-400">
+              {t('noMessagesFound')}
             </div>
           )}
         </div>
@@ -169,36 +169,36 @@ const MessagesView = () => {
       {/* Card View Alternative (Optional) */}
       <div className="grid gap-4 md:hidden">
         {messages.map((message) => (
-          <div key={message.id} className="bg-white rounded-lg shadow p-4">
+          <div key={message.id} className="bg-white dark:bg-slate-900 rounded-lg shadow p-4 border border-slate-200 dark:border-slate-700">
             <div className="flex justify-between items-start mb-3">
               <div>
-                <h3 className="font-semibold text-gray-900">{message.name}</h3>
-                <p className="text-sm text-gray-600">{message.email}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-slate-100">{message.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-slate-400">{message.email}</p>
               </div>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-slate-400">
                 {formatDate(message.createdAt || message.date)}
               </span>
             </div>
-            <h4 className="font-medium text-gray-800 mb-2">
+            <h4 className="font-medium text-gray-800 dark:text-slate-200 mb-2">
               {message.subject}
             </h4>
             {expandedId === message.id && (
-              <p className="text-gray-700 mb-3 whitespace-pre-wrap">
+              <p className="text-gray-700 dark:text-slate-300 mb-3 whitespace-pre-wrap">
                 {message.message || message.content}
               </p>
             )}
             <div className="flex gap-2">
               <button
                 onClick={() => toggleExpand(message.id)}
-                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 text-sm font-medium"
               >
-                {expandedId === message.id ? 'Hide' : 'Read More'}
+                {expandedId === message.id ? t('hide') : t('readMore')}
               </button>
               <button
                 onClick={() => handleDelete(message.id)}
                 className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition"
               >
-                Delete
+                {t('delete')}
               </button>
             </div>
           </div>
@@ -209,3 +209,7 @@ const MessagesView = () => {
 };
 
 export default MessagesView;
+
+
+
+

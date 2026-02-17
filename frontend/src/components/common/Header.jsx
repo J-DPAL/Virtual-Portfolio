@@ -47,7 +47,7 @@ export default function Header() {
       link.remove();
     } catch (error) {
       console.error('Error downloading resume:', error);
-      alert('Resume download is not available at the moment');
+      alert(t('resumeDownloadUnavailable'));
     } finally {
       setDownloading(false);
     }
@@ -76,7 +76,7 @@ export default function Header() {
             <span
               className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600`}
             >
-              Digital Portfolio
+              {t('brandName')}
             </span>
           </Link>
 
@@ -122,7 +122,7 @@ export default function Header() {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              {downloading ? 'Downloading...' : 'CV'}
+              {downloading ? t('downloading') : t('resumeShortLabel')}
             </button>
 
             {/* Theme Toggle Button */}
@@ -133,7 +133,7 @@ export default function Header() {
                   ? 'border-slate-600 hover:border-yellow-500 hover:text-yellow-400 text-slate-300'
                   : 'border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-700'
               }`}
-              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={isDark ? t('switchToLightMode') : t('switchToDarkMode')}
             >
               {isDark ? (
                 <svg
@@ -250,7 +250,7 @@ export default function Header() {
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  Admin
+                  {t('admin')}
                 </Link>
                 <button
                   onClick={handleLogout}

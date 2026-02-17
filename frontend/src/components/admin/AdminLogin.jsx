@@ -46,7 +46,7 @@ export default function AdminLogin() {
               isDark ? 'text-slate-100' : 'text-gray-900'
             }`}
           >
-            {t('admin')}
+            {t('login')}
           </h2>
         </div>
 

@@ -22,31 +22,31 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 @Configuration
 public class GatewayConfig {
 
-  @Value("${services.users.url:http://users-service:8081}")
+  @Value("${services.users.url:http://localhost:8081}")
   private String usersServiceUrl;
 
-  @Value("${services.skills.url:http://skills-service:8082}")
+  @Value("${services.skills.url:http://localhost:8082}")
   private String skillsServiceUrl;
 
-  @Value("${services.projects.url:http://projects-service:8083}")
+  @Value("${services.projects.url:http://localhost:8083}")
   private String projectsServiceUrl;
 
-  @Value("${services.experience.url:http://experience-service:8084}")
+  @Value("${services.experience.url:http://localhost:8084}")
   private String experienceServiceUrl;
 
-  @Value("${services.education.url:http://education-service:8085}")
+  @Value("${services.education.url:http://localhost:8085}")
   private String educationServiceUrl;
 
-  @Value("${services.hobbies.url:http://hobbies-service:8086}")
+  @Value("${services.hobbies.url:http://localhost:8086}")
   private String hobbiesServiceUrl;
 
-  @Value("${services.testimonials.url:http://testimonials-service:8087}")
+  @Value("${services.testimonials.url:http://localhost:8087}")
   private String testimonialsServiceUrl;
 
-  @Value("${services.messages.url:http://messages-service:8088}")
+  @Value("${services.messages.url:http://localhost:8088}")
   private String messagesServiceUrl;
 
-  @Value("${services.files.url:http://files-service:8090}")
+  @Value("${services.files.url:http://localhost:8090}")
   private String filesServiceUrl;
 
   @Bean

@@ -28,24 +28,48 @@ export default function HobbiesPage() {
     }
   };
 
-  const hobbyIcons = [
-    {
-      path: 'M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3',
-    },
-    {
-      path: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-    },
-    {
-      path: 'M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z',
-    },
-    {
-      path: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    },
-    { path: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-    {
-      path: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
-    },
-  ];
+  const hobbyIconPaths = {
+    basketball:
+      'M12 3a9 9 0 100 18 9 9 0 000-18zM8 5.2c2.3 1.6 3.4 3.8 3.4 6.8S10.3 17.2 8 18.8M16 5.2c-2.3 1.6-3.4 3.8-3.4 6.8s1.1 5.2 3.4 6.8M3.8 8h16.4M3.8 16h16.4',
+    boardgames:
+      'M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z',
+    book: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+    default:
+      'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
+  };
+
+  const getHobbyIconPath = (hobby) => {
+    const iconKey = (hobby.icon || '').toLowerCase().trim();
+    const nameKey = `${hobby.nameEn || ''} ${hobby.nameFr || ''} ${hobby.nameEs || ''}`
+      .toLowerCase()
+      .trim();
+
+    if (
+      iconKey.includes('basketball') ||
+      nameKey.includes('basketball') ||
+      nameKey.includes('baloncesto')
+    ) {
+      return hobbyIconPaths.basketball;
+    }
+    if (
+      iconKey.includes('chess') ||
+      iconKey.includes('board') ||
+      nameKey.includes('board game') ||
+      nameKey.includes('jeux de societe') ||
+      nameKey.includes('juegos de mesa')
+    ) {
+      return hobbyIconPaths.boardgames;
+    }
+    if (
+      iconKey.includes('book') ||
+      nameKey.includes('novel') ||
+      nameKey.includes('novela') ||
+      nameKey.includes('lire')
+    ) {
+      return hobbyIconPaths.book;
+    }
+    return hobbyIconPaths.default;
+  };
 
   const techPatternStyle = {
     backgroundImage: isDark
@@ -204,7 +228,7 @@ export default function HobbiesPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {hobbies.map((hobby, index) => (
+          {hobbies.map((hobby) => (
             <div
               key={hobby.id}
               className={`group rounded-2xl p-6 transition-all duration-300 ring-1 hover:-translate-y-2 ${
@@ -233,7 +257,7 @@ export default function HobbiesPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d={hobbyIcons[index % hobbyIcons.length].path}
+                      d={getHobbyIconPath(hobby)}
                     />
                   </svg>
                 </div>

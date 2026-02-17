@@ -114,17 +114,17 @@ export default function SkillsManagement() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <p className="mt-4 text-slate-600 dark:text-slate-300">{t('loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-green-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-green-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -132,7 +132,7 @@ export default function SkillsManagement() {
             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600">
               {t('manageSkills')}
             </h1>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
               {t('manageSkillsDescription')}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default function SkillsManagement() {
 
         {/* Success/Error Messages */}
         {successMessage && (
-          <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -177,7 +177,7 @@ export default function SkillsManagement() {
           </div>
         )}
         {errorMessage && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -196,31 +196,31 @@ export default function SkillsManagement() {
         )}
 
         {/* Skills Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-slate-50 to-slate-100">
+              <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Name (EN)
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('nameEnLabel')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Name (FR)
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('nameFrLabel')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                     Proficiency
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                     {t('actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {skills.length === 0 ? (
                   <tr>
                     <td
                       colSpan="4"
-                      className="px-6 py-12 text-center text-slate-500"
+                      className="px-6 py-12 text-center text-slate-500 dark:text-slate-400"
                     >
                       {t('noData')}
                     </td>
@@ -229,24 +229,24 @@ export default function SkillsManagement() {
                   skills.map((skill) => (
                     <tr
                       key={skill.id}
-                      className="hover:bg-slate-50 transition-colors"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                      <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
                         {skill.nameEn}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">
+                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {skill.nameFr}
                       </td>
                       <td className="px-6 py-4">
                         <span
                           className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
                             skill.proficiency === 'expert'
-                              ? 'bg-teal-100 text-teal-700'
+                              ? 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300'
                               : skill.proficiency === 'advanced'
                                 ? 'bg-blue-100 text-blue-700'
                                 : skill.proficiency === 'intermediate'
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-yellow-100 text-yellow-700'
+                                  ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                                  : 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
                           }`}
                         >
                           {skill.proficiency}
@@ -255,7 +255,7 @@ export default function SkillsManagement() {
                       <td className="px-6 py-4 text-right space-x-2">
                         <button
                           onClick={() => handleEdit(skill)}
-                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -274,7 +274,7 @@ export default function SkillsManagement() {
                         </button>
                         <button
                           onClick={() => handleDelete(skill.id)}
-                          className="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -303,7 +303,7 @@ export default function SkillsManagement() {
         {/* Add/Edit Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
                   {editingSkill ? t('edit') : t('add')} {t('skill')}
@@ -331,52 +331,52 @@ export default function SkillsManagement() {
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (English)
-                    </label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameEnglish')}
+                  </label>
                     <input
                       type="text"
                       value={formData.nameEn}
                       onChange={(e) =>
                         setFormData({ ...formData, nameEn: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (French)
-                    </label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameFrench')}
+                  </label>
                     <input
                       type="text"
                       value={formData.nameFr}
                       onChange={(e) =>
                         setFormData({ ...formData, nameFr: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (Spanish)
-                    </label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameSpanish')}
+                  </label>
                     <input
                       type="text"
                       value={formData.nameEs}
                       onChange={(e) =>
                         setFormData({ ...formData, nameEs: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (English)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionEnglish')}
                   </label>
                   <textarea
                     value={formData.descriptionEn}
@@ -386,15 +386,15 @@ export default function SkillsManagement() {
                         descriptionEn: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (French)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionFrench')}
                   </label>
                   <textarea
                     value={formData.descriptionFr}
@@ -404,15 +404,15 @@ export default function SkillsManagement() {
                         descriptionFr: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (Spanish)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionSpanish')}
                   </label>
                   <textarea
                     value={formData.descriptionEs}
@@ -422,27 +422,27 @@ export default function SkillsManagement() {
                         descriptionEs: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Proficiency Level
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('proficiencyLevel')}
                   </label>
                   <select
                     value={formData.proficiency}
                     onChange={(e) =>
                       setFormData({ ...formData, proficiency: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   >
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                    <option value="expert">Expert</option>
+                    <option value="beginner">{t('beginner')}</option>
+                    <option value="intermediate">{t('intermediate')}</option>
+                    <option value="advanced">{t('advanced')}</option>
+                    <option value="expert">{t('expert')}</option>
                   </select>
                 </div>
 
@@ -456,7 +456,7 @@ export default function SkillsManagement() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                    className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
                   >
                     {t('close')}
                   </button>
@@ -469,3 +469,4 @@ export default function SkillsManagement() {
     </div>
   );
 }
+

@@ -17,9 +17,7 @@ const getTestimonialFormFields = (page) => {
   const companyInput = inputs.nth(2);
   const ratingInput = inputs.nth(3);
   const textareas = form.locator('textarea');
-  const textEn = textareas.nth(0);
-  const textFr = textareas.nth(1);
-  const textEs = textareas.nth(2);
+  const testimonialText = textareas.nth(0);
   const submitButton = form.locator('button[type="submit"]');
   return {
     form,
@@ -27,9 +25,7 @@ const getTestimonialFormFields = (page) => {
     titleInput,
     companyInput,
     ratingInput,
-    textEn,
-    textFr,
-    textEs,
+    testimonialText,
     submitButton,
   };
 };
@@ -105,13 +101,20 @@ test.describe('Testimonials Page - View & Submit', () => {
   }) => {
     await openTestimonialForm(page);
 
-    const { form, nameInput, titleInput, textEn, ratingInput, submitButton } =
+    const {
+      form,
+      nameInput,
+      titleInput,
+      testimonialText,
+      ratingInput,
+      submitButton,
+    } =
       getTestimonialFormFields(page);
 
     await expect(form).toBeVisible();
     await expect(nameInput).toBeVisible();
     await expect(titleInput).toBeVisible();
-    await expect(textEn).toBeVisible();
+    await expect(testimonialText).toBeVisible();
     await expect(ratingInput).toBeVisible();
     await expect(submitButton).toBeVisible();
   });
@@ -158,20 +161,14 @@ test.describe('Testimonials Page - View & Submit', () => {
       titleInput,
       companyInput,
       ratingInput,
-      textEn,
-      textFr,
-      textEs,
+      testimonialText,
       submitButton,
     } = getTestimonialFormFields(page);
 
     await nameInput.fill('Sarah Johnson');
     await titleInput.fill('Marketing Manager');
     await companyInput.fill('Tech Innovations Inc');
-    await textEn.fill('Outstanding work on our portfolio redesign.');
-    await textFr.scrollIntoViewIfNeeded();
-    await textFr.fill('Travail exceptionnel sur notre portfolio.');
-    await textEs.scrollIntoViewIfNeeded();
-    await textEs.fill('Trabajo excelente en nuestro portafolio.');
+    await testimonialText.fill('Outstanding work on our portfolio redesign.');
     await ratingInput.fill('5');
 
     const submitPromise = page.waitForResponse(
@@ -250,9 +247,7 @@ test.describe('Testimonials Page - View & Submit', () => {
       titleInput,
       companyInput,
       ratingInput,
-      textEn,
-      textFr,
-      textEs,
+      testimonialText,
       submitButton,
     } = getTestimonialFormFields(page);
 
@@ -260,9 +255,7 @@ test.describe('Testimonials Page - View & Submit', () => {
     await titleInput.fill('QA Engineer');
     await companyInput.fill('Test Co');
     await ratingInput.fill('5');
-    await textEn.fill('This submission will fail');
-    await textFr.fill('Échec attendu');
-    await textEs.fill('Fallo esperado');
+    await testimonialText.fill('This submission will fail');
 
     // Submit form
     await submitButton.click();
@@ -275,6 +268,6 @@ test.describe('Testimonials Page - View & Submit', () => {
 
     // Verify form data is preserved
     await expect(nameInput).toHaveValue('Error Test User');
-    await expect(textEn).toHaveValue('This submission will fail');
+    await expect(testimonialText).toHaveValue('This submission will fail');
   });
 });

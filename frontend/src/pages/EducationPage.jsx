@@ -278,7 +278,7 @@ export default function EducationPage() {
                         />
                       </svg>
                       {formatDate(edu.startDate)} -{' '}
-                      {edu.endDate ? formatDate(edu.endDate) : 'Present'}
+                      {edu.endDate ? formatDate(edu.endDate) : t('presentDate')}
                     </span>
                     {edu.grade && (
                       <span

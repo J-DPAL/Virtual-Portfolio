@@ -111,17 +111,17 @@ export default function HobbiesManagement() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <p className="mt-4 text-slate-600 dark:text-slate-300">{t('loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -129,7 +129,7 @@ export default function HobbiesManagement() {
             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-orange-600">
               {t('manageHobbies')}
             </h1>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
               {t('manageHobbiesDescription')}
             </p>
           </div>
@@ -156,7 +156,7 @@ export default function HobbiesManagement() {
 
         {/* Success/Error Messages */}
         {successMessage && (
-          <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -174,7 +174,7 @@ export default function HobbiesManagement() {
           </div>
         )}
         {errorMessage && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -193,28 +193,28 @@ export default function HobbiesManagement() {
         )}
 
         {/* Hobbies Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-slate-50 to-slate-100">
+              <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Name (EN)
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('nameEnLabel')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Name (FR)
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                    {t('nameFrLabel')}
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                     {t('actions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {hobbies.length === 0 ? (
                   <tr>
                     <td
                       colSpan="3"
-                      className="px-6 py-12 text-center text-slate-500"
+                      className="px-6 py-12 text-center text-slate-500 dark:text-slate-400"
                     >
                       {t('noData')}
                     </td>
@@ -223,18 +223,18 @@ export default function HobbiesManagement() {
                   hobbies.map((hobby) => (
                     <tr
                       key={hobby.id}
-                      className="hover:bg-slate-50 transition-colors"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                      <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
                         {hobby.nameEn}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">
+                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {hobby.nameFr}
                       </td>
                       <td className="px-6 py-4 text-right space-x-2">
                         <button
                           onClick={() => handleEdit(hobby)}
-                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -253,7 +253,7 @@ export default function HobbiesManagement() {
                         </button>
                         <button
                           onClick={() => handleDelete(hobby.id)}
-                          className="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-medium"
+                          className="inline-flex items-center px-3 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/50 transition text-sm font-medium"
                         >
                           <svg
                             className="w-4 h-4 mr-1"
@@ -282,7 +282,7 @@ export default function HobbiesManagement() {
         {/* Add/Edit Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-amber-600 to-orange-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
                   {editingHobby ? t('edit') : t('add')} {t('hobby')}
@@ -310,8 +310,8 @@ export default function HobbiesManagement() {
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (English)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameEnglish')}
                     </label>
                     <input
                       type="text"
@@ -319,13 +319,13 @@ export default function HobbiesManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, nameEn: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (French)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameFrench')}
                     </label>
                     <input
                       type="text"
@@ -333,13 +333,13 @@ export default function HobbiesManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, nameFr: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Name (Spanish)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('nameSpanish')}
                     </label>
                     <input
                       type="text"
@@ -347,15 +347,15 @@ export default function HobbiesManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, nameEs: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (English)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionEnglish')}
                   </label>
                   <textarea
                     value={formData.descriptionEn}
@@ -365,15 +365,15 @@ export default function HobbiesManagement() {
                         descriptionEn: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (French)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionFrench')}
                   </label>
                   <textarea
                     value={formData.descriptionFr}
@@ -383,15 +383,15 @@ export default function HobbiesManagement() {
                         descriptionFr: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (Spanish)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionSpanish')}
                   </label>
                   <textarea
                     value={formData.descriptionEs}
@@ -401,7 +401,7 @@ export default function HobbiesManagement() {
                         descriptionEs: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
@@ -417,7 +417,7 @@ export default function HobbiesManagement() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                    className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
                   >
                     {t('close')}
                   </button>
@@ -430,3 +430,4 @@ export default function HobbiesManagement() {
     </div>
   );
 }
+

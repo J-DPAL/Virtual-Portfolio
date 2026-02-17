@@ -170,7 +170,7 @@ export default function AdminDashboard() {
               isDark ? 'text-slate-400' : 'text-slate-600'
             }`}
           >
-            Manage all aspects of your portfolio from this central dashboard
+            {t('managePortfolioDashboardDescription')}
           </p>
         </div>
 
@@ -219,7 +219,8 @@ export default function AdminDashboard() {
                 <div
                   className={`inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r ${section.gradient} text-white font-semibold text-sm mb-4`}
                 >
-                  {section.count} {section.count === 1 ? 'item' : 'items'}
+                  {section.count}{' '}
+                  {section.count === 1 ? t('itemSingular') : t('itemPlural')}
                 </div>
               )}
               <div
@@ -227,7 +228,7 @@ export default function AdminDashboard() {
                   isDark ? 'text-blue-400' : 'text-blue-600'
                 }`}
               >
-                <span>Manage</span>
+                <span>{t('manage')}</span>
                 <svg
                   className="w-5 h-5 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -248,7 +249,7 @@ export default function AdminDashboard() {
 
         <div className="mt-12 bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">
-            Quick Actions
+            {t('quickActions')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
@@ -274,7 +275,7 @@ export default function AdminDashboard() {
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              View Public Site
+              {t('viewPublicSite')}
             </Link>
             <button
               onClick={fetchStats}
@@ -293,7 +294,7 @@ export default function AdminDashboard() {
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </svg>
-              Refresh Stats
+              {t('refreshStats')}
             </button>
             <div className="flex items-center justify-center px-6 py-4 rounded-xl border-2 border-slate-300 text-slate-500 font-semibold cursor-not-allowed opacity-50">
               <svg
@@ -315,7 +316,7 @@ export default function AdminDashboard() {
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              Settings (Coming Soon)
+              {t('settingsComingSoon')}
             </div>
           </div>
         </div>

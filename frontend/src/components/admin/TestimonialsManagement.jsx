@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as testimonialsService from '../../services/testimonialsService';
+import { useTheme } from '../../context/ThemeContext';
 
 const TestimonialsManagement = () => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,7 +121,7 @@ const TestimonialsManagement = () => {
           <svg
             key={index}
             className={`w-5 h-5 ${
-              index < rating ? 'text-yellow-400' : 'text-gray-300'
+              index < rating ? 'text-yellow-400' : isDark ? 'text-slate-600' : 'text-gray-300'
             }`}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -149,7 +151,7 @@ const TestimonialsManagement = () => {
           </div>
           <button
             onClick={handleAdd}
-            className="px-6 py-3 bg-white text-orange-600 rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2"
+            className="px-6 py-3 bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-300 rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 border border-white/40 dark:border-slate-600"
           >
             <svg
               className="w-5 h-5"
@@ -170,52 +172,52 @@ const TestimonialsManagement = () => {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow overflow-hidden border border-slate-200 dark:border-slate-700">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <thead className="bg-gray-50 dark:bg-slate-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('name')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Title
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('position')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Company
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('company')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Rating
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('rating')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  {t('actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-700">
               {testimonials.map((testimonial) => (
                 <>
-                  <tr key={testimonial.id} className="hover:bg-gray-50">
+                  <tr key={testimonial.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-900 dark:text-slate-100">
                         {testimonial.clientName}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-900">
+                      <div className="text-gray-900 dark:text-slate-100">
                         {testimonial.clientPosition}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-gray-900">
+                      <div className="text-gray-900 dark:text-slate-100">
                         {testimonial.clientCompany}
                       </div>
                     </td>
@@ -224,12 +226,12 @@ const TestimonialsManagement = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {testimonial.approved ? (
-                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Approved
+                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300">
+                          {t('approved')}
                         </span>
                       ) : (
-                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                          Pending
+                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
+                          {t('pending')}
                         </span>
                       )}
                     </td>
@@ -237,41 +239,43 @@ const TestimonialsManagement = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleExpand(testimonial.id)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                         >
-                          {expandedId === testimonial.id ? 'Hide' : 'View'}
+                          {expandedId === testimonial.id
+                            ? t('hide')
+                            : t('view')}
                         </button>
                         <button
                           onClick={() => handleEdit(testimonial)}
                           className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
                         >
-                          Edit
+                          {t('edit')}
                         </button>
                         {!testimonial.approved && (
                           <button
                             onClick={() => handleApprove(testimonial.id)}
                             className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
                           >
-                            Approve
+                            {t('approve')}
                           </button>
                         )}
                         <button
                           onClick={() => handleDelete(testimonial.id)}
                           className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
                         >
-                          Delete
+                          {t('delete')}
                         </button>
                       </div>
                     </td>
                   </tr>
                   {expandedId === testimonial.id && (
                     <tr>
-                      <td colSpan="6" className="px-6 py-4 bg-gray-50">
+                      <td colSpan="6" className="px-6 py-4 bg-gray-50 dark:bg-slate-800">
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-gray-900">
-                            Content:
+                          <h4 className="font-semibold text-gray-900 dark:text-slate-100">
+                            {t('contentLabel')}
                           </h4>
-                          <p className="text-gray-700 whitespace-pre-wrap">
+                          <p className="text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
                             {testimonial.content}
                           </p>
                         </div>
@@ -283,8 +287,8 @@ const TestimonialsManagement = () => {
             </tbody>
           </table>
           {testimonials.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No testimonials found
+            <div className="text-center py-8 text-gray-500 dark:text-slate-400">
+              {t('noTestimonialsFound')}
             </div>
           )}
         </div>
@@ -293,10 +297,10 @@ const TestimonialsManagement = () => {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
             <div className="sticky top-0 bg-gradient-to-r from-yellow-600 to-orange-600 px-8 py-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-white">
-                {editingTestimonial ? 'Edit' : 'Add'} Testimonial
+                {editingTestimonial ? t('edit') : t('add')} {t('testimonials')}
               </h2>
               <button
                 onClick={() => setShowModal(false)}
@@ -321,8 +325,8 @@ const TestimonialsManagement = () => {
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Name
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('name')}
                   </label>
                   <input
                     type="text"
@@ -330,13 +334,13 @@ const TestimonialsManagement = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, clientName: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Title
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('position')}
                   </label>
                   <input
                     type="text"
@@ -347,7 +351,7 @@ const TestimonialsManagement = () => {
                         clientPosition: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
                 </div>
@@ -355,8 +359,8 @@ const TestimonialsManagement = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Company
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('company')}
                   </label>
                   <input
                     type="text"
@@ -367,13 +371,13 @@ const TestimonialsManagement = () => {
                         clientCompany: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Rating
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('rating')}
                   </label>
                   <select
                     value={formData.rating}
@@ -383,20 +387,20 @@ const TestimonialsManagement = () => {
                         rating: parseInt(e.target.value),
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                   >
-                    <option value={1}>1 Star</option>
-                    <option value={2}>2 Stars</option>
-                    <option value={3}>3 Stars</option>
-                    <option value={4}>4 Stars</option>
-                    <option value={5}>5 Stars</option>
+                    <option value={1}>1 {t('star')}</option>
+                    <option value={2}>2 {t('stars')}</option>
+                    <option value={3}>3 {t('stars')}</option>
+                    <option value={4}>4 {t('stars')}</option>
+                    <option value={5}>5 {t('stars')}</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Testimonial Text (English)
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                  {t('testimonialTextEnglish')}
                 </label>
                 <textarea
                   value={formData.testimonialTextEn}
@@ -406,15 +410,15 @@ const TestimonialsManagement = () => {
                       testimonialTextEn: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                   rows="4"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Testimonial Text (French)
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                  {t('testimonialTextFrench')}
                 </label>
                 <textarea
                   value={formData.testimonialTextFr}
@@ -424,15 +428,15 @@ const TestimonialsManagement = () => {
                       testimonialTextFr: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                   rows="4"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Testimonial Text (Spanish)
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                  {t('testimonialTextSpanish')}
                 </label>
                 <textarea
                   value={formData.testimonialTextEs}
@@ -442,7 +446,7 @@ const TestimonialsManagement = () => {
                       testimonialTextEs: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                   rows="4"
                   required
                 />
@@ -453,14 +457,14 @@ const TestimonialsManagement = () => {
                   type="submit"
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
-                  Save
+                  {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                  className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </form>
@@ -472,3 +476,5 @@ const TestimonialsManagement = () => {
 };
 
 export default TestimonialsManagement;
+
+

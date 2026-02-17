@@ -477,7 +477,7 @@ export default function ContactPage() {
                       isDark ? 'text-slate-100' : 'text-slate-900'
                     }`}
                   >
-                    Email
+                    {t('email')}
                   </h3>
                   <p
                     className={`${

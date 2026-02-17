@@ -155,18 +155,18 @@ const ResumeUpload = () => {
   ) => {
     const isEnglish = language === 'en';
     const title = isEnglish
-      ? `${t('language')}: English`
-      : `${t('language')}: Français`;
+      ? `${t('language')}: ${t('english')}`
+      : `${t('language')}: ${t('french')}`;
 
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">{title}</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md p-6 border border-slate-200 dark:border-slate-700">
+        <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-slate-100">{title}</h3>
 
         <div
           className={`border-2 border-dashed rounded-lg p-8 text-center transition ${
             dragActive
-              ? 'border-green-500 bg-green-50'
-              : 'border-gray-300 hover:border-green-400'
+              ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+              : 'border-gray-300 dark:border-slate-600 hover:border-green-400'
           }`}
           onDragEnter={(e) => handleDrag(e, language)}
           onDragLeave={(e) => handleDrag(e, language)}
@@ -174,7 +174,7 @@ const ResumeUpload = () => {
           onDrop={(e) => handleDrop(e, language)}
         >
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-12 w-12 text-gray-400 dark:text-slate-500"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 48 48"
@@ -202,11 +202,11 @@ const ResumeUpload = () => {
               />
             </label>
           </div>
-          <p className="mt-2 text-sm text-gray-600">{t('dragDropResume')}</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-slate-400">{t('dragDropResume')}</p>
         </div>
 
         {file && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+          <div className="mt-4 p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <svg
@@ -221,10 +221,10 @@ const ResumeUpload = () => {
                   />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 dark:text-slate-100">
                     {file.name}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-slate-400">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
@@ -239,7 +239,7 @@ const ResumeUpload = () => {
                     setFrSuccess(null);
                   }
                 }}
-                className="text-red-600 hover:text-red-800"
+                className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                 disabled={uploading}
               >
                 <svg
@@ -258,11 +258,11 @@ const ResumeUpload = () => {
 
             {uploading && (
               <div className="mt-3">
-                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-slate-400 mb-1">
                   <span>{t('uploading')}</span>
                   <span>{progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                   <div
                     className="bg-gradient-to-r from-green-600 to-emerald-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${progress}%` }}
@@ -274,7 +274,7 @@ const ResumeUpload = () => {
         )}
 
         {success && (
-          <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+          <div className="mt-4 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 px-4 py-3 rounded">
             {success}
           </div>
         )}
@@ -284,11 +284,11 @@ const ResumeUpload = () => {
           disabled={!file || uploading}
           className={`mt-4 w-full py-2 px-4 rounded-md font-medium transition ${
             !file || uploading
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? 'bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700'
           }`}
         >
-          {uploading ? 'Uploading...' : `Upload ${title}`}
+          {uploading ? t('uploading') : `${t('upload')} ${title}`}
         </button>
       </div>
     );
@@ -302,7 +302,7 @@ const ResumeUpload = () => {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
           {error}
         </div>
       )}
@@ -332,3 +332,6 @@ const ResumeUpload = () => {
 };
 
 export default ResumeUpload;
+
+
+

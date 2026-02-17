@@ -130,24 +130,24 @@ export default function ProjectsManagement() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-slate-600">{t('loading')}</p>
+          <p className="mt-4 text-slate-600 dark:text-slate-300">{t('loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12">
       <div className="container mx-auto px-4">
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-600">
               {t('manageProjects')}
             </h1>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
               {t('manageProjectsDescription')}
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function ProjectsManagement() {
         </div>
 
         {successMessage && (
-          <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -191,7 +191,7 @@ export default function ProjectsManagement() {
           </div>
         )}
         {errorMessage && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3">
+          <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-xl flex items-center gap-3">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -211,28 +211,28 @@ export default function ProjectsManagement() {
 
         <div className="grid gap-6">
           {projects.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-12 text-center">
-              <p className="text-slate-500">{t('noData')}</p>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-12 text-center">
+              <p className="text-slate-500 dark:text-slate-400">{t('noData')}</p>
             </div>
           ) : (
             projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-all"
+                className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-xl transition-all"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">
                       {project.titleEn}
                     </h3>
-                    <p className="text-slate-600 line-clamp-2">
+                    <p className="text-slate-600 dark:text-slate-300 line-clamp-2">
                       {project.descriptionEn}
                     </p>
                   </div>
                   <div className="flex gap-2 ml-4">
                     <button
                       onClick={() => handleEdit(project)}
-                      className="p-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+                      className="p-2 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition"
                     >
                       <svg
                         className="w-5 h-5"
@@ -250,7 +250,7 @@ export default function ProjectsManagement() {
                     </button>
                     <button
                       onClick={() => handleDelete(project.id)}
-                      className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition"
+                      className="p-2 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/50 transition"
                     >
                       <svg
                         className="w-5 h-5"
@@ -276,7 +276,7 @@ export default function ProjectsManagement() {
                     ).map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full text-sm font-medium"
                       >
                         {tech}
                       </span>
@@ -290,7 +290,7 @@ export default function ProjectsManagement() {
 
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-teal-600 px-8 py-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">
                   {editingProject ? t('edit') : t('add')} {t('project')}
@@ -318,8 +318,8 @@ export default function ProjectsManagement() {
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Title (English)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('titleEnglish')}
                     </label>
                     <input
                       type="text"
@@ -327,13 +327,13 @@ export default function ProjectsManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, titleEn: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Title (French)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('titleFrench')}
                     </label>
                     <input
                       type="text"
@@ -341,13 +341,13 @@ export default function ProjectsManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, titleFr: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Title (Spanish)
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('titleSpanish')}
                     </label>
                     <input
                       type="text"
@@ -355,15 +355,15 @@ export default function ProjectsManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, titleEs: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (English)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionEnglish')}
                   </label>
                   <textarea
                     value={formData.descriptionEn}
@@ -373,15 +373,15 @@ export default function ProjectsManagement() {
                         descriptionEn: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (French)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionFrench')}
                   </label>
                   <textarea
                     value={formData.descriptionFr}
@@ -391,15 +391,15 @@ export default function ProjectsManagement() {
                         descriptionFr: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description (Spanish)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('descriptionSpanish')}
                   </label>
                   <textarea
                     value={formData.descriptionEs}
@@ -409,15 +409,15 @@ export default function ProjectsManagement() {
                         descriptionEs: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     rows="3"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Technologies (comma-separated)
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('technologiesCommaSeparated')}
                   </label>
                   <input
                     type="text"
@@ -425,15 +425,15 @@ export default function ProjectsManagement() {
                     onChange={(e) =>
                       setFormData({ ...formData, technologies: e.target.value })
                     }
-                    placeholder="React, Node.js, MongoDB"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    placeholder={t('technologiesPlaceholder')}
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      GitHub Link
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('githubLink')}
                     </label>
                     <input
                       type="url"
@@ -441,12 +441,12 @@ export default function ProjectsManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, githubLink: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Live Demo Link
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                      {t('liveDemoLink')}
                     </label>
                     <input
                       type="url"
@@ -454,7 +454,7 @@ export default function ProjectsManagement() {
                       onChange={(e) =>
                         setFormData({ ...formData, liveLink: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     />
                   </div>
                 </div>
@@ -469,7 +469,7 @@ export default function ProjectsManagement() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition"
+                    className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
                   >
                     {t('close')}
                   </button>
@@ -482,3 +482,4 @@ export default function ProjectsManagement() {
     </div>
   );
 }
+
