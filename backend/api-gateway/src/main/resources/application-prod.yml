@@ -3,33 +3,34 @@ spring:
     jwt:
       secret: ${JWT_SECRET}
 
-# Docker/compose profile: service DNS names are resolvable on the Docker network.
+# Render/prod profile:
+# In Render, the gateway must call other services via their public URLs (or private network URLs),
+# not Docker Compose service DNS names.
 services:
   users:
-    url: http://users-service:8081
+    url: ${USERS_SERVICE_URL:http://users-service:8081}
   skills:
-    url: http://skills-service:8082
+    url: ${SKILLS_SERVICE_URL:http://skills-service:8082}
   projects:
-    url: http://projects-service:8083
+    url: ${PROJECTS_SERVICE_URL:http://projects-service:8083}
   experience:
-    url: http://experience-service:8084
+    url: ${EXPERIENCE_SERVICE_URL:http://experience-service:8084}
   education:
-    url: http://education-service:8085
+    url: ${EDUCATION_SERVICE_URL:http://education-service:8085}
   hobbies:
-    url: http://hobbies-service:8086
+    url: ${HOBBIES_SERVICE_URL:http://hobbies-service:8086}
   testimonials:
-    url: http://testimonials-service:8087
+    url: ${TESTIMONIALS_SERVICE_URL:http://testimonials-service:8087}
   messages:
-    url: http://messages-service:8088
+    url: ${MESSAGES_SERVICE_URL:http://messages-service:8088}
   files:
-    url: http://files-service:8090
+    url: ${FILES_SERVICE_URL:http://files-service:8090}
 
+# This gateway implementation does not depend on Eureka for routing.
+# Keep Eureka disabled in prod unless you explicitly deploy and use it.
 eureka:
   client:
-    serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
+    enabled: false
 
 app:
   cors:
