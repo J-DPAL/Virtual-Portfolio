@@ -1,18 +1,5 @@
 services:
-  - type: pserv
-    name: eureka-server
-    env: docker
-    plan: free
-    dockerfilePath: backend/eureka-server/Dockerfile
-    dockerContext: backend
-    autoDeploy: true
-    envVars:
-      - key: SPRING_APPLICATION_NAME
-        value: eureka-server
-      - key: SERVER_PORT
-        value: "8761"
-
-  - type: pserv
+  - type: web
     name: users-service
     env: docker
     plan: free
@@ -26,8 +13,8 @@ services:
         value: "8081"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -43,7 +30,7 @@ services:
       - key: ADMIN_FULL_NAME
         value: Admin User
 
-  - type: pserv
+  - type: web
     name: skills-service
     env: docker
     plan: free
@@ -57,8 +44,8 @@ services:
         value: "8082"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -68,7 +55,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: projects-service
     env: docker
     plan: free
@@ -82,8 +69,8 @@ services:
         value: "8083"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -93,7 +80,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: experience-service
     env: docker
     plan: free
@@ -107,8 +94,8 @@ services:
         value: "8084"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -118,7 +105,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: education-service
     env: docker
     plan: free
@@ -132,8 +119,8 @@ services:
         value: "8085"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -143,7 +130,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: hobbies-service
     env: docker
     plan: free
@@ -157,8 +144,8 @@ services:
         value: "8086"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -168,7 +155,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: testimonials-service
     env: docker
     plan: free
@@ -182,8 +169,8 @@ services:
         value: "8087"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -193,7 +180,7 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: pserv
+  - type: web
     name: messages-service
     env: docker
     plan: free
@@ -207,8 +194,8 @@ services:
         value: "8088"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -236,7 +223,7 @@ services:
       - key: TURNSTILE_MIN_SCORE
         value: "0.5"
 
-  - type: pserv
+  - type: web
     name: files-service
     env: docker
     plan: free
@@ -250,8 +237,8 @@ services:
         value: "8090"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: SPRING_DATASOURCE_USERNAME
@@ -277,28 +264,28 @@ services:
         value: "8080"
       - key: SPRING_PROFILES_ACTIVE
         value: prod
+      - key: EUREKA_CLIENT_ENABLED
+        value: "false"
       - key: JWT_SECRET
         sync: false
-      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-        value: http://eureka-server:8761/eureka/
       - key: SERVICES_USERS_URL
-        value: http://users-service:8081
+        value: https://users-service.onrender.com
       - key: SERVICES_SKILLS_URL
-        value: http://skills-service:8082
+        value: https://skills-service.onrender.com
       - key: SERVICES_PROJECTS_URL
-        value: http://projects-service:8083
+        value: https://projects-service.onrender.com
       - key: SERVICES_EXPERIENCE_URL
-        value: http://experience-service:8084
+        value: https://experience-service.onrender.com
       - key: SERVICES_EDUCATION_URL
-        value: http://education-service:8085
+        value: https://education-service.onrender.com
       - key: SERVICES_HOBBIES_URL
-        value: http://hobbies-service:8086
+        value: https://hobbies-service.onrender.com
       - key: SERVICES_TESTIMONIALS_URL
-        value: http://testimonials-service:8087
+        value: https://testimonials-service.onrender.com
       - key: SERVICES_MESSAGES_URL
-        value: http://messages-service:8088
+        value: https://messages-service.onrender.com
       - key: SERVICES_FILES_URL
-        value: http://files-service:8090
+        value: https://files-service.onrender.com
 
   - type: web
     runtime: static
@@ -312,47 +299,7 @@ services:
         sync: false
 
 databases:
-  - name: users-db
+  - name: portfolio-db
     plan: free
-    databaseName: users_db
-    user: users_db_user
-
-  - name: skills-db
-    plan: free
-    databaseName: skills_db
-    user: skills_db_user
-
-  - name: projects-db
-    plan: free
-    databaseName: projects_db
-    user: projects_db_user
-
-  - name: experience-db
-    plan: free
-    databaseName: experience_db
-    user: experience_db_user
-
-  - name: education-db
-    plan: free
-    databaseName: education_db
-    user: education_db_user
-
-  - name: hobbies-db
-    plan: free
-    databaseName: hobbies_db
-    user: hobbies_db_user
-
-  - name: testimonials-db
-    plan: free
-    databaseName: testimonials_db
-    user: testimonials_db_user
-
-  - name: messages-db
-    plan: free
-    databaseName: messages_db
-    user: messages_db_user
-
-  - name: files-db
-    plan: free
-    databaseName: files_db
-    user: files_db_user
+    databaseName: portfolio_db
+    user: portfolio_user
