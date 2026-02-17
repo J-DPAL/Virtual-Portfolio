@@ -2,6 +2,7 @@ package com.portfolio.config;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +37,14 @@ public class SecurityConfig {
       RateLimitFilter rateLimitFilter,
       @Value(
               "${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173,https://virtual-portfolio-frontend.onrender.com}")
-          List<String> allowedOrigins) {
+          String allowedOriginsCsv) {
     this.rateLimitFilter = rateLimitFilter;
-    this.allowedOrigins = allowedOrigins;
+    this.allowedOrigins =
+        Arrays.stream(allowedOriginsCsv.split(","))
+            .map(String::trim)
+            .filter(s -> !s.isBlank())
+            .distinct()
+            .collect(Collectors.toList());
   }
 
   @Bean
