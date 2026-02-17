@@ -22,3 +22,11 @@ eureka:
 jwt:
   secret: test-secret-key-that-is-long-enough-for-testing-purposes
   expiration: 3600000
+
+security:
+  contact:
+    ip-hash-salt: test-contact-ip-salt
+    turnstile:
+      enabled: false
+      secret-key: test-secret
+      minimum-score: 0.5

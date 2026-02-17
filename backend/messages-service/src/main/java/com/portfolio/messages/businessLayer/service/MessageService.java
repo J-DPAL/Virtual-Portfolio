@@ -24,14 +24,17 @@ public class MessageService {
   private final MessageRepository messageRepository;
   private final MessageMapper messageMapper;
   private final Optional<EmailService> emailService;
+  private final ContactProtectionService contactProtectionService;
 
   public MessageService(
       MessageRepository messageRepository,
       MessageMapper messageMapper,
-      Optional<EmailService> emailService) {
+      Optional<EmailService> emailService,
+      ContactProtectionService contactProtectionService) {
     this.messageRepository = messageRepository;
     this.messageMapper = messageMapper;
     this.emailService = emailService;
+    this.contactProtectionService = contactProtectionService;
   }
 
   public List<MessageDTO> getAllMessages() {
@@ -54,8 +57,11 @@ public class MessageService {
         .collect(Collectors.toList());
   }
 
-  public MessageDTO createMessage(MessageDTO messageDTO) {
-    Message message = messageMapper.toEntity(messageDTO);
+  public MessageDTO createMessage(MessageDTO messageDTO, String clientIp, String userAgent) {
+    contactProtectionService.validateSubmission(messageDTO, clientIp, userAgent);
+
+    MessageDTO sanitizedDTO = sanitizeMessageFields(messageDTO);
+    Message message = messageMapper.toEntity(sanitizedDTO);
     Message savedMessage = messageRepository.save(message);
     MessageDTO savedDTO = messageMapper.toDTO(savedMessage);
 
@@ -114,5 +120,19 @@ public class MessageService {
       throw new ResourceNotFoundException("Message not found with id: " + id);
     }
     messageRepository.deleteById(id);
+  }
+
+  private MessageDTO sanitizeMessageFields(MessageDTO messageDTO) {
+    return MessageDTO.builder()
+        .id(messageDTO.getId())
+        .senderName(contactProtectionService.sanitizeInput(messageDTO.getSenderName()))
+        .senderEmail(contactProtectionService.sanitizeInput(messageDTO.getSenderEmail()))
+        .subject(contactProtectionService.sanitizeInput(messageDTO.getSubject()))
+        .message(contactProtectionService.sanitizeInput(messageDTO.getMessage()))
+        .isRead(messageDTO.getIsRead())
+        .createdAt(messageDTO.getCreatedAt())
+        .updatedAt(messageDTO.getUpdatedAt())
+        .mailNotificationStatus(messageDTO.getMailNotificationStatus())
+        .build();
   }
 }

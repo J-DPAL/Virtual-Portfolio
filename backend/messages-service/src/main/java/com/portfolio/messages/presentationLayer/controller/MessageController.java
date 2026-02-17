@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.portfolio.messages.businessLayer.service.MessageService;
 import com.portfolio.messages.mappingLayer.dto.MessageDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -42,8 +43,11 @@ public class MessageController {
   }
 
   @PostMapping
-  public ResponseEntity<MessageDTO> createMessage(@Valid @RequestBody MessageDTO messageDTO) {
-    MessageDTO createdMessage = messageService.createMessage(messageDTO);
+  public ResponseEntity<MessageDTO> createMessage(
+      @Valid @RequestBody MessageDTO messageDTO, HttpServletRequest request) {
+    MessageDTO createdMessage =
+        messageService.createMessage(
+            messageDTO, resolveClientIp(request), request.getHeader("User-Agent"));
     return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
   }
 
@@ -72,5 +76,17 @@ public class MessageController {
   @GetMapping("/health")
   public ResponseEntity<String> health() {
     return ResponseEntity.ok("Messages service is running");
+  }
+
+  private String resolveClientIp(HttpServletRequest request) {
+    String forwardedFor = request.getHeader("X-Forwarded-For");
+    if (forwardedFor != null && !forwardedFor.isBlank()) {
+      return forwardedFor.split(",")[0].trim();
+    }
+    String realIp = request.getHeader("X-Real-IP");
+    if (realIp != null && !realIp.isBlank()) {
+      return realIp.trim();
+    }
+    return request.getRemoteAddr();
   }
 }

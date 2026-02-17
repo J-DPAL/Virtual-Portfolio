@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { getAllProjects } from '../services/projectsService';
+import BackToTopButton from '../components/BackToTopButton';
 
 export default function ProjectsPage() {
   const { t, i18n } = useTranslation();
@@ -11,11 +12,39 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [filterTech, setFilterTech] = useState('');
+  const [sortOption, setSortOption] = useState('newest');
+  const [filteredProjects, setFilteredProjects] = useState([]);
   const currentLang = i18n.language;
 
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    // Filtering and sorting logic
+    let filtered = [...projects];
+    if (filterTech) {
+      filtered = filtered.filter(
+        (project) =>
+          project.technologies &&
+          project.technologies.toLowerCase().includes(filterTech.toLowerCase())
+      );
+    }
+    if (sortOption === 'alphabetical') {
+      filtered.sort((a, b) => {
+        const titleA = getProjectTitle(a).toLowerCase();
+        const titleB = getProjectTitle(b).toLowerCase();
+        return titleA.localeCompare(titleB);
+      });
+    } else if (sortOption === 'newest') {
+      filtered.sort((a, b) => {
+        // Assume projects have a 'createdAt' field
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+    setFilteredProjects(filtered);
+  }, [projects, filterTech, sortOption]);
 
   const fetchProjects = async () => {
     try {
@@ -237,6 +266,55 @@ export default function ProjectsPage() {
       ></div>
       <div className="container mx-auto px-4 relative z-10">
         <header className="text-center mb-12">
+          {/* Filter & Sort Controls */}
+          <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+              <select
+                className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+                value={filterTech}
+                onChange={(e) => setFilterTech(e.target.value)}
+              >
+                <option value="">
+                  {t('filterByTechnology') || 'Filter by Technology'}
+                </option>
+                {/* Build unique tech list from projects */}
+                {Array.from(
+                  new Set(
+                    projects.flatMap((p) =>
+                      p.technologies
+                        ? p.technologies.split(',').map((t) => t.trim())
+                        : []
+                    )
+                  )
+                )
+                  .filter(Boolean)
+                  .sort()
+                  .map((tech) => (
+                    <option key={tech} value={tech}>
+                      {tech}
+                    </option>
+                  ))}
+              </select>
+              <select
+                className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="newest">{t('sortNewest') || 'Newest'}</option>
+                <option value="alphabetical">
+                  {t('sortAlphabetical') || 'Alphabetical'}
+                </option>
+              </select>
+              {filterTech && (
+                <button
+                  className="px-3 py-1 rounded border bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-xs"
+                  onClick={() => setFilterTech('')}
+                >
+                  {t('clearFilter') || 'Clear Filter'}
+                </button>
+              )}
+            </div>
+          </div>
           <span
             className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold border mb-4 ${
               isDark
@@ -290,7 +368,7 @@ export default function ProjectsPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {projects.map((project) => (
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
               onClick={() => handleProjectOpen(project)}
@@ -306,7 +384,7 @@ export default function ProjectsPage() {
                 isDark
                   ? 'bg-slate-900/70 ring-slate-800 hover:ring-blue-500/50'
                   : 'bg-slate-50/80 ring-slate-200 hover:ring-blue-400/40'
-              }`}
+              } animate-fadeIn`}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
@@ -394,15 +472,14 @@ export default function ProjectsPage() {
             </div>
           ))}
         </div>
-
-        {projects.length === 0 && !loading && (
+        {filteredProjects.length === 0 && !loading && (
           <div className="text-center py-12">
             <p
               className={`text-lg ${
                 isDark ? 'text-slate-400' : 'text-slate-600'
               }`}
             >
-              {t('noProjectsAvailable')}
+              {t('noProjectsAvailable') || 'No projects available'}
             </p>
           </div>
         )}
@@ -559,6 +636,7 @@ export default function ProjectsPage() {
           </div>
         </div>
       )}
+      <BackToTopButton />
     </div>
   );
 }

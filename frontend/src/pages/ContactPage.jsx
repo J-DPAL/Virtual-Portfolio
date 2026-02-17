@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sendMessage } from '../services/messagesService';
 import { useTheme } from '../context/ThemeContext';
@@ -11,26 +11,126 @@ export default function ContactPage() {
     senderEmail: '',
     subject: '',
     message: '',
+    website: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const turnstileContainerRef = useRef(null);
+  const turnstileWidgetRef = useRef(null);
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+  const turnstileEnabled = Boolean(turnstileSiteKey);
 
   const updateField = (field, value) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
+  useEffect(() => {
+    if (cooldownSeconds <= 0) {
+      return undefined;
+    }
+
+    const intervalId = setInterval(() => {
+      setCooldownSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [cooldownSeconds]);
+
+  useEffect(() => {
+    if (!turnstileEnabled || !turnstileContainerRef.current) {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    const renderTurnstile = () => {
+      if (cancelled || !window.turnstile || !turnstileContainerRef.current) {
+        return;
+      }
+
+      if (turnstileWidgetRef.current !== null) {
+        window.turnstile.remove(turnstileWidgetRef.current);
+      }
+
+      turnstileWidgetRef.current = window.turnstile.render(
+        turnstileContainerRef.current,
+        {
+          sitekey: turnstileSiteKey,
+          theme: isDark ? 'dark' : 'light',
+          callback: (token) => setCaptchaToken(token),
+          'error-callback': () => setCaptchaToken(''),
+          'expired-callback': () => setCaptchaToken(''),
+        }
+      );
+    };
+
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const scriptId = 'cloudflare-turnstile-script';
+      let script = document.getElementById(scriptId);
+      if (!script) {
+        script = document.createElement('script');
+        script.id = scriptId;
+        script.src =
+          'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+      script.onload = () => renderTurnstile();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isDark, turnstileEnabled, turnstileSiteKey]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (cooldownSeconds > 0 || loading) {
+      return;
+    }
+
+    if (turnstileEnabled && !captchaToken) {
+      setError(t('captchaRequired'));
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      await sendMessage(form);
+      await sendMessage({ ...form, captchaToken });
       setSubmitted(true);
-      setForm({ senderName: '', senderEmail: '', subject: '', message: '' });
+      setForm({
+        senderName: '',
+        senderEmail: '',
+        subject: '',
+        message: '',
+        website: '',
+      });
+      setCaptchaToken('');
+      if (window.turnstile && turnstileWidgetRef.current !== null) {
+        window.turnstile.reset(turnstileWidgetRef.current);
+      }
+      setCooldownSeconds(60);
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      setError(t('sendMessageFailed'));
+      if (err?.response?.status === 429) {
+        setError(t('contactRateLimited'));
+      } else if (err?.response?.status === 400) {
+        const backendMessage = err?.response?.data?.message;
+        if (backendMessage === 'Invalid captcha') {
+          setError(t('captchaInvalid'));
+        } else {
+          setError(t('contactValidationFailed'));
+        }
+      } else {
+        setError(t('sendMessageFailed'));
+      }
       console.error('Error sending message:', err);
     } finally {
       setLoading(false);
@@ -191,6 +291,17 @@ export default function ContactPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="website"
+                className="absolute -left-[9999px] opacity-0 pointer-events-none"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(e) => updateField('website', e.target.value)}
+                aria-hidden="true"
+              />
+
               <div>
                 <label
                   className={`block text-sm font-medium mb-2 ${
@@ -270,9 +381,35 @@ export default function ContactPage() {
                   required
                 />
               </div>
+              {turnstileEnabled && (
+                <div>
+                  <label
+                    className={`block text-sm font-medium mb-2 ${
+                      isDark ? 'text-slate-300' : 'text-slate-700'
+                    }`}
+                  >
+                    {t('securityCheck')}
+                  </label>
+                  <div
+                    ref={turnstileContainerRef}
+                    className="min-h-[65px]"
+                  ></div>
+                </div>
+              )}
+
+              {cooldownSeconds > 0 && (
+                <div
+                  className={`text-sm font-medium ${
+                    isDark ? 'text-amber-300' : 'text-amber-700'
+                  }`}
+                >
+                  {t('contactCooldown', { seconds: cooldownSeconds })}
+                </div>
+              )}
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || cooldownSeconds > 0}
                 className="w-full flex justify-center items-center px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium hover:shadow-lg disabled:opacity-50 transition-all"
               >
                 {loading ? (
@@ -280,6 +417,8 @@ export default function ContactPage() {
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                     {t('loading')}
                   </>
+                ) : cooldownSeconds > 0 ? (
+                  t('contactCooldownButton', { seconds: cooldownSeconds })
                 ) : (
                   <>
                     {t('sendMessage')}

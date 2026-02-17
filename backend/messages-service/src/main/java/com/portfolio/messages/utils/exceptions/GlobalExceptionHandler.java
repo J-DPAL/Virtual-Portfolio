@@ -55,6 +55,31 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(RateLimitExceededException.class)
+  public ResponseEntity<ErrorResponse> handleRateLimitExceededException(
+      RateLimitExceededException ex) {
+    log.warn("Rate limit exceeded: {}", ex.getMessage());
+    ErrorResponse error =
+        ErrorResponse.builder()
+            .status(HttpStatus.TOO_MANY_REQUESTS.value())
+            .message(ex.getMessage())
+            .timestamp(LocalDateTime.now())
+            .build();
+    return new ResponseEntity<>(error, HttpStatus.TOO_MANY_REQUESTS);
+  }
+
+  @ExceptionHandler({InvalidCaptchaException.class, ContactValidationException.class})
+  public ResponseEntity<ErrorResponse> handleContactProtectionException(RuntimeException ex) {
+    log.warn("Contact protection validation failed: {}", ex.getMessage());
+    ErrorResponse error =
+        ErrorResponse.builder()
+            .status(HttpStatus.BAD_REQUEST.value())
+            .message(ex.getMessage())
+            .timestamp(LocalDateTime.now())
+            .build();
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(MailNotificationException.class)
   public ResponseEntity<ErrorResponse> handleMailNotificationException(
       MailNotificationException ex) {

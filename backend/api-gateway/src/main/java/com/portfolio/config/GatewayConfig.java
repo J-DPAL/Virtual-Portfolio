@@ -232,6 +232,16 @@ public class GatewayConfig {
                 }
               });
 
+      String remoteAddr = request.servletRequest().getRemoteAddr();
+      if (remoteAddr != null && !remoteAddr.isBlank()) {
+        String existingXForwardedFor = headers.getFirst("X-Forwarded-For");
+        if (existingXForwardedFor == null || existingXForwardedFor.isBlank()) {
+          headers.set("X-Forwarded-For", remoteAddr);
+        } else {
+          headers.set("X-Forwarded-For", existingXForwardedFor + ", " + remoteAddr);
+        }
+      }
+
       // Create entity with body when applicable
       // Always provide a non-null HttpEntity instance
       @SuppressWarnings("null")

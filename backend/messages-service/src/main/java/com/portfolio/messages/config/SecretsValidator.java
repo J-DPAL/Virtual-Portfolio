@@ -26,6 +26,9 @@ public class SecretsValidator {
     require("JWT_SECRET", environment.getProperty("jwt.secret"));
     require("MAIL_USERNAME", environment.getProperty("spring.mail.username"));
     require("MAIL_PASSWORD", environment.getProperty("spring.mail.password"));
+    require("CONTACT_IP_HASH_SALT", environment.getProperty("security.contact.ip-hash-salt"));
+    require(
+        "TURNSTILE_SECRET_KEY", environment.getProperty("security.contact.turnstile.secret-key"));
   }
 
   private void require(String name, String value) {

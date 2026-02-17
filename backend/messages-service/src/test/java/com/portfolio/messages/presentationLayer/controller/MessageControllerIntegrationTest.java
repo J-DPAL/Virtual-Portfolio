@@ -120,7 +120,7 @@ class MessageControllerIntegrationTest {
         MessageDTO.builder()
             .senderName("Jane Doe")
             .senderEmail("jane@example.com")
-            .subject("Hi")
+            .subject("Hello")
             .message("New message")
             .isRead(false)
             .build();
@@ -130,12 +130,14 @@ class MessageControllerIntegrationTest {
             .id(2L)
             .senderName("Jane Doe")
             .senderEmail("jane@example.com")
-            .subject("Hi")
+            .subject("Hello")
             .message("New message")
             .isRead(false)
             .build();
 
-    when(messageService.createMessage(any(MessageDTO.class))).thenReturn(createdDTO);
+    when(messageService.createMessage(
+            any(MessageDTO.class), nullable(String.class), nullable(String.class)))
+        .thenReturn(createdDTO);
 
     // Act & Assert: Perform POST request and verify response
     mockMvc
@@ -146,7 +148,8 @@ class MessageControllerIntegrationTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.senderName").value("Jane Doe"));
 
-    verify(messageService, times(1)).createMessage(any(MessageDTO.class));
+    verify(messageService, times(1))
+        .createMessage(any(MessageDTO.class), nullable(String.class), nullable(String.class));
   }
 
   @Test
@@ -158,7 +161,7 @@ class MessageControllerIntegrationTest {
         MessageDTO.builder()
             .senderName("Jane Doe")
             .senderEmail("jane@example.com")
-            .subject("Hi")
+            .subject("Hello")
             .message("New message")
             .isRead(false)
             .build();

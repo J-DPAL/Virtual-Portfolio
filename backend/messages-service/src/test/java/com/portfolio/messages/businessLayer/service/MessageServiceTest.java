@@ -28,6 +28,7 @@ class MessageServiceTest {
   @Mock private MessageRepository messageRepository;
   @Mock private MessageMapper messageMapper;
   @Mock private EmailService emailService;
+  @Mock private ContactProtectionService contactProtectionService;
   private MessageService messageService;
 
   private Message testMessage;
@@ -58,7 +59,8 @@ class MessageServiceTest {
 
     // Inject mocks into MessageService, including Optional<EmailService>
     messageService =
-        new MessageService(messageRepository, messageMapper, Optional.of(emailService));
+        new MessageService(
+            messageRepository, messageMapper, Optional.of(emailService), contactProtectionService);
   }
 
   @Test
@@ -148,7 +150,7 @@ class MessageServiceTest {
             .isRead(false)
             .build();
 
-    when(messageMapper.toEntity(newMessageDTO)).thenReturn(newMessage);
+    when(messageMapper.toEntity(any(MessageDTO.class))).thenReturn(newMessage);
     when(messageRepository.save(newMessage)).thenReturn(savedMessage);
     MessageDTO savedDTO =
         MessageDTO.builder()
@@ -162,11 +164,14 @@ class MessageServiceTest {
     when(messageMapper.toDTO(savedMessage)).thenReturn(savedDTO);
 
     // Act: Call service method
-    MessageDTO result = messageService.createMessage(newMessageDTO);
+    MessageDTO result =
+        messageService.createMessage(newMessageDTO, "127.0.0.1", "JUnit-Test-Agent");
 
     // Assert: Verify results
     assertNotNull(result);
     assertNotNull(result.getId());
+    verify(contactProtectionService, times(1))
+        .validateSubmission(eq(newMessageDTO), eq("127.0.0.1"), eq("JUnit-Test-Agent"));
   }
 
   @Test

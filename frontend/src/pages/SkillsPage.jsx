@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import { getAllSkills } from '../services/skillsService';
+import BackToTopButton from '../components/BackToTopButton';
 
 export default function SkillsPage() {
   const { t, i18n } = useTranslation();
@@ -9,11 +10,53 @@ export default function SkillsPage() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filterCategory, setFilterCategory] = useState('');
+  const [sortOption, setSortOption] = useState('alphabetical');
+  const [filteredSkills, setFilteredSkills] = useState([]);
   const currentLang = i18n.language;
 
   useEffect(() => {
     fetchSkills();
   }, []);
+
+  useEffect(() => {
+    let filtered = [...skills];
+    if (filterCategory) {
+      filtered = filtered.filter(
+        (skill) =>
+          skill.category &&
+          skill.category.toLowerCase().includes(filterCategory.toLowerCase())
+      );
+    }
+    if (sortOption === 'alphabetical') {
+      filtered.sort((a, b) => {
+        const nameA = (
+          currentLang === 'es' && a.nameEs
+            ? a.nameEs
+            : currentLang === 'fr' && a.nameFr
+              ? a.nameFr
+              : a.nameEn
+        ).toLowerCase();
+        const nameB = (
+          currentLang === 'es' && b.nameEs
+            ? b.nameEs
+            : currentLang === 'fr' && b.nameFr
+              ? b.nameFr
+              : b.nameEn
+        ).toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+    } else if (sortOption === 'proficiency') {
+      // Assume proficiencyLevel is ordered: beginner < intermediate < advanced < expert
+      const order = { beginner: 1, intermediate: 2, advanced: 3, expert: 4 };
+      filtered.sort(
+        (a, b) =>
+          order[b.proficiencyLevel?.toLowerCase()] -
+          order[a.proficiencyLevel?.toLowerCase()]
+      );
+    }
+    setFilteredSkills(filtered);
+  }, [skills, filterCategory, sortOption, currentLang]);
 
   const fetchSkills = async () => {
     try {
@@ -704,6 +747,49 @@ export default function SkillsPage() {
         style={glowFieldStyle}
       ></div>
       <div className="max-w-6xl mx-auto px-4 relative z-10">
+        {/* Filter & Sort Controls */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+            <select
+              className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              <option value="">
+                {t('filterByCategory') || 'Filter by Category'}
+              </option>
+              {Array.from(
+                new Set(skills.map((s) => s.category).filter(Boolean))
+              )
+                .sort()
+                .map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+            </select>
+            <select
+              className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="alphabetical">
+                {t('sortAlphabetical') || 'Alphabetical'}
+              </option>
+              <option value="proficiency">
+                {t('sortProficiency') || 'Proficiency'}
+              </option>
+            </select>
+            {filterCategory && (
+              <button
+                className="px-3 py-1 rounded border bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-xs"
+                onClick={() => setFilterCategory('')}
+              >
+                {t('clearFilter') || 'Clear Filter'}
+              </button>
+            )}
+          </div>
+        </div>
         <div className="text-center mb-12">
           <span
             className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold border mb-4 ${
@@ -739,7 +825,7 @@ export default function SkillsPage() {
         )}
 
         <div className={getGridCols()}>
-          {skills.map((skill) => {
+          {filteredSkills.map((skill) => {
             const displayName =
               currentLang === 'es' && skill.nameEs
                 ? skill.nameEs
@@ -756,7 +842,7 @@ export default function SkillsPage() {
                   isDark
                     ? 'bg-slate-900/70 ring-slate-800 hover:ring-slate-700'
                     : 'bg-slate-50/90 ring-slate-200 hover:ring-slate-300'
-                }`}
+                } animate-fadeIn`}
               >
                 <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div
@@ -810,19 +896,19 @@ export default function SkillsPage() {
             );
           })}
         </div>
-
-        {skills.length === 0 && !loading && (
+        {filteredSkills.length === 0 && !loading && (
           <div className="text-center py-12">
             <p
               className={`text-lg ${
                 isDark ? 'text-slate-400' : 'text-slate-600'
               }`}
             >
-              {t('noSkillsAvailable')}
+              {t('noSkillsAvailable') || 'No skills available'}
             </p>
           </div>
         )}
       </div>
+      <BackToTopButton />
     </div>
   );
 }

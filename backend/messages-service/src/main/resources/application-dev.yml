@@ -18,3 +18,11 @@ spring:
 jwt:
   secret: dev-secret-only-use-locally
   expiration: 86400000
+
+security:
+  contact:
+    ip-hash-salt: dev-contact-ip-salt
+    turnstile:
+      enabled: false
+      secret-key: dev-secret
+      minimum-score: 0.5
