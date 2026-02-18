@@ -34,12 +34,15 @@ public class SecurityConfig {
                         "/resume/download",
                         "/resume/current",
                         "/api/resume/download",
-                        "/api/resume/current")
+                        "/api/resume/current",
+                        // Health endpoints for monitoring / wake-up pings
+                        "/health",
+                        "/api/health",
+                        // If actuator is added later
+                        "/actuator/health")
                     .permitAll()
                     .requestMatchers("/resume/upload", "/api/resume/upload")
                     .hasRole("ADMIN")
-                    .requestMatchers("/actuator/health")
-                    .permitAll()
                     .anyRequest()
                     .authenticated());
 
