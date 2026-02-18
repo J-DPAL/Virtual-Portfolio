@@ -4,9 +4,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(ResponseStatusException.class)
+  public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex) {
+    ErrorResponse errorResponse =
+        ErrorResponse.builder()
+            .message(ex.getReason() != null ? ex.getReason() : "Request failed")
+            .status("ERROR")
+            .build();
+
+    return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+  }
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {

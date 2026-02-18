@@ -1,7 +1,9 @@
 package com.portfolio.users.businessLayer.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.portfolio.users.dataAccessLayer.entity.User;
 import com.portfolio.users.dataAccessLayer.repository.UserRepository;
@@ -34,14 +36,16 @@ public class AuthService {
     User user =
         userRepository
             .findByEmail(loginRequest.getEmail())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(
+                // Avoid leaking whether the email exists
+                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
 
     if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-      throw new RuntimeException("Invalid password");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
     }
 
     if (!Boolean.TRUE.equals(user.getActive())) {
-      throw new RuntimeException("User account is inactive");
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account is inactive");
     }
 
     String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString());
