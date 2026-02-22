@@ -1,1 +1,0 @@
--- No schema overrides required for EN/FR/ES alignment.
