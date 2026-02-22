@@ -17,21 +17,10 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>Virtual Portfolio Parent</name>
-    <description>Dynamic Virtual Portfolio Application - Microservices Architecture</description>
+    <description>Dynamic Virtual Portfolio Application - Monolithic Architecture</description>
 
     <modules>
-        <module>api-gateway</module>
-        <module>users-service</module>
-        <module>skills-service</module>
-        <module>projects-service</module>
-        <module>experience-service</module>
-        <module>education-service</module>
-        <module>hobbies-service</module>
-        <module>testimonials-service</module>
-        <module>messages-service</module>
-        <module>files-service</module>
-        <module>eureka-server</module>
-        <module>jacoco-aggregate</module>
+        <module>monolith-service</module>
     </modules>
 
     <properties>
@@ -39,23 +28,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <!-- Skip Spring Boot run/repackage at parent (no main class in aggregator POM) -->
+        <spring-boot.run.skip>true</spring-boot.run.skip>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
         <spotless.version>2.43.0</spotless.version>
         <jacoco.version>0.8.11</jacoco.version>
         <jacoco.skip.check>false</jacoco.skip.check>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -63,8 +42,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- Do not skip repackage so runnable jars are produced -->
-                    <skip>false</skip>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -145,32 +122,4 @@
             </plugin>
         </plugins>
     </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-    </dependency>
-
-    <!-- Testing Dependencies -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>

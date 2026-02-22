@@ -1,77 +1,52 @@
-# Makefile for Virtual Portfolio
-
 .PHONY: help docker-up docker-down docker-build docker-logs \
-        backend-setup backend-run backend-test frontend-setup \
-        frontend-dev frontend-build db-init clean all
+        backend-run backend-test backend-build frontend-setup \
+        frontend-dev frontend-build clean
 
 help:
-	@echo "Virtual Portfolio - Available Commands"
-	@echo "======================================"
-	@echo "Docker Commands:"
-	@echo "  make docker-up         Start all services with Docker Compose"
-	@echo "  make docker-down       Stop all services"
-	@echo "  make docker-build      Build all Docker images"
-	@echo "  make docker-logs       View logs from all services"
+	@echo "Virtual Portfolio (Monolith) - Commands"
+	@echo "======================================="
+	@echo "Docker:"
+	@echo "  make docker-up         Start frontend + monolith"
+	@echo "  make docker-down       Stop services"
+	@echo "  make docker-build      Rebuild images"
+	@echo "  make docker-logs       Follow logs"
 	@echo ""
-	@echo "Backend Commands:"
-	@echo "  make backend-setup     Install backend dependencies"
-	@echo "  make backend-run       Run backend locally"
-	@echo "  make backend-test      Run backend tests"
+	@echo "Backend:"
+	@echo "  make backend-run       Run monolith locally"
+	@echo "  make backend-test      Run monolith tests"
+	@echo "  make backend-build     Build monolith jar"
 	@echo ""
-	@echo "Frontend Commands:"
-	@echo "  make frontend-setup    Install frontend dependencies"
-	@echo "  make frontend-dev      Run frontend dev server"
-	@echo "  make frontend-build    Build frontend for production"
+	@echo "Frontend:"
+	@echo "  make frontend-setup    Install dependencies"
+	@echo "  make frontend-dev      Start Vite dev server"
+	@echo "  make frontend-build    Build frontend"
 	@echo ""
-	@echo "Database Commands:"
-	@echo "  make db-init           Initialize database"
-	@echo ""
-	@echo "Utility Commands:"
-	@echo "  make clean             Clean all build artifacts"
-	@echo "  make all               Full setup and start"
+	@echo "Utility:"
+	@echo "  make clean             Clean build artifacts"
 
-# Docker commands
 docker-up:
-	docker-compose up -d
-	@echo "Services started. Access:"
-	@echo "Frontend: http://localhost:3000"
-	@echo "Backend: http://localhost:8080/api"
-	@echo "Database: localhost:5432"
+	docker compose up -d --build
 
 docker-down:
-	docker-compose down
+	docker compose down
 
 docker-build:
-	docker-compose build --no-cache
+	docker compose build --no-cache
 
 docker-logs:
-	docker-compose logs -f
-
-docker-logs-backend:
-	docker-compose logs -f backend
-
-docker-logs-frontend:
-	docker-compose logs -f frontend
-
-docker-logs-db:
-	docker-compose logs -f postgres
-
-# Backend commands
-backend-setup:
-	cd backend && mvn install
+	docker compose logs -f
 
 backend-run:
-	cd backend && mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=dev"
+	cd backend && mvn -pl monolith-service -am spring-boot:run
 
 backend-test:
-	cd backend && mvn test
+	cd backend && mvn -pl monolith-service -am test
 
 backend-build:
-	cd backend && mvn clean package -DskipTests
+	cd backend && mvn -pl monolith-service -am clean package -DskipTests
 
-# Frontend commands
 frontend-setup:
-	cd frontend && npm install
+	cd frontend && npm ci
 
 frontend-dev:
 	cd frontend && npm run dev
@@ -79,28 +54,8 @@ frontend-dev:
 frontend-build:
 	cd frontend && npm run build
 
-frontend-lint:
-	cd frontend && npm run lint
-
-# Database commands
-db-init:
-	psql -U postgres -d virtual_portfolio -f database/init.sql
-
-# Utility commands
 clean:
 	cd backend && mvn clean
-	cd frontend && npm run clean || true
-	docker-compose down -v
-
-all: clean backend-setup frontend-setup docker-up
-	@echo "Project setup complete!"
-
-# Install dependencies
-install: backend-setup frontend-setup
-	@echo "All dependencies installed"
-
-# Run tests
-test: backend-test
-	@echo "All tests completed"
+	docker compose down -v
 
 .DEFAULT_GOAL := help

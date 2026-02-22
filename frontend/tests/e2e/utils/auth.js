@@ -1,22 +1,58 @@
-import { expect } from '@playwright/test';
+const ADMIN_USER = {
+  id: 1,
+  email: 'admin@example.com',
+  fullName: 'Admin User',
+  role: 'ADMIN',
+  active: true,
+};
+
+export const mockCurrentUserAuthenticated = async (page, user = ADMIN_USER) => {
+  await page.route('**/v1/auth/me', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(user),
+    });
+  });
+};
+
+export const mockCurrentUserUnauthenticated = async (page) => {
+  await page.route('**/v1/auth/me', async (route) => {
+    await route.fulfill({
+      status: 403,
+      contentType: 'application/json',
+      body: JSON.stringify({ message: 'Forbidden' }),
+    });
+  });
+};
+
+export const mockLogoutSuccess = async (page) => {
+  await page.route('**/v1/auth/logout', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true }),
+    });
+  });
+};
 
 export const loginAsAdmin = async (page) => {
-  await mockLoginSuccess(page);
-  await page.addInitScript(() => {
-    localStorage.setItem('authToken', 'test-auth-token');
-  });
-
+  await mockCurrentUserAuthenticated(page);
+  await mockLogoutSuccess(page);
   await page.goto('/admin/dashboard', { waitUntil: 'domcontentloaded' });
 };
 
-export const mockLoginSuccess = async (page) => {
+export const mockLoginSuccess = async (page, user = ADMIN_USER) => {
+  await mockCurrentUserAuthenticated(page, user);
+  await mockLogoutSuccess(page);
   await page.route('**/v1/auth/login', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        user: { id: 1, email: 'admin@example.com', fullName: 'Admin User' },
+        user,
         token: 'test-auth-token',
+        message: 'Login successful',
       }),
     });
   });

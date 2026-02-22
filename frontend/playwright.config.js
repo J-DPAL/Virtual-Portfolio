@@ -64,6 +64,13 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:3000',
+    env: {
+      ...process.env,
+      // Force E2E to run in legacy API mode so HTTP mocks remain deterministic.
+      VITE_SUPABASE_URL: '',
+      VITE_SUPABASE_ANON_KEY: '',
+      VITE_ADMIN_EMAILS: process.env.VITE_ADMIN_EMAILS || 'admin@example.com',
+    },
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

@@ -23,10 +23,10 @@ export default function AdminLogin() {
     try {
       const response = await loginUser(email, password);
       const { user } = response.data;
-      login(user);
+      await login(user);
       navigate('/admin/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || t('loginFailed'));
+      setError(err.response?.data?.message || err.message || t('loginFailed'));
     } finally {
       setLoading(false);
     }

@@ -28,10 +28,10 @@ test.describe('Public Skills Page', () => {
     const cardTitle = page.getByText('Java', { selector: 'h2' }).first();
     await expect(cardTitle).toBeVisible();
 
-    const categoryChip = page.getByText('Backend', { selector: 'span' }).first();
+    const categoryChip = page.locator('span', { hasText: 'Backend' }).first();
     await expect(categoryChip).toBeVisible();
 
-    const levelChip = page.getByText(/advanced/i, { selector: 'span' }).first();
+    const levelChip = page.locator('span', { hasText: /advanced/i }).first();
     await expect(levelChip).toBeVisible();
 
     const logo = page.locator('img[alt*="Java"]').first();

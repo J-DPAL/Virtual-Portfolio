@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as testimonialsService from '../../services/testimonialsService';
 import { useTheme } from '../../context/ThemeContext';
+import { validateTestimonialInput } from '../../utils/validation';
 
 const TestimonialsManagement = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isDark } = useTheme();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,8 +30,19 @@ const TestimonialsManagement = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await testimonialsService.getPendingTestimonials();
-      setTestimonials(response.data);
+      const [pendingResponse, approvedResponse] = await Promise.all([
+        testimonialsService.getPendingTestimonials(),
+        testimonialsService.getApprovedTestimonials(),
+      ]);
+      const merged = [...(pendingResponse.data || []), ...(approvedResponse.data || [])]
+        .reduce((acc, current) => {
+          if (!acc.some((item) => item.id === current.id)) {
+            acc.push(current);
+          }
+          return acc;
+        }, [])
+        .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      setTestimonials(merged);
       setError(null);
     } catch (err) {
       setError(t('manageTestimonialsFailedLoad'));
@@ -80,6 +92,12 @@ const TestimonialsManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationMessage = validateTestimonialInput(formData, t);
+    if (validationMessage) {
+      setError(validationMessage);
+      return;
+    }
+
     try {
       if (editingTestimonial) {
         await testimonialsService.updateTestimonial(
@@ -112,6 +130,16 @@ const TestimonialsManagement = () => {
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
+  };
+
+  const getTestimonialContent = (testimonial) => {
+    if (i18n.language === 'fr' && testimonial.testimonialTextFr) {
+      return testimonial.testimonialTextFr;
+    }
+    if (i18n.language === 'es' && testimonial.testimonialTextEs) {
+      return testimonial.testimonialTextEs;
+    }
+    return testimonial.testimonialTextEn || testimonial.content || '';
   };
 
   const renderStars = (rating) => {
@@ -204,8 +232,8 @@ const TestimonialsManagement = () => {
             </thead>
             <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-700">
               {testimonials.map((testimonial) => (
-                <>
-                  <tr key={testimonial.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
+                <React.Fragment key={testimonial.id}>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-slate-800">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-slate-100">
                         {testimonial.clientName}
@@ -276,13 +304,13 @@ const TestimonialsManagement = () => {
                             {t('contentLabel')}
                           </h4>
                           <p className="text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
-                            {testimonial.content}
+                            {getTestimonialContent(testimonial)}
                           </p>
                         </div>
                       </td>
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
@@ -337,6 +365,9 @@ const TestimonialsManagement = () => {
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {t('validationTestimonialNameHint', { min: 2, max: 100 })}
+                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
@@ -354,6 +385,9 @@ const TestimonialsManagement = () => {
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {t('validationTestimonialPositionHint', { min: 2, max: 120 })}
+                  </p>
                 </div>
               </div>
 
@@ -374,6 +408,9 @@ const TestimonialsManagement = () => {
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                     required
                   />
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {t('validationTestimonialCompanyHint', { min: 2, max: 120 })}
+                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
@@ -414,6 +451,13 @@ const TestimonialsManagement = () => {
                   rows="4"
                   required
                 />
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {t('validationTestimonialTextHint', {
+                    minChars: 30,
+                    minWords: 6,
+                    maxChars: 1200,
+                  })}
+                </p>
               </div>
 
               <div>
@@ -432,6 +476,13 @@ const TestimonialsManagement = () => {
                   rows="4"
                   required
                 />
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {t('validationTestimonialTextHint', {
+                    minChars: 30,
+                    minWords: 6,
+                    maxChars: 1200,
+                  })}
+                </p>
               </div>
 
               <div>
@@ -450,6 +501,13 @@ const TestimonialsManagement = () => {
                   rows="4"
                   required
                 />
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {t('validationTestimonialTextHint', {
+                    minChars: 30,
+                    minWords: 6,
+                    maxChars: 1200,
+                  })}
+                </p>
               </div>
 
               <div className="flex gap-4 pt-4">

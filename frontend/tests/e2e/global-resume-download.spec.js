@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Resume Download', () => {
   test('requests resume download for selected language', async ({ page }) => {
-    await page.route('**/v1/files/resume/download**', async (route) => {
+    await page.route('**/api/v1/files/resume/download*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/pdf',
@@ -10,7 +10,7 @@ test.describe('Resume Download', () => {
       });
     });
 
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('domcontentloaded');
 
     const languageButton = page
@@ -22,26 +22,31 @@ test.describe('Resume Download', () => {
     await expect(spanishOption).toBeVisible();
     await spanishOption.click({ force: true });
 
-    const mobileMenuButton = page.locator('button.lg\\:hidden').first();
-    if (await mobileMenuButton.isVisible()) {
+    let downloadButton = page.getByRole('button', { name: /^cv$/i }).first();
+    if (!(await downloadButton.isVisible())) {
+      const mobileMenuButton = page.locator('button.lg\\:hidden').first();
+      await expect(mobileMenuButton).toBeVisible();
       await mobileMenuButton.click({ force: true });
+
+      downloadButton = page
+        .locator('button:visible')
+        .filter({
+          hasText:
+            /download|resume|cv|descargar|hoja de vida|curriculum|t[ée]l[ée]charger/i,
+        })
+        .first();
     }
 
-    const downloadButton = page
-      .locator('button:visible')
-      .filter({ hasText: /download resume|cv|resume/i })
-      .first();
     await expect(downloadButton).toBeVisible();
     await expect(downloadButton).toBeEnabled();
     await downloadButton.scrollIntoViewIfNeeded();
 
-    const [response] = await Promise.all([
-      page.waitForResponse((resp) =>
-        resp.url().includes('/v1/files/resume/download')
+    const [request] = await Promise.all([
+      page.waitForRequest((req) =>
+        req.url().includes('/api/v1/files/resume/download')
       ),
       downloadButton.click({ force: true }),
     ]);
-    expect(response.status()).toBe(200);
-    expect(response.url()).toContain('language=es');
+    expect(request.url()).toContain('language=es');
   });
 });

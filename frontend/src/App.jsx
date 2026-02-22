@@ -58,7 +58,7 @@ function App() {
             <Route
               path="/admin/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
@@ -66,7 +66,7 @@ function App() {
             <Route
               path="/admin/skills"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <SkillsManagement />
                 </ProtectedRoute>
               }
@@ -74,7 +74,7 @@ function App() {
             <Route
               path="/admin/projects"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <ProjectsManagement />
                 </ProtectedRoute>
               }
@@ -82,7 +82,7 @@ function App() {
             <Route
               path="/admin/experience"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <ExperienceManagement />
                 </ProtectedRoute>
               }
@@ -90,7 +90,7 @@ function App() {
             <Route
               path="/admin/education"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <EducationManagement />
                 </ProtectedRoute>
               }
@@ -98,7 +98,7 @@ function App() {
             <Route
               path="/admin/hobbies"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <HobbiesManagement />
                 </ProtectedRoute>
               }
@@ -106,7 +106,7 @@ function App() {
             <Route
               path="/admin/testimonials"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <TestimonialsManagement />
                 </ProtectedRoute>
               }
@@ -114,7 +114,7 @@ function App() {
             <Route
               path="/admin/messages"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <MessagesView />
                 </ProtectedRoute>
               }
@@ -122,7 +122,7 @@ function App() {
             <Route
               path="/admin/files"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <ResumeUpload />
                 </ProtectedRoute>
               }

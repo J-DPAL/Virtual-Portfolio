@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sendMessage } from '../services/messagesService';
 import { useTheme } from '../context/ThemeContext';
+import { validateContactForm } from '../utils/validation';
 
 export default function ContactPage() {
   const { t } = useTranslation();
@@ -91,6 +92,12 @@ export default function ContactPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (cooldownSeconds > 0 || loading) {
+      return;
+    }
+
+    const validationMessage = validateContactForm(form, t);
+    if (validationMessage) {
+      setError(validationMessage);
       return;
     }
 
@@ -321,6 +328,13 @@ export default function ContactPage() {
                   onChange={(e) => updateField('senderName', e.target.value)}
                   required
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationContactNameHint', { min: 2, max: 100 })}
+                </p>
               </div>
               <div>
                 <label
@@ -361,6 +375,13 @@ export default function ContactPage() {
                   onChange={(e) => updateField('subject', e.target.value)}
                   required
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationContactSubjectHint', { min: 3, max: 200 })}
+                </p>
               </div>
               <div>
                 <label
@@ -380,6 +401,17 @@ export default function ContactPage() {
                   onChange={(e) => updateField('message', e.target.value)}
                   required
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationContactMessageHint', {
+                    minChars: 20,
+                    minWords: 5,
+                    maxChars: 2000,
+                  })}
+                </p>
               </div>
               {turnstileEnabled && (
                 <div>

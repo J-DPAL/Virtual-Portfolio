@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import {
   getApprovedTestimonials,
   submitTestimonial,
 } from '../services/testimonialsService';
+import { validateTestimonialInput } from '../utils/validation';
 
 export default function TestimonialsPage() {
   const { t, i18n } = useTranslation();
@@ -44,16 +45,23 @@ export default function TestimonialsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      ...formData,
+      testimonialTextEn: formData.testimonialText,
+      testimonialTextFr: formData.testimonialText,
+      testimonialTextEs: formData.testimonialText,
+    };
+
+    const validationMessage = validateTestimonialInput(payload, t);
+    if (validationMessage) {
+      setError(validationMessage);
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
 
     try {
-      const payload = {
-        ...formData,
-        testimonialTextEn: formData.testimonialText,
-        testimonialTextFr: formData.testimonialText,
-        testimonialTextEs: formData.testimonialText,
-      };
       await submitTestimonial(payload);
       setSuccess(true);
       setFormData({
@@ -300,6 +308,13 @@ export default function TestimonialsPage() {
                     setFormData({ ...formData, clientName: e.target.value })
                   }
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationTestimonialNameHint', { min: 2, max: 100 })}
+                </p>
               </div>
               <div>
                 <label
@@ -322,6 +337,13 @@ export default function TestimonialsPage() {
                     setFormData({ ...formData, clientPosition: e.target.value })
                   }
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationTestimonialPositionHint', { min: 2, max: 120 })}
+                </p>
               </div>
               <div>
                 <label
@@ -343,6 +365,13 @@ export default function TestimonialsPage() {
                     setFormData({ ...formData, clientCompany: e.target.value })
                   }
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationTestimonialCompanyHint', { min: 2, max: 120 })}
+                </p>
               </div>
               <div>
                 <label
@@ -368,6 +397,17 @@ export default function TestimonialsPage() {
                     })
                   }
                 />
+                <p
+                  className={`mt-1 text-xs ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  {t('validationTestimonialTextHint', {
+                    minChars: 30,
+                    minWords: 6,
+                    maxChars: 1200,
+                  })}
+                </p>
               </div>
               <div>
                 <label
@@ -423,7 +463,7 @@ export default function TestimonialsPage() {
                 }`}
                 aria-hidden="true"
               >
-                “
+                &ldquo;
               </div>
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
@@ -499,3 +539,4 @@ export default function TestimonialsPage() {
     </div>
   );
 }
+

@@ -1,8 +1,14 @@
 import { test, expect } from '@playwright/test';
-import { mockLoginFailure, mockLoginSuccess } from './utils/auth';
+import {
+  mockCurrentUserUnauthenticated,
+  mockLoginFailure,
+  mockLoginSuccess,
+} from './utils/auth';
 
 test.describe('Admin Login & Authentication', () => {
   test.beforeEach(async ({ page }) => {
+    await mockCurrentUserUnauthenticated(page);
+
     // Navigate to login page before each test
     await page.goto('/login', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('input[type="email"]', {
@@ -17,7 +23,7 @@ test.describe('Admin Login & Authentication', () => {
 
   test('should display login form with required fields', async ({ page }) => {
     // Verify login page title/heading
-    const heading = page.getByRole('heading', { name: /admin/i });
+    const heading = page.getByRole('heading', { name: /log ?in|sign ?in/i });
     await expect(heading).toBeVisible();
 
     // Verify email input field exists
@@ -33,7 +39,7 @@ test.describe('Admin Login & Authentication', () => {
     // Verify submit button exists
     const submitButton = page.locator('button[type="submit"]');
     await expect(submitButton).toBeVisible();
-    await expect(submitButton).toContainText(/login|sign in/i);
+    await expect(submitButton).toContainText(/log ?in|sign ?in/i);
   });
 
   test('should show validation error with empty credentials', async ({
@@ -110,6 +116,13 @@ test.describe('Admin Login & Authentication', () => {
     page,
   }) => {
     await mockLoginSuccess(page);
+    await page.route('**/api/skills', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
     // Login first
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@example.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
@@ -125,26 +138,19 @@ test.describe('Admin Login & Authentication', () => {
     // Wait for redirect to dashboard
     await page.waitForURL('/admin/dashboard', { timeout: 5000 });
 
-    // Verify localStorage contains auth token
-    const authToken = await page.evaluate(() =>
-      localStorage.getItem('authToken')
-    );
-    expect(authToken).toBeTruthy();
-
     // Navigate to another protected route
     await page.goto('/admin/skills', { waitUntil: 'domcontentloaded' });
 
     // Should be able to access protected route
     await expect(page).toHaveURL('/admin/skills');
-    await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /manage skills/i })).toBeVisible({
+      timeout: 15000,
+    });
   });
 
   test('should prevent unauthorized access to protected routes', async ({
     page,
   }) => {
-    // Clear any existing auth token
-    await page.evaluate(() => localStorage.removeItem('authToken'));
-
     // Try to access protected route directly
     await page.goto('/admin/dashboard', { waitUntil: 'domcontentloaded' });
 
@@ -171,7 +177,7 @@ test.describe('Admin Login & Authentication', () => {
     await page.waitForURL('/admin/dashboard', { timeout: 5000 });
 
     // Find and click logout button (in header or mobile menu)
-    const logoutButton = page.getByRole('button', { name: /logout/i });
+    const logoutButton = page.getByRole('button', { name: /log ?out/i });
     if (await logoutButton.isVisible()) {
       await logoutButton.scrollIntoViewIfNeeded();
       await logoutButton.click({ force: true });
@@ -179,13 +185,15 @@ test.describe('Admin Login & Authentication', () => {
       const mobileMenuButton = page.locator('button.lg\\:hidden').first();
       if (await mobileMenuButton.isVisible()) {
         await mobileMenuButton.click({ force: true });
-        await page.getByRole('button', { name: /logout/i }).click({ force: true });
+        await page.getByRole('button', { name: /log ?out/i }).click({ force: true });
       }
     }
 
     // Verify redirect to login page after logout
     await expect(page).toHaveURL('/login', { timeout: 10000 });
-    const loginHeading = page.getByRole('heading', { name: /admin/i });
+    const loginHeading = page.getByRole('heading', {
+      name: /log ?in|sign ?in/i,
+    });
     await expect(loginHeading).toBeVisible({ timeout: 10000 });
 
     // Protected-route guard is covered in a dedicated test

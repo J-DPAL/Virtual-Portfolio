@@ -6,15 +6,20 @@ const ResumeUpload = () => {
   const { t } = useTranslation();
   const [enFile, setEnFile] = useState(null);
   const [frFile, setFrFile] = useState(null);
+  const [esFile, setEsFile] = useState(null);
   const [enUploading, setEnUploading] = useState(false);
   const [frUploading, setFrUploading] = useState(false);
+  const [esUploading, setEsUploading] = useState(false);
   const [enProgress, setEnProgress] = useState(0);
   const [frProgress, setFrProgress] = useState(0);
+  const [esProgress, setEsProgress] = useState(0);
   const [enSuccess, setEnSuccess] = useState(null);
   const [frSuccess, setFrSuccess] = useState(null);
+  const [esSuccess, setEsSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [dragActiveEn, setDragActiveEn] = useState(false);
   const [dragActiveFr, setDragActiveFr] = useState(false);
+  const [dragActiveEs, setDragActiveEs] = useState(false);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -36,9 +41,12 @@ const ResumeUpload = () => {
     if (language === 'en') {
       setEnFile(file);
       setEnSuccess(null);
-    } else {
+    } else if (language === 'fr') {
       setFrFile(file);
       setFrSuccess(null);
+    } else {
+      setEsFile(file);
+      setEsSuccess(null);
     }
     setError(null);
   };
@@ -49,14 +57,18 @@ const ResumeUpload = () => {
     if (e.type === 'dragenter' || e.type === 'dragover') {
       if (language === 'en') {
         setDragActiveEn(true);
-      } else {
+      } else if (language === 'fr') {
         setDragActiveFr(true);
+      } else {
+        setDragActiveEs(true);
       }
     } else if (e.type === 'dragleave') {
       if (language === 'en') {
         setDragActiveEn(false);
-      } else {
+      } else if (language === 'fr') {
         setDragActiveFr(false);
+      } else {
+        setDragActiveEs(false);
       }
     }
   };
@@ -66,8 +78,10 @@ const ResumeUpload = () => {
     e.stopPropagation();
     if (language === 'en') {
       setDragActiveEn(false);
-    } else {
+    } else if (language === 'fr') {
       setDragActiveFr(false);
+    } else {
+      setDragActiveEs(false);
     }
 
     const file = e.dataTransfer.files[0];
@@ -75,16 +89,24 @@ const ResumeUpload = () => {
       if (language === 'en') {
         setEnFile(file);
         setEnSuccess(null);
-      } else {
+      } else if (language === 'fr') {
         setFrFile(file);
         setFrSuccess(null);
+      } else {
+        setEsFile(file);
+        setEsSuccess(null);
       }
       setError(null);
     }
   };
 
   const handleUpload = async (language) => {
-    const file = language === 'en' ? enFile : frFile;
+    const fileByLanguage = {
+      en: enFile,
+      fr: frFile,
+      es: esFile,
+    };
+    const file = fileByLanguage[language];
     const validationError = validateFile(file);
 
     if (validationError) {
@@ -92,9 +114,24 @@ const ResumeUpload = () => {
       return;
     }
 
-    const setUploading = language === 'en' ? setEnUploading : setFrUploading;
-    const setProgress = language === 'en' ? setEnProgress : setFrProgress;
-    const setSuccess = language === 'en' ? setEnSuccess : setFrSuccess;
+    const setUploadingByLanguage = {
+      en: setEnUploading,
+      fr: setFrUploading,
+      es: setEsUploading,
+    };
+    const setProgressByLanguage = {
+      en: setEnProgress,
+      fr: setFrProgress,
+      es: setEsProgress,
+    };
+    const setSuccessByLanguage = {
+      en: setEnSuccess,
+      fr: setFrSuccess,
+      es: setEsSuccess,
+    };
+    const setUploading = setUploadingByLanguage[language];
+    const setProgress = setProgressByLanguage[language];
+    const setSuccess = setSuccessByLanguage[language];
 
     try {
       setUploading(true);
@@ -123,8 +160,10 @@ const ResumeUpload = () => {
         setSuccess(null);
         if (language === 'en') {
           setEnFile(null);
-        } else {
+        } else if (language === 'fr') {
           setFrFile(null);
+        } else {
+          setEsFile(null);
         }
         setProgress(0);
       }, 3000);
@@ -154,9 +193,12 @@ const ResumeUpload = () => {
     dragActive
   ) => {
     const isEnglish = language === 'en';
+    const isFrench = language === 'fr';
     const title = isEnglish
       ? `${t('language')}: ${t('english')}`
-      : `${t('language')}: ${t('french')}`;
+      : isFrench
+        ? `${t('language')}: ${t('french')}`
+        : `${t('language')}: ES`;
 
     return (
       <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md p-6 border border-slate-200 dark:border-slate-700">
@@ -234,9 +276,12 @@ const ResumeUpload = () => {
                   if (isEnglish) {
                     setEnFile(null);
                     setEnSuccess(null);
-                  } else {
+                  } else if (isFrench) {
                     setFrFile(null);
                     setFrSuccess(null);
+                  } else {
+                    setEsFile(null);
+                    setEsSuccess(null);
                   }
                 }}
                 className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
@@ -307,7 +352,7 @@ const ResumeUpload = () => {
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         {renderUploadSection(
           'en',
           enFile,
@@ -325,6 +370,15 @@ const ResumeUpload = () => {
           frProgress,
           frSuccess,
           dragActiveFr
+        )}
+        {renderUploadSection(
+          'es',
+          esFile,
+          setEsFile,
+          esUploading,
+          esProgress,
+          esSuccess,
+          dragActiveEs
         )}
       </div>
     </div>

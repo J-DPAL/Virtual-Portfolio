@@ -4,12 +4,11 @@ test.describe('Public Home Page', () => {
   test('renders hero content and primary navigation links', async ({
     page,
   }) => {
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await page.waitForLoadState('domcontentloaded');
-
-    const heading = page.locator('h1');
-    await expect(heading).toBeVisible();
-
+    const emptyList = {
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([]),
+    };
     await page.route('**/api/projects', async (route) => {
       await route.fulfill({
         status: 200,
@@ -24,6 +23,15 @@ test.describe('Public Home Page', () => {
         ]),
       });
     });
+    await page.route('**/api/skills', (route) => route.fulfill(emptyList));
+    await page.route('**/api/experience', (route) => route.fulfill(emptyList));
+    await page.route('**/api/education', (route) => route.fulfill(emptyList));
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('domcontentloaded');
+
+    const heading = page.locator('h1');
+    await expect(heading).toBeVisible();
 
     const cta = page
       .getByRole('link', { name: /view my work|projects/i })

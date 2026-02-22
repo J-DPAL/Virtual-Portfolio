@@ -3,7 +3,10 @@ import { test, expect } from '@playwright/test';
 const openTestimonialForm = async (page) => {
   const toggleButton = page
     .locator('button')
-    .filter({ hasText: /add testimonial|close|add a testimonial|submit/i })
+    .filter({
+      hasText:
+        /add testimonial|add a testimonial|submit testimonial|close|ajouter|agregar|testimonio/i,
+    })
     .first();
   await expect(toggleButton).toBeVisible({ timeout: 10000 });
   await toggleButton.click();
@@ -45,7 +48,7 @@ test.describe('Testimonials Page - View & Submit', () => {
     });
 
     // Navigate to testimonials page before each test
-    await page.goto('/testimonials', { waitUntil: 'networkidle' });
+    await page.goto('/testimonials', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('domcontentloaded');
   });
 
@@ -140,8 +143,31 @@ test.describe('Testimonials Page - View & Submit', () => {
   test('should successfully submit testimonial with valid data', async ({
     page,
   }) => {
+    await page.unroute('**/api/testimonials');
     await page.route('**/api/testimonials', async (route) => {
-      if (route.request().method() === 'POST') {
+      const method = route.request().method();
+      if (method === 'GET') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([]),
+        });
+        return;
+      }
+
+      if (method === 'OPTIONS') {
+        await route.fulfill({
+          status: 204,
+          headers: {
+            'access-control-allow-origin': '*',
+            'access-control-allow-methods': 'GET,POST,OPTIONS',
+            'access-control-allow-headers': '*',
+          },
+        });
+        return;
+      }
+
+      if (method === 'POST') {
         await route.fulfill({
           status: 201,
           contentType: 'application/json',
@@ -231,9 +257,32 @@ test.describe('Testimonials Page - View & Submit', () => {
   test('should handle testimonial submission errors gracefully', async ({
     page,
   }) => {
+    await page.unroute('**/api/testimonials');
     // Simulate network error for submission
     await page.route('**/api/testimonials', (route) => {
-      if (route.request().method() === 'POST') {
+      const method = route.request().method();
+      if (method === 'GET') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([]),
+        });
+        return;
+      }
+
+      if (method === 'OPTIONS') {
+        route.fulfill({
+          status: 204,
+          headers: {
+            'access-control-allow-origin': '*',
+            'access-control-allow-methods': 'GET,POST,OPTIONS',
+            'access-control-allow-headers': '*',
+          },
+        });
+        return;
+      }
+
+      if (method === 'POST') {
         route.abort('failed');
         return;
       }
@@ -255,19 +304,23 @@ test.describe('Testimonials Page - View & Submit', () => {
     await titleInput.fill('QA Engineer');
     await companyInput.fill('Test Co');
     await ratingInput.fill('5');
-    await testimonialText.fill('This submission will fail');
+    await testimonialText.fill(
+      'This testimonial has enough words and characters to pass validation checks.'
+    );
 
     // Submit form
     await submitButton.click();
 
     // Verify error message appears
     const errorMessage = page.locator(
-      'text=/failed to submit testimonial|error occurred|please try again/i'
+      'text=/unable to submit|failed to submit|please try again|error occurred/i'
     );
     await expect(errorMessage).toBeVisible({ timeout: 10000 });
 
     // Verify form data is preserved
     await expect(nameInput).toHaveValue('Error Test User');
-    await expect(testimonialText).toHaveValue('This submission will fail');
+    await expect(testimonialText).toHaveValue(
+      'This testimonial has enough words and characters to pass validation checks.'
+    );
   });
 });

@@ -1,330 +1,39 @@
 services:
-  # Eureka Service Discovery Server
-  eureka-server:
+  monolith-service:
     build:
       context: ./backend
-      dockerfile: ./eureka-server/Dockerfile
-    container_name: portfolio-eureka-server
+      dockerfile: Dockerfile
+    container_name: portfolio-monolith-service
     environment:
-      SPRING_APPLICATION_NAME: eureka-server
-      SERVER_PORT: 8761
-    ports:
-      - "8761:8761"
-    networks:
-      - portfolio-network
-
-  # PostgreSQL Database - Separate databases per service
-  postgres:
-    image: postgres:16-alpine
-    container_name: portfolio-postgres
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: postgres
-      USERS_DB_NAME: users_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./database/init-databases.sh:/docker-entrypoint-initdb.d/00-init-databases.sh
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - portfolio-network
-
-  # API Gateway - Service Router
-  api-gateway:
-    build:
-      context: ./backend
-      dockerfile: ./api-gateway/Dockerfile
-    container_name: portfolio-api-gateway
-    environment:
-      SPRING_APPLICATION_NAME: api-gateway
-      SERVER_PORT: 8080
-      SPRING_PROFILES_ACTIVE: prod
-      JWT_SECRET: ${JWT_SECRET}
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      APP_AUTH_COOKIE_FORCE_SECURE: ${APP_AUTH_COOKIE_FORCE_SECURE:-false}
+      CONTACT_IP_HASH_SALT: ${CONTACT_IP_HASH_SALT:-local-dev-salt-change-me}
+      TURNSTILE_ENABLED: ${TURNSTILE_ENABLED:-false}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+      TURNSTILE_MINIMUM_SCORE: ${TURNSTILE_MINIMUM_SCORE:-0.5}
+      SUPABASE_RESUME_BUCKET: ${SUPABASE_RESUME_BUCKET:-resumes}
+      RESUME_FILE_EN: ${RESUME_FILE_EN:-resume_en.pdf}
+      RESUME_FILE_FR: ${RESUME_FILE_FR:-resume_fr.pdf}
+      RESUME_FILE_ES: ${RESUME_FILE_ES:-resume_es.pdf}
     ports:
       - "8080:8080"
-    depends_on:
-      - eureka-server
-      - users-service
-      - skills-service
-      - projects-service
-      - experience-service
-      - education-service
-      - hobbies-service
-      - testimonials-service
-      - messages-service
-      - files-service
-    networks:
-      - portfolio-network
 
-  # Users Service - Authentication & User Management
-  users-service:
-    build:
-      context: ./backend
-      dockerfile: ./users-service/Dockerfile
-    container_name: portfolio-users-service
-    environment:
-      SPRING_APPLICATION_NAME: users-service
-      SERVER_PORT: 8081
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
-      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-Admin User}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8081:8081"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Skills Service
-  skills-service:
-    build:
-      context: ./backend
-      dockerfile: ./skills-service/Dockerfile
-    container_name: portfolio-skills-service
-    environment:
-      SPRING_APPLICATION_NAME: skills-service
-      SERVER_PORT: 8082
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skills_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8082:8082"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Projects Service
-  projects-service:
-    build:
-      context: ./backend
-      dockerfile: ./projects-service/Dockerfile
-    container_name: portfolio-projects-service
-    environment:
-      SPRING_APPLICATION_NAME: projects-service
-      SERVER_PORT: 8083
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/projects_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8083:8083"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Experience Service
-  experience-service:
-    build:
-      context: ./backend
-      dockerfile: ./experience-service/Dockerfile
-    container_name: portfolio-experience-service
-    environment:
-      SPRING_APPLICATION_NAME: experience-service
-      SERVER_PORT: 8084
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/experience_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8084:8084"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Education Service
-  education-service:
-    build:
-      context: ./backend
-      dockerfile: ./education-service/Dockerfile
-    container_name: portfolio-education-service
-    environment:
-      SPRING_APPLICATION_NAME: education-service
-      SERVER_PORT: 8085
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/education_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8085:8085"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Hobbies Service
-  hobbies-service:
-    build:
-      context: ./backend
-      dockerfile: ./hobbies-service/Dockerfile
-    container_name: portfolio-hobbies-service
-    environment:
-      SPRING_APPLICATION_NAME: hobbies-service
-      SERVER_PORT: 8086
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hobbies_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8086:8086"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Testimonials Service
-  testimonials-service:
-    build:
-      context: ./backend
-      dockerfile: ./testimonials-service/Dockerfile
-    container_name: portfolio-testimonials-service
-    environment:
-      SPRING_APPLICATION_NAME: testimonials-service
-      SERVER_PORT: 8087
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testimonials_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8087:8087"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Messages Service
-  messages-service:
-    build:
-      context: ./backend
-      dockerfile: ./messages-service/Dockerfile
-    container_name: portfolio-messages-service
-    environment:
-      SPRING_APPLICATION_NAME: messages-service
-      SERVER_PORT: 8088
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/messages_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-      # Email configuration
-      SPRING_MAIL_HOST: ${MAIL_HOST}
-      SPRING_MAIL_PORT: ${MAIL_PORT}
-      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
-      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      TURNSTILE_ENABLED: ${TURNSTILE_ENABLED}
-      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
-      TURNSTILE_MIN_SCORE: ${TURNSTILE_MIN_SCORE}
-      CONTACT_IP_HASH_SALT: ${CONTACT_IP_HASH_SALT}
-    ports:
-      - "8088:8088"
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # Files Service - Resume Upload/Download
-  files-service:
-    build:
-      context: ./backend
-      dockerfile: ./files-service/Dockerfile
-    container_name: portfolio-files-service
-    environment:
-      SPRING_APPLICATION_NAME: files-service
-      SERVER_PORT: 8090
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/files_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      FILE_CV_DIR: /app/CV
-      SPRING_PROFILES_ACTIVE: prod
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    ports:
-      - "8090:8090"
-    volumes:
-      - resume_uploads:/app/uploads/resumes
-      - ./CV:/app/CV:ro
-    depends_on:
-      eureka-server:
-        condition: service_started
-      postgres:
-        condition: service_healthy
-    networks:
-      - portfolio-network
-
-  # React Frontend
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      # No build args - use Dockerfile default (localhost) for browser access
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080/api}
     container_name: portfolio-frontend
-    environment:
-      NODE_ENV: production
     ports:
       - "3000:3000"
     depends_on:
-      - api-gateway
-    networks:
-      - portfolio-network
-
-volumes:
-  postgres_data:
-  resume_uploads:
-
-networks:
-  portfolio-network:
-    driver: bridge
+      - monolith-service

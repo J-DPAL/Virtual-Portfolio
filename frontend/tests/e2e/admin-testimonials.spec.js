@@ -13,6 +13,7 @@ test.describe('Admin Testimonials Management', () => {
         rating: 5,
       },
     ];
+    let approved = [];
 
     await page.route('**/api/testimonials/pending', async (route) => {
       await route.fulfill({
@@ -22,7 +23,16 @@ test.describe('Admin Testimonials Management', () => {
       });
     });
 
+    await page.route('**/api/testimonials', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(approved),
+      });
+    });
+
     await page.route('**/api/testimonials/1/approve', async (route) => {
+      approved = [{ ...pending[0], approved: true }];
       pending = [];
       await route.fulfill({
         status: 200,

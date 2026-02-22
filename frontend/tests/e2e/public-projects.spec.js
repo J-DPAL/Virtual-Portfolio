@@ -28,7 +28,7 @@ test.describe('Public Projects Page', () => {
     const projectTitle = page.getByText('Portfolio Platform', { selector: 'h2' }).first();
     await expect(projectTitle).toBeVisible();
 
-    const techTag = page.getByText('React', { selector: 'span' }).first();
+    const techTag = page.locator('span', { hasText: 'React' }).first();
     await expect(techTag).toBeVisible();
 
     const link = page.locator('a[href="https://example.com"]');

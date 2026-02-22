@@ -1,23 +1,21 @@
 # Build stage
-FROM maven:3.9.5-eclipse-temurin-17 AS build
+FROM maven:3.9.5-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
+COPY . .
 
-COPY src ./src
-
-RUN mvn clean package -DskipTests
+# Build only the monolith service and required parents.
+RUN mvn clean package -pl monolith-service -am -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=builder /app/monolith-service/target/*.jar app.jar
 
-ENV PORT=8080
+ENV SERVER_PORT=8080
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

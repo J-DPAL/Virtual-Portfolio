@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const getContactFields = (page) => {
   const form = page.locator('form');
-  const inputs = form.locator('input');
+  const inputs = form.locator('input:not([name="website"])');
   const nameInput = inputs.nth(0);
   const emailInput = inputs.nth(1);
   const subjectInput = inputs.nth(2);
@@ -59,19 +59,16 @@ test.describe('Contact Form Submission', () => {
     const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
-    // Check HTML5 validation on required fields
-    const { nameInput, emailInput, messageTextarea } = getContactFields(page);
+    // HTML5 required validation should keep required inputs invalid.
+    const { nameInput, emailInput, subjectInput, messageTextarea } =
+      getContactFields(page);
 
-    // Verify HTML5 validation
-    const nameValidity = await nameInput.evaluate((el) => el.validity.valid);
-    const emailValidity = await emailInput.evaluate((el) => el.validity.valid);
-    const messageValidity = await messageTextarea.evaluate(
-      (el) => el.validity.valid
+    expect(await nameInput.evaluate((el) => el.validity.valid)).toBe(false);
+    expect(await emailInput.evaluate((el) => el.validity.valid)).toBe(false);
+    expect(await subjectInput.evaluate((el) => el.validity.valid)).toBe(false);
+    expect(await messageTextarea.evaluate((el) => el.validity.valid)).toBe(
+      false
     );
-
-    expect(nameValidity).toBe(false);
-    expect(emailValidity).toBe(false);
-    expect(messageValidity).toBe(false);
 
     // Should still be on contact page
     await expect(page).toHaveURL('/contact');
@@ -85,15 +82,18 @@ test.describe('Contact Form Submission', () => {
     await nameInput.fill('John Doe');
     await emailInput.fill('invalid-email-format');
     await subjectInput.fill('Test Subject');
-    await messageTextarea.fill('This is a test message');
+    await messageTextarea.fill(
+      'This is a valid length message with enough words for validation.'
+    );
 
     // Try to submit
     const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
-    // Verify email input shows validation error
-    const emailValidity = await emailInput.evaluate((el) => el.validity.valid);
-    expect(emailValidity).toBe(false);
+    // Verify email validation error is shown
+    await expect(
+      page.getByText(/email.*(valid|invalid)/i).first()
+    ).toBeVisible({ timeout: 5000 });
 
     // Should stay on contact page
     await expect(page).toHaveURL('/contact');
@@ -102,6 +102,14 @@ test.describe('Contact Form Submission', () => {
   test('should successfully submit form with valid data and show success message', async ({
     page,
   }) => {
+    await page.route('**/api/messages', async (route) => {
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 1 }),
+      });
+    });
+
     // Fill form with valid data
     const { nameInput, emailInput, subjectInput, messageTextarea } =
       getContactFields(page);
@@ -111,7 +119,7 @@ test.describe('Contact Form Submission', () => {
       email: 'john@example.com',
       subject: 'Test Portfolio Inquiry',
       message:
-        'This is a test message to verify the contact form is working correctly.',
+        'This is a test message to verify the contact form is working correctly and clearly.',
     };
 
     await nameInput.fill(testData.name);
@@ -159,7 +167,11 @@ test.describe('Contact Form Submission', () => {
     // Intercept request with delay to observe disabled state
     await page.route('**/api/messages', async (route) => {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
-      await route.continue();
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: 1 }),
+      });
     });
 
     const submitButton = page.locator('button[type="submit"]');
@@ -197,7 +209,9 @@ test.describe('Contact Form Submission', () => {
     await nameInput.fill('Error Test User');
     await emailInput.fill('error@test.com');
     await subjectInput.fill('Network Error Test');
-    await messageTextarea.fill('Testing error handling');
+    await messageTextarea.fill(
+      'Testing network error handling with enough words and characters now.'
+    );
 
     // Submit form
     const submitButton = page.locator('button[type="submit"]');
