@@ -18,17 +18,12 @@ test.describe('Global Language Switching', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('domcontentloaded');
 
-    const languageButton = page
-      .getByRole('button', { name: /EN|FR|ES|Langue|Language/i })
-      .first();
+    const languageButton = page.getByTestId('language-toggle');
     await expect(languageButton).toBeVisible();
 
     await languageButton.click({ force: true });
 
-    const frenchOption = page
-      .locator('button')
-      .filter({ hasText: /fran/i })
-      .first();
+    const frenchOption = page.getByTestId('language-option-fr');
     await expect(frenchOption).toBeVisible();
     await frenchOption.click({ force: true });
 

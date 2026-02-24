@@ -68,32 +68,6 @@ public class TestimonialDataService {
     return jdbc.queryForObject(sql, p, rowMapper());
   }
 
-  public TestimonialDto updateTestimonial(Long id, TestimonialDto dto) {
-    String status = dto.status == null ? TestimonialStatus.PENDING.name() : dto.status.name();
-
-    String sql =
-        "update public.testimonials set "
-            + "client_name = :clientName, client_position = :clientPosition, client_company = :clientCompany, "
-            + "testimonial_text_en = :testimonialTextEn, testimonial_text_fr = :testimonialTextFr, testimonial_text_es = :testimonialTextEs, "
-            + "rating = :rating, client_image_url = :clientImageUrl, status = cast(:status as varchar), updated_at = now() "
-            + "where id = :id returning *";
-
-    MapSqlParameterSource p =
-        new MapSqlParameterSource()
-            .addValue("id", id)
-            .addValue("clientName", dto.clientName)
-            .addValue("clientPosition", dto.clientPosition)
-            .addValue("clientCompany", dto.clientCompany)
-            .addValue("testimonialTextEn", dto.testimonialTextEn)
-            .addValue("testimonialTextFr", dto.testimonialTextFr)
-            .addValue("testimonialTextEs", dto.testimonialTextEs)
-            .addValue("rating", dto.rating)
-            .addValue("clientImageUrl", dto.clientImageUrl)
-            .addValue("status", status);
-
-    return queryOne(sql, p, "Testimonial not found");
-  }
-
   public TestimonialDto approveTestimonial(Long id) {
     String sql = "update public.testimonials set status = 'APPROVED', updated_at = now() where id = :id returning *";
     return queryOne(sql, new MapSqlParameterSource("id", id), "Testimonial not found");

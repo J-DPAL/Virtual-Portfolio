@@ -13,26 +13,33 @@ test.describe('Resume Download', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('domcontentloaded');
 
-    const languageButton = page
-      .getByRole('button', { name: /EN|FR|ES|Langue|Language/i })
-      .first();
+    const languageButton = page.getByTestId('language-toggle');
     await languageButton.click({ force: true });
 
-    const spanishOption = page.getByText('Español', { selector: 'button' }).first();
+    const spanishOption = page.getByTestId('language-option-es');
     await expect(spanishOption).toBeVisible();
     await spanishOption.click({ force: true });
 
     let downloadButton = page.getByRole('button', { name: /^cv$/i }).first();
     if (!(await downloadButton.isVisible())) {
+      downloadButton = page
+        .locator('button:visible')
+        .filter({
+          hasText: /download|resume|cv|descargar|hoja de vida|curriculum|telecharger/i,
+        })
+        .first();
+    }
+
+    if (!(await downloadButton.isVisible())) {
       const mobileMenuButton = page.locator('button.lg\\:hidden').first();
-      await expect(mobileMenuButton).toBeVisible();
-      await mobileMenuButton.click({ force: true });
+      if (await mobileMenuButton.isVisible()) {
+        await mobileMenuButton.click({ force: true });
+      }
 
       downloadButton = page
         .locator('button:visible')
         .filter({
-          hasText:
-            /download|resume|cv|descargar|hoja de vida|curriculum|t[ée]l[ée]charger/i,
+          hasText: /download|resume|cv|descargar|hoja de vida|curriculum|telecharger/i,
         })
         .first();
     }

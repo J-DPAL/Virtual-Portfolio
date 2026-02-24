@@ -3,6 +3,7 @@ package com.portfolio.monolith.service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.List;
@@ -43,6 +44,9 @@ public class ContactProtectionService {
 
   private final RestTemplate restTemplate;
   private final Map<String, Bucket> ipBuckets = new ConcurrentHashMap<>();
+  private final Map<String, Bucket> emailBuckets = new ConcurrentHashMap<>();
+  private final Map<String, Bucket> nameBuckets = new ConcurrentHashMap<>();
+  private final Map<String, Bucket> identityBuckets = new ConcurrentHashMap<>();
 
   @Value("${security.contact.turnstile.enabled:false}")
   private boolean turnstileEnabled;
@@ -66,9 +70,17 @@ public class ContactProtectionService {
   public void validateSubmission(MessageDto messageDto, String clientIp, String userAgent) {
     String normalizedIp = normalizeClientIp(clientIp);
     String ipHash = hashIp(normalizedIp);
+    String normalizedName = normalizeName(messageDto.senderName);
+    String normalizedEmail = normalizeEmail(messageDto.senderEmail);
+    String nameHash = hashIdentifier("name", normalizedName);
+    String emailHash = hashIdentifier("email", normalizedEmail);
+    String identityHash = hashIdentifier("identity", normalizedName + "|" + normalizedEmail);
 
-    validateHoneypot(messageDto.website, ipHash, userAgent);
-    enforceRateLimit(ipHash, userAgent);
+    validateHoneypot(messageDto.website, userAgent);
+    enforceIpRateLimit(ipHash);
+    enforceNameRateLimit(nameHash);
+    enforceEmailRateLimit(emailHash);
+    enforceIdentityRateLimit(identityHash);
     validateCaptcha(messageDto.captchaToken, normalizedIp, ipHash, userAgent);
     validateLinkCount(messageDto.message, ipHash, userAgent);
     validateSpamKeywords(messageDto.message, ipHash, userAgent);
@@ -90,14 +102,37 @@ public class ContactProtectionService {
     return withoutControlChars.trim();
   }
 
-  private void validateHoneypot(String websiteField, String ipHash, String userAgent) {
+  private void validateHoneypot(String websiteField, String userAgent) {
     if (websiteField != null && !websiteField.trim().isEmpty()) {
       throw new BadRequestException("Validation failed");
     }
   }
 
-  private void enforceRateLimit(String ipHash, String userAgent) {
+  private void enforceIpRateLimit(String ipHash) {
     Bucket bucket = ipBuckets.computeIfAbsent(ipHash, this::newRateLimitedBucket);
+    if (!bucket.tryConsume(1)) {
+      throw new RateLimitExceededException("Too many contact form submissions");
+    }
+  }
+
+  private void enforceEmailRateLimit(String emailHash) {
+    Bucket bucket =
+        emailBuckets.computeIfAbsent(emailHash, this::newEmailRateLimitedBucket);
+    if (!bucket.tryConsume(1)) {
+      throw new RateLimitExceededException("Too many contact form submissions");
+    }
+  }
+
+  private void enforceNameRateLimit(String nameHash) {
+    Bucket bucket = nameBuckets.computeIfAbsent(nameHash, this::newNameRateLimitedBucket);
+    if (!bucket.tryConsume(1)) {
+      throw new RateLimitExceededException("Too many contact form submissions");
+    }
+  }
+
+  private void enforceIdentityRateLimit(String identityHash) {
+    Bucket bucket =
+        identityBuckets.computeIfAbsent(identityHash, this::newIdentityRateLimitedBucket);
     if (!bucket.tryConsume(1)) {
       throw new RateLimitExceededException("Too many contact form submissions");
     }
@@ -106,6 +141,24 @@ public class ContactProtectionService {
   private Bucket newRateLimitedBucket(String ignored) {
     Bandwidth tenMinuteLimit = Bandwidth.classic(3, Refill.intervally(3, Duration.ofMinutes(10)));
     Bandwidth dailyLimit = Bandwidth.classic(10, Refill.intervally(10, Duration.ofHours(24)));
+    return Bucket.builder().addLimit(tenMinuteLimit).addLimit(dailyLimit).build();
+  }
+
+  private Bucket newEmailRateLimitedBucket(String ignored) {
+    Bandwidth tenMinuteLimit = Bandwidth.classic(2, Refill.intervally(2, Duration.ofMinutes(10)));
+    Bandwidth dailyLimit = Bandwidth.classic(8, Refill.intervally(8, Duration.ofHours(24)));
+    return Bucket.builder().addLimit(tenMinuteLimit).addLimit(dailyLimit).build();
+  }
+
+  private Bucket newNameRateLimitedBucket(String ignored) {
+    Bandwidth tenMinuteLimit = Bandwidth.classic(4, Refill.intervally(4, Duration.ofMinutes(10)));
+    Bandwidth dailyLimit = Bandwidth.classic(12, Refill.intervally(12, Duration.ofHours(24)));
+    return Bucket.builder().addLimit(tenMinuteLimit).addLimit(dailyLimit).build();
+  }
+
+  private Bucket newIdentityRateLimitedBucket(String ignored) {
+    Bandwidth tenMinuteLimit = Bandwidth.classic(2, Refill.intervally(2, Duration.ofMinutes(10)));
+    Bandwidth dailyLimit = Bandwidth.classic(6, Refill.intervally(6, Duration.ofHours(24)));
     return Bucket.builder().addLimit(tenMinuteLimit).addLimit(dailyLimit).build();
   }
 
@@ -173,6 +226,24 @@ public class ContactProtectionService {
       return "unknown";
     }
     return clientIp.trim();
+  }
+
+  private String normalizeName(String senderName) {
+    if (senderName == null || senderName.isBlank()) {
+      return "unknown";
+    }
+    return senderName.trim().toLowerCase(Locale.ROOT).replaceAll("\\s+", " ");
+  }
+
+  private String normalizeEmail(String senderEmail) {
+    if (senderEmail == null || senderEmail.isBlank()) {
+      return "unknown";
+    }
+    return senderEmail.trim().toLowerCase(Locale.ROOT);
+  }
+
+  private String hashIdentifier(String namespace, String value) {
+    return hashIp(namespace + ":" + value);
   }
 
   private String hashIp(String ip) {

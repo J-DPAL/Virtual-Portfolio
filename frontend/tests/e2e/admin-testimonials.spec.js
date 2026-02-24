@@ -50,4 +50,40 @@ test.describe('Admin Testimonials Management', () => {
 
     await expect(approveButton).toBeHidden({ timeout: 5000 });
   });
+
+  test('does not expose edit controls for testimonials', async ({ page }) => {
+    const pending = [
+      {
+        id: 2,
+        clientName: 'John Client',
+        clientPosition: 'Director',
+        clientCompany: 'Acme',
+        testimonialTextEn: 'Excellent service and delivery quality.',
+        approved: false,
+        rating: 5,
+      },
+    ];
+
+    await page.route('**/api/testimonials/pending', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(pending),
+      });
+    });
+
+    await page.route('**/api/testimonials', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([]),
+      });
+    });
+
+    await loginAsAdmin(page);
+    await page.goto('/admin/testimonials');
+
+    await expect(page.getByRole('button', { name: /add new/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /edit/i })).toHaveCount(0);
+  });
 });

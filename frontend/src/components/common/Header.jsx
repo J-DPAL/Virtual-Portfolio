@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
-import { downloadResume, getResumeDownloadFileName } from '../../services/filesService';
+
+import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  downloadResume,
+  getResumeDownloadFileName,
+} from '../../services/filesService';
 
 export default function Header() {
   const { language, switchLanguage } = useLanguage();
@@ -63,18 +67,15 @@ export default function Header() {
     >
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2" aria-label={t('home')}>
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">DP</span>
             </div>
-            <span
-              className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600`}
-            >
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600">
               {t('brandName')}
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <NavLink
@@ -95,13 +96,14 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={handleDownloadResume}
               disabled={downloading}
               className="hidden md:flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:shadow-lg transition-all disabled:opacity-50"
               title={t('downloadResume')}
+              aria-label={t('downloadResume')}
             >
               <svg
                 className="w-4 h-4 mr-2"
@@ -119,8 +121,8 @@ export default function Header() {
               {downloading ? t('downloading') : t('resumeShortLabel')}
             </button>
 
-            {/* Theme Toggle Button */}
             <button
+              type="button"
               onClick={toggleTheme}
               className={`px-3 py-2 text-sm font-medium rounded-lg border-2 transition-all flex items-center gap-2 ${
                 isDark
@@ -128,6 +130,7 @@ export default function Header() {
                   : 'border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-700'
               }`}
               title={isDark ? t('switchToLightMode') : t('switchToDarkMode')}
+              aria-label={isDark ? t('switchToLightMode') : t('switchToDarkMode')}
             >
               {isDark ? (
                 <svg
@@ -150,13 +153,18 @@ export default function Header() {
 
             <div className="relative group">
               <button
+                type="button"
                 onClick={() => setLanguageDropdown(!languageDropdown)}
+                data-testid="language-toggle"
                 className={`px-3 py-2 text-sm font-medium rounded-lg border-2 transition-all flex items-center gap-2 ${
                   isDark
                     ? 'border-slate-600 hover:border-blue-500 hover:text-blue-400 text-slate-300'
                     : 'border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-700'
                 }`}
                 title={t('language')}
+                aria-label={t('language')}
+                aria-expanded={languageDropdown}
+                aria-haspopup="menu"
               >
                 {language.toUpperCase()}
               </button>
@@ -168,8 +176,11 @@ export default function Header() {
                       ? 'bg-slate-800 border-slate-700'
                       : 'bg-slate-50/95 border-slate-200'
                   } border rounded-lg shadow-lg z-50`}
+                  role="menu"
                 >
                   <button
+                    type="button"
+                    data-testid="language-option-en"
                     onClick={() => {
                       switchLanguage('en');
                       i18n.changeLanguage('en');
@@ -180,10 +191,13 @@ export default function Header() {
                         ? 'hover:bg-slate-700 text-slate-200'
                         : 'hover:bg-slate-100 text-slate-700'
                     }`}
+                    role="menuitem"
                   >
-                    🇬🇧 English
+                    EN English
                   </button>
                   <button
+                    type="button"
+                    data-testid="language-option-fr"
                     onClick={() => {
                       switchLanguage('fr');
                       i18n.changeLanguage('fr');
@@ -194,10 +208,13 @@ export default function Header() {
                         ? 'hover:bg-slate-700 text-slate-200'
                         : 'hover:bg-slate-100 text-slate-700'
                     }`}
+                    role="menuitem"
                   >
-                    🇫🇷 Français
+                    FR Français
                   </button>
                   <button
+                    type="button"
+                    data-testid="language-option-es"
                     onClick={() => {
                       switchLanguage('es');
                       i18n.changeLanguage('es');
@@ -208,8 +225,9 @@ export default function Header() {
                         ? 'hover:bg-slate-700 text-slate-200'
                         : 'hover:bg-slate-100 text-slate-700'
                     }`}
+                    role="menuitem"
                   >
-                    🇪🇸 Español
+                    ES Español
                   </button>
                 </div>
               )}
@@ -249,6 +267,7 @@ export default function Header() {
                   </Link>
                 )}
                 <button
+                  type="button"
                   onClick={handleLogout}
                   className="px-4 py-2 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
                 >
@@ -264,14 +283,20 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`lg:hidden p-2 rounded-lg transition ${
                 isDark
                   ? 'hover:bg-slate-800 text-slate-300'
                   : 'hover:bg-slate-100 text-slate-900'
               }`}
+              aria-label={
+                mobileMenuOpen
+                  ? t('closeMenu')
+                  : t('openMenu')
+              }
+              aria-expanded={mobileMenuOpen}
             >
               <svg
                 className="w-6 h-6"
@@ -299,7 +324,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div
             className={`lg:hidden mt-4 py-4 ${
@@ -326,6 +350,7 @@ export default function Header() {
                 </NavLink>
               ))}
               <button
+                type="button"
                 onClick={() => {
                   handleDownloadResume();
                   setMobileMenuOpen(false);
@@ -337,7 +362,7 @@ export default function Header() {
                     : 'bg-emerald-600 hover:bg-emerald-700'
                 }`}
               >
-                📄 {t('downloadResume')}
+                {t('downloadResume')}
               </button>
             </div>
           </div>

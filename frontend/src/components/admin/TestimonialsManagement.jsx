@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as testimonialsService from '../../services/testimonialsService';
+
 import { useTheme } from '../../context/ThemeContext';
-import { validateTestimonialInput } from '../../utils/validation';
+import * as testimonialsService from '../../services/testimonialsService';
 
 const TestimonialsManagement = () => {
   const { t, i18n } = useTranslation();
@@ -11,17 +11,6 @@ const TestimonialsManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [editingTestimonial, setEditingTestimonial] = useState(null);
-  const [formData, setFormData] = useState({
-    clientName: '',
-    clientPosition: '',
-    clientCompany: '',
-    rating: 5,
-    testimonialTextEn: '',
-    testimonialTextFr: '',
-    testimonialTextEs: '',
-  });
 
   useEffect(() => {
     fetchTestimonials();
@@ -34,6 +23,7 @@ const TestimonialsManagement = () => {
         testimonialsService.getPendingTestimonials(),
         testimonialsService.getApprovedTestimonials(),
       ]);
+
       const merged = [...(pendingResponse.data || []), ...(approvedResponse.data || [])]
         .reduce((acc, current) => {
           if (!acc.some((item) => item.id === current.id)) {
@@ -42,6 +32,7 @@ const TestimonialsManagement = () => {
           return acc;
         }, [])
         .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
       setTestimonials(merged);
       setError(null);
     } catch (err) {
@@ -62,69 +53,16 @@ const TestimonialsManagement = () => {
     }
   };
 
-  const handleAdd = () => {
-    setEditingTestimonial(null);
-    setFormData({
-      clientName: '',
-      clientPosition: '',
-      clientCompany: '',
-      rating: 5,
-      testimonialTextEn: '',
-      testimonialTextFr: '',
-      testimonialTextEs: '',
-    });
-    setShowModal(true);
-  };
-
-  const handleEdit = (testimonial) => {
-    setEditingTestimonial(testimonial);
-    setFormData({
-      clientName: testimonial.clientName || '',
-      clientPosition: testimonial.clientPosition || '',
-      clientCompany: testimonial.clientCompany || '',
-      rating: testimonial.rating || 5,
-      testimonialTextEn: testimonial.testimonialTextEn || '',
-      testimonialTextFr: testimonial.testimonialTextFr || '',
-      testimonialTextEs: testimonial.testimonialTextEs || '',
-    });
-    setShowModal(true);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationMessage = validateTestimonialInput(formData, t);
-    if (validationMessage) {
-      setError(validationMessage);
+  const handleDelete = async (id) => {
+    if (!window.confirm(t('confirmDeleteTestimonial'))) {
       return;
     }
-
     try {
-      if (editingTestimonial) {
-        await testimonialsService.updateTestimonial(
-          editingTestimonial.id,
-          formData
-        );
-      } else {
-        await testimonialsService.submitTestimonial(formData);
-      }
-      setShowModal(false);
+      await testimonialsService.deleteTestimonial(id);
       await fetchTestimonials();
-      setError(null);
     } catch (err) {
-      setError(t('manageTestimonialsFailedSave'));
+      setError(t('manageTestimonialsFailedDelete'));
       console.error(err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm(t('confirmDeleteTestimonial'))) {
-      try {
-        await testimonialsService.deleteTestimonial(id);
-        await fetchTestimonials();
-      } catch (err) {
-        setError(t('manageTestimonialsFailedDelete'));
-        console.error(err);
-      }
     }
   };
 
@@ -172,31 +110,8 @@ const TestimonialsManagement = () => {
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white p-6 rounded-lg shadow-lg">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold">{t('testimonialManagement')}</h2>
-            <p className="mt-2 opacity-90">{t('reviewApproveTestimonials')}</p>
-          </div>
-          <button
-            onClick={handleAdd}
-            className="px-6 py-3 bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-300 rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 border border-white/40 dark:border-slate-600"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            {t('addNew')}
-          </button>
-        </div>
+        <h2 className="text-3xl font-bold">{t('testimonialManagement')}</h2>
+        <p className="mt-2 opacity-90">{t('reviewApproveTestimonials')}</p>
       </div>
 
       {error && (
@@ -269,15 +184,7 @@ const TestimonialsManagement = () => {
                           onClick={() => toggleExpand(testimonial.id)}
                           className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                         >
-                          {expandedId === testimonial.id
-                            ? t('hide')
-                            : t('view')}
-                        </button>
-                        <button
-                          onClick={() => handleEdit(testimonial)}
-                          className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
-                        >
-                          {t('edit')}
+                          {expandedId === testimonial.id ? t('hide') : t('view')}
                         </button>
                         {!testimonial.approved && (
                           <button
@@ -321,218 +228,8 @@ const TestimonialsManagement = () => {
           )}
         </div>
       </div>
-
-      {/* Add/Edit Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
-            <div className="sticky top-0 bg-gradient-to-r from-yellow-600 to-orange-600 px-8 py-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">
-                {editingTestimonial ? t('edit') : t('add')} {t('testimonials')}
-              </h2>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2 transition"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-8 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                    {t('name')}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.clientName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, clientName: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                    required
-                  />
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                    {t('validationTestimonialNameHint', { min: 2, max: 100 })}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                    {t('position')}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.clientPosition}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        clientPosition: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                    required
-                  />
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                    {t('validationTestimonialPositionHint', { min: 2, max: 120 })}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                    {t('company')}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.clientCompany}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        clientCompany: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                    required
-                  />
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                    {t('validationTestimonialCompanyHint', { min: 2, max: 120 })}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                    {t('rating')}
-                  </label>
-                  <select
-                    value={formData.rating}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        rating: parseInt(e.target.value),
-                      })
-                    }
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                  >
-                    <option value={1}>1 {t('star')}</option>
-                    <option value={2}>2 {t('stars')}</option>
-                    <option value={3}>3 {t('stars')}</option>
-                    <option value={4}>4 {t('stars')}</option>
-                    <option value={5}>5 {t('stars')}</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                  {t('testimonialTextEnglish')}
-                </label>
-                <textarea
-                  value={formData.testimonialTextEn}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      testimonialTextEn: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                  rows="4"
-                  required
-                />
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                  {t('validationTestimonialTextHint', {
-                    minChars: 30,
-                    minWords: 6,
-                    maxChars: 1200,
-                  })}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                  {t('testimonialTextFrench')}
-                </label>
-                <textarea
-                  value={formData.testimonialTextFr}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      testimonialTextFr: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                  rows="4"
-                  required
-                />
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                  {t('validationTestimonialTextHint', {
-                    minChars: 30,
-                    minWords: 6,
-                    maxChars: 1200,
-                  })}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                  {t('testimonialTextSpanish')}
-                </label>
-                <textarea
-                  value={formData.testimonialTextEs}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      testimonialTextEs: e.target.value,
-                    })
-                  }
-                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                  rows="4"
-                  required
-                />
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                  {t('validationTestimonialTextHint', {
-                    minChars: 30,
-                    minWords: 6,
-                    maxChars: 1200,
-                  })}
-                </p>
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  {t('save')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition"
-                >
-                  {t('cancel')}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default TestimonialsManagement;
-
-

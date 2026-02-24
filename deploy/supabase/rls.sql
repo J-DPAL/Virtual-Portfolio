@@ -187,6 +187,34 @@ for delete
 to authenticated
 using (public.is_admin());
 
+-- 9b) Admin moderation guardrail:
+-- allow status transitions but block edits to testimonial content fields.
+create or replace function public.prevent_testimonial_content_edit()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.client_name is distinct from old.client_name
+    or new.client_position is distinct from old.client_position
+    or new.client_company is distinct from old.client_company
+    or new.testimonial_text_en is distinct from old.testimonial_text_en
+    or new.testimonial_text_fr is distinct from old.testimonial_text_fr
+    or new.testimonial_text_es is distinct from old.testimonial_text_es
+    or new.rating is distinct from old.rating
+    or new.client_image_url is distinct from old.client_image_url
+  then
+    raise exception 'Editing testimonial content is not allowed. Only moderation status is editable.';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_prevent_testimonial_content_edit on public.testimonials;
+create trigger trg_prevent_testimonial_content_edit
+before update on public.testimonials
+for each row execute function public.prevent_testimonial_content_edit();
+
 -- 10) STORAGE policies for resumes bucket
 -- Storage policies target storage.objects table.
 drop policy if exists "Public read resumes" on storage.objects;

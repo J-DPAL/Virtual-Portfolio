@@ -73,22 +73,6 @@ export const submitTestimonial = async (testimonialData) => {
   return toAxiosLikeResponse(mapTestimonialRow(data));
 };
 
-export const updateTestimonial = async (id, testimonialData) => {
-  if (!isSupabaseConfigured())
-    return apiClient.put(`/testimonials/${id}`, testimonialData);
-
-  assertSupabaseConfigured();
-  const row = mapTestimonialDtoToRow(testimonialData);
-  const { data, error } = await supabase
-    .from('testimonials')
-    .update(row)
-    .eq('id', id)
-    .select('*')
-    .single();
-  if (error) throw error;
-  return toAxiosLikeResponse(mapTestimonialRow(data));
-};
-
 export const approveTestimonial = async (id) => {
   if (!isSupabaseConfigured()) return apiClient.patch(`/testimonials/${id}/approve`);
 
@@ -111,4 +95,3 @@ export const deleteTestimonial = async (id) => {
   if (error) throw error;
   return toAxiosLikeResponse({ ok: true });
 };
-

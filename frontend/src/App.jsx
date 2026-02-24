@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from './context/ThemeContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -28,6 +29,7 @@ import './index.css';
 
 function App() {
   const { isDark } = useTheme();
+  const { t } = useTranslation();
   const location = useLocation();
 
   return (
@@ -39,8 +41,11 @@ function App() {
       }`}
       dir="ltr"
     >
+      <a href="#main-content" className="skip-link">
+        {t('skipToMainContent')}
+      </a>
       <Header />
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         <PageTransitionWrapper location={location}>
           <Routes location={location} key={location.pathname}>
             {/* Public Routes */}
