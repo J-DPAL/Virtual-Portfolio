@@ -2,6 +2,8 @@ package com.portfolio.monolith.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.portfolio.monolith.dto.MessageDto;
+import com.portfolio.monolith.service.ContactEmailNotificationService;
 import com.portfolio.monolith.service.ContactProtectionService;
 import com.portfolio.monolith.service.MessageDataService;
 
@@ -28,13 +31,19 @@ import jakarta.validation.Valid;
 @Validated
 public class MessageController {
 
+  private static final Logger log = LoggerFactory.getLogger(MessageController.class);
+
   private final MessageDataService service;
   private final ContactProtectionService contactProtectionService;
+  private final ContactEmailNotificationService contactEmailNotificationService;
 
   public MessageController(
-      MessageDataService service, ContactProtectionService contactProtectionService) {
+      MessageDataService service,
+      ContactProtectionService contactProtectionService,
+      ContactEmailNotificationService contactEmailNotificationService) {
     this.service = service;
     this.contactProtectionService = contactProtectionService;
+    this.contactEmailNotificationService = contactEmailNotificationService;
   }
 
   @PreAuthorize("hasRole('ADMIN')")
@@ -65,6 +74,11 @@ public class MessageController {
     contactProtectionService.sanitize(dto);
 
     MessageDto created = service.createMessage(dto);
+    try {
+      contactEmailNotificationService.sendNewMessageNotification(created);
+    } catch (Exception ex) {
+      log.error("Message saved but email notification failed for message id={}", created.id, ex);
+    }
     return new ResponseEntity<>(created, HttpStatus.CREATED);
   }
 

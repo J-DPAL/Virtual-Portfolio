@@ -84,6 +84,14 @@ public class MessageDataService {
     }
   }
 
+  public int deleteReadMessagesOlderThanDays(int days) {
+    String sql =
+        "delete from public.messages "
+            + "where is_read = true "
+            + "and updated_at < (now() - make_interval(days => :days))";
+    return jdbc.update(sql, new MapSqlParameterSource("days", days));
+  }
+
   private MessageDto queryOne(String sql, SqlParameterSource params, String notFoundMessage) {
     try {
       return jdbc.queryForObject(sql, params, rowMapper());

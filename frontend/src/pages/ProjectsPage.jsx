@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { getAllProjects } from '../services/projectsService';
 import BackToTopButton from '../components/BackToTopButton';
+import manaProjectImage from '../assets/project-images/ManaProject.png';
+import champlainPetClinicImage from '../assets/project-images/ChamplainPetClinicProject.png';
+import wheatherAppProjectImage from '../assets/project-images/WheatherAppProject.png';
 
 export default function ProjectsPage() {
   const { t, i18n } = useTranslation();
@@ -90,6 +93,35 @@ export default function ProjectsPage() {
     } ${project?.descriptionEs || ''}`;
     const tech = project?.technologies || '';
     const haystack = `${title} ${description} ${tech}`.toLowerCase();
+
+    if (haystack.includes('mana')) {
+      return {
+        gradient: 'from-cyan-500 to-blue-600',
+        iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+        imageSrc: manaProjectImage,
+      };
+    }
+
+    if (haystack.includes('champlain') || haystack.includes('pet clinic')) {
+      return {
+        gradient: 'from-emerald-500 to-teal-600',
+        iconPath:
+          'M7 2h10a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V4a2 2 0 012-2zm5 16h.01M8 5h8',
+        imageSrc: champlainPetClinicImage,
+      };
+    }
+
+    if (
+      haystack.includes('weather app') ||
+      haystack.includes('wheather app')
+    ) {
+      return {
+        gradient: 'from-sky-500 to-blue-600',
+        iconPath:
+          'M3 15a4 4 0 014-4 5 5 0 019.9 1.5A3.5 3.5 0 0118 19H7a4 4 0 01-4-4z',
+        imageSrc: wheatherAppProjectImage,
+      };
+    }
 
     if (haystack.includes('mobile') || haystack.includes('android')) {
       return {
@@ -270,7 +302,11 @@ export default function ProjectsPage() {
           <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
               <select
-                className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+                className={`px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm ${
+                  isDark
+                    ? 'bg-slate-800 border-slate-700 text-slate-100'
+                    : 'bg-slate-50 border-slate-300 text-slate-900'
+                }`}
                 value={filterTech}
                 onChange={(e) => setFilterTech(e.target.value)}
               >
@@ -296,7 +332,11 @@ export default function ProjectsPage() {
                   ))}
               </select>
               <select
-                className="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm"
+                className={`px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm ${
+                  isDark
+                    ? 'bg-slate-800 border-slate-700 text-slate-100'
+                    : 'bg-slate-50 border-slate-300 text-slate-900'
+                }`}
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
               >
@@ -307,7 +347,11 @@ export default function ProjectsPage() {
               </select>
               {filterTech && (
                 <button
-                  className="px-3 py-1 rounded border bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-xs"
+                  className={`px-3 py-1 rounded border transition text-xs ${
+                    isDark
+                      ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
+                      : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
+                  }`}
                   onClick={() => setFilterTech('')}
                 >
                   {t('clearFilter')}
@@ -392,19 +436,28 @@ export default function ProjectsPage() {
               <div
                 className={`bg-gradient-to-br ${getProjectVisual(project).gradient} h-48 flex items-center justify-center relative`}
               >
-                <svg
-                  className="w-20 h-20 text-white opacity-80"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d={getProjectVisual(project).iconPath}
+                {getProjectVisual(project).imageSrc ? (
+                  <img
+                    src={getProjectVisual(project).imageSrc}
+                    alt={getProjectTitle(project)}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
                   />
-                </svg>
+                ) : (
+                  <svg
+                    className="w-20 h-20 text-white opacity-80"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d={getProjectVisual(project).iconPath}
+                    />
+                  </svg>
+                )}
               </div>
               <div className="p-6 backdrop-blur-sm">
                 <h2
@@ -509,19 +562,28 @@ export default function ProjectsPage() {
               className={`bg-gradient-to-br ${getProjectVisual(selectedProject).gradient} h-28 flex items-center justify-between px-6`}
             >
               <div className="flex items-center gap-3 text-white">
-                <svg
-                  className="w-10 h-10 opacity-90"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d={getProjectVisual(selectedProject).iconPath}
+                {getProjectVisual(selectedProject).imageSrc ? (
+                  <img
+                    src={getProjectVisual(selectedProject).imageSrc}
+                    alt={getProjectTitle(selectedProject)}
+                    className="h-12 w-12 rounded-lg object-cover"
+                    loading="lazy"
                   />
-                </svg>
+                ) : (
+                  <svg
+                    className="w-10 h-10 opacity-90"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d={getProjectVisual(selectedProject).iconPath}
+                    />
+                  </svg>
+                )}
                 <div>
                   <h2 className="text-2xl font-bold">
                     {getProjectTitle(selectedProject)}

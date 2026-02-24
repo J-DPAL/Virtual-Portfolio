@@ -43,3 +43,9 @@ body,
   outline: 3px solid #0ea5e9;
   outline-offset: 2px;
 }
+
+.dark select,
+.dark select option {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
