@@ -93,8 +93,10 @@ export default function ProjectsPage() {
     } ${project?.descriptionEs || ''}`;
     const tech = project?.technologies || '';
     const haystack = `${title} ${description} ${tech}`.toLowerCase();
+    const hasWord = (value, word) =>
+      new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(value);
 
-    if (haystack.includes('mana')) {
+    if (hasWord(haystack, 'mana')) {
       return {
         gradient: 'from-cyan-500 to-blue-600',
         iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
