@@ -1,5 +1,6 @@
 package com.portfolio.monolith.service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -115,9 +116,13 @@ public class SkillDataService {
       dto.proficiencyLevel = rs.getString("proficiency_level");
       dto.category = rs.getString("category");
       dto.yearsOfExperience = (Integer) rs.getObject("years_of_experience");
-      dto.createdAt = rs.getObject("created_at", LocalDateTime.class);
-      dto.updatedAt = rs.getObject("updated_at", LocalDateTime.class);
+      dto.createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
+      dto.updatedAt = toLocalDateTime(rs.getTimestamp("updated_at"));
       return dto;
     };
+  }
+
+  private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
+    return timestamp == null ? null : timestamp.toLocalDateTime();
   }
 }
