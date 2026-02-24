@@ -8,6 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -80,16 +81,16 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
+            <div className="relative">
               <label htmlFor="password" className="sr-only">
                 {t('password')}
               </label>
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
-                className={`appearance-none rounded-none relative block w-full px-3 py-2 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm ${
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 pr-24 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm ${
                   isDark
                     ? 'bg-slate-800 border border-slate-600 text-slate-100 placeholder-slate-400'
                     : 'border border-gray-300 bg-white text-gray-900 placeholder-gray-500'
@@ -98,6 +99,18 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className={`absolute inset-y-0 right-0 px-3 text-xs font-medium transition ${
+                  isDark
+                    ? 'text-slate-300 hover:text-white'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+              >
+                {showPassword ? t('hide') : t('show')}
+              </button>
             </div>
           </div>
 

@@ -99,7 +99,7 @@ export default function HomePage() {
   const stats = [
     { label: t('projectsCompleted'), value: statsCounts.projects, icon: '🚀' },
     { label: t('technologiesMastered'), value: statsCounts.skills, icon: '💻' },
-    { label: t('yearsExperience'), value: statsCounts.experiences, icon: '⏱️' },
+    { label: t('yearsOfExperience'), value: statsCounts.experiences, icon: '⏱️' },
     {
       label: t('clientSatisfaction'),
       value: statsCounts.education,
