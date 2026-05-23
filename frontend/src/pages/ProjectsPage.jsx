@@ -414,7 +414,15 @@ export default function ProjectsPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project) => {
+            const visual = getProjectVisual(project);
+            const projectImageSrc = project.imageUrl
+              ? project.imageUrl.startsWith('http')
+                ? project.imageUrl
+                : `/assets/project-images/${project.imageUrl}`
+              : visual.imageSrc;
+
+            return (
             <div
               key={project.id}
               onClick={() => handleProjectOpen(project)}
@@ -436,11 +444,11 @@ export default function ProjectsPage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
               </div>
               <div
-                className={`bg-gradient-to-br ${getProjectVisual(project).gradient} h-48 flex items-center justify-center relative`}
+                className={`bg-gradient-to-br ${visual.gradient} h-48 flex items-center justify-center relative`}
               >
-                {getProjectVisual(project).imageSrc ? (
+                {projectImageSrc ? (
                   <img
-                    src={getProjectVisual(project).imageSrc}
+                    src={projectImageSrc}
                     alt={getProjectTitle(project)}
                     className="h-full w-full object-cover"
                     loading="lazy"
@@ -456,7 +464,7 @@ export default function ProjectsPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={1.5}
-                      d={getProjectVisual(project).iconPath}
+                      d={visual.iconPath}
                     />
                   </svg>
                 )}
@@ -561,12 +569,18 @@ export default function ProjectsPage() {
             }`}
           >
             <div
-              className={`bg-gradient-to-br ${getProjectVisual(selectedProject).gradient} h-28 flex items-center justify-between px-6`}
+                className={`bg-gradient-to-br ${getProjectVisual(selectedProject).gradient} h-28 flex items-center justify-between px-6`}
             >
               <div className="flex items-center gap-3 text-white">
-                {getProjectVisual(selectedProject).imageSrc ? (
+                {selectedProject.imageUrl || getProjectVisual(selectedProject).imageSrc ? (
                   <img
-                    src={getProjectVisual(selectedProject).imageSrc}
+                    src={
+                      selectedProject.imageUrl
+                        ? selectedProject.imageUrl.startsWith('http')
+                          ? selectedProject.imageUrl
+                          : `/assets/project-images/${selectedProject.imageUrl}`
+                        : getProjectVisual(selectedProject).imageSrc
+                    }
                     alt={getProjectTitle(selectedProject)}
                     className="h-12 w-12 rounded-lg object-cover"
                     loading="lazy"
