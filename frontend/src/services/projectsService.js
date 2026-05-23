@@ -1,5 +1,8 @@
 import apiClient from './apiClient';
-import { mapProjectDtoToRow, mapProjectRow } from './dbMappers';
+import {
+  mapProjectDtoToRow,
+  mapProjectRow,
+} from './dbMappers';
 import {
   assertSupabaseConfigured,
   isSupabaseConfigured,
@@ -11,7 +14,10 @@ function toAxiosLikeResponse(data) {
 }
 
 export const getAllProjects = async () => {
-  if (!isSupabaseConfigured()) return apiClient.get('/projects');
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get('/projects');
+    return toAxiosLikeResponse((response.data || []).map(mapProjectRow));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -23,7 +29,10 @@ export const getAllProjects = async () => {
 };
 
 export const getProjectById = async (id) => {
-  if (!isSupabaseConfigured()) return apiClient.get(`/projects/${id}`);
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get(`/projects/${id}`);
+    return toAxiosLikeResponse(mapProjectRow(response.data));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -36,7 +45,24 @@ export const getProjectById = async (id) => {
 };
 
 export const createProject = async (projectData) => {
-  if (!isSupabaseConfigured()) return apiClient.post('/projects', projectData);
+  if (!isSupabaseConfigured())
+    return apiClient.post('/projects', {
+      titleEn: projectData.titleEn ?? '',
+      titleFr: projectData.titleFr ?? '',
+      titleEs: projectData.titleEs ?? '',
+      descriptionEn: projectData.descriptionEn ?? null,
+      descriptionFr: projectData.descriptionFr ?? null,
+      descriptionEs: projectData.descriptionEs ?? null,
+      technologies: Array.isArray(projectData.technologies)
+        ? projectData.technologies.join(', ')
+        : projectData.technologies ?? null,
+      projectUrl: projectData.projectUrl ?? projectData.liveLink ?? null,
+      githubUrl: projectData.githubUrl ?? projectData.githubLink ?? null,
+      imageUrl: projectData.imageUrl ?? null,
+      startDate: projectData.startDate ?? null,
+      endDate: projectData.endDate ?? null,
+      status: projectData.status ?? 'Completed',
+    });
 
   assertSupabaseConfigured();
   const row = mapProjectDtoToRow(projectData);
@@ -51,7 +77,23 @@ export const createProject = async (projectData) => {
 
 export const updateProject = async (id, projectData) => {
   if (!isSupabaseConfigured())
-    return apiClient.put(`/projects/${id}`, projectData);
+    return apiClient.put(`/projects/${id}`, {
+      titleEn: projectData.titleEn ?? '',
+      titleFr: projectData.titleFr ?? '',
+      titleEs: projectData.titleEs ?? '',
+      descriptionEn: projectData.descriptionEn ?? null,
+      descriptionFr: projectData.descriptionFr ?? null,
+      descriptionEs: projectData.descriptionEs ?? null,
+      technologies: Array.isArray(projectData.technologies)
+        ? projectData.technologies.join(', ')
+        : projectData.technologies ?? null,
+      projectUrl: projectData.projectUrl ?? projectData.liveLink ?? null,
+      githubUrl: projectData.githubUrl ?? projectData.githubLink ?? null,
+      imageUrl: projectData.imageUrl ?? null,
+      startDate: projectData.startDate ?? null,
+      endDate: projectData.endDate ?? null,
+      status: projectData.status ?? 'Completed',
+    });
 
   assertSupabaseConfigured();
   const row = mapProjectDtoToRow(projectData);

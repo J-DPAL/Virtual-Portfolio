@@ -9,25 +9,25 @@ export function mapProjectRow(row) {
   const technologies = row.technologies || '';
   return {
     id: row.id,
-    titleEn: row.title_en,
-    titleFr: row.title_fr,
-    titleEs: row.title_es,
-    descriptionEn: row.description_en,
-    descriptionFr: row.description_fr,
-    descriptionEs: row.description_es,
+    titleEn: row.title_en ?? row.titleEn,
+    titleFr: row.title_fr ?? row.titleFr,
+    titleEs: row.title_es ?? row.titleEs,
+    descriptionEn: row.description_en ?? row.descriptionEn,
+    descriptionFr: row.description_fr ?? row.descriptionFr,
+    descriptionEs: row.description_es ?? row.descriptionEs,
     technologies,
-    projectUrl: row.project_url,
-    githubUrl: row.github_url,
-    imageUrl: row.image_url,
+    projectUrl: row.project_url ?? row.projectUrl,
+    githubUrl: row.github_url ?? row.githubUrl,
+    imageUrl: row.image_url ?? row.imageUrl,
     status: row.status,
-    startDate: row.start_date,
-    endDate: row.end_date,
+    startDate: row.start_date ?? row.startDate,
+    endDate: row.end_date ?? row.endDate,
     createdAt: toIso(row.created_at),
     updatedAt: toIso(row.updated_at),
 
     // Back-compat with existing admin UI field names.
-    liveLink: row.project_url,
-    githubLink: row.github_url,
+    liveLink: row.project_url ?? row.projectUrl,
+    githubLink: row.github_url ?? row.githubUrl,
   };
 }
 
@@ -99,33 +99,33 @@ export function mapEducationRow(row) {
   if (!row) return row;
   return {
     id: row.id,
-    institutionNameEn: row.institution_name_en,
-    institutionNameFr: row.institution_name_fr,
-    institutionNameEs: row.institution_name_es,
-    degreeEn: row.degree_en,
-    degreeFr: row.degree_fr,
-    degreeEs: row.degree_es,
-    fieldOfStudyEn: row.field_of_study_en,
-    fieldOfStudyFr: row.field_of_study_fr,
-    fieldOfStudyEs: row.field_of_study_es,
-    descriptionEn: row.description_en,
-    descriptionFr: row.description_fr,
-    descriptionEs: row.description_es,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    isCurrent: row.is_current,
-    gpa: row.gpa,
+    institutionNameEn: row.institution_name_en ?? row.institutionNameEn,
+    institutionNameFr: row.institution_name_fr ?? row.institutionNameFr,
+    institutionNameEs: row.institution_name_es ?? row.institutionNameEs,
+    degreeEn: row.degree_en ?? row.degreeEn,
+    degreeFr: row.degree_fr ?? row.degreeFr,
+    degreeEs: row.degree_es ?? row.degreeEs,
+    fieldOfStudyEn: row.field_of_study_en ?? row.fieldOfStudyEn,
+    fieldOfStudyFr: row.field_of_study_fr ?? row.fieldOfStudyFr,
+    fieldOfStudyEs: row.field_of_study_es ?? row.fieldOfStudyEs,
+    descriptionEn: row.description_en ?? row.descriptionEn,
+    descriptionFr: row.description_fr ?? row.descriptionFr,
+    descriptionEs: row.description_es ?? row.descriptionEs,
+    startDate: row.start_date ?? row.startDate,
+    endDate: row.end_date ?? row.endDate,
+    isCurrent: row.is_current ?? row.isCurrent,
+    gpa: row.gpa ?? row.grade,
     createdAt: toIso(row.created_at),
     updatedAt: toIso(row.updated_at),
 
     // Back-compat with admin UI field names.
-    institutionEn: row.institution_name_en,
-    institutionFr: row.institution_name_fr,
-    institutionEs: row.institution_name_es,
-    fieldEn: row.field_of_study_en,
-    fieldFr: row.field_of_study_fr,
-    fieldEs: row.field_of_study_es,
-    grade: row.gpa,
+    institutionEn: row.institution_name_en ?? row.institutionNameEn,
+    institutionFr: row.institution_name_fr ?? row.institutionNameFr,
+    institutionEs: row.institution_name_es ?? row.institutionNameEs,
+    fieldEn: row.field_of_study_en ?? row.fieldOfStudyEn,
+    fieldFr: row.field_of_study_fr ?? row.fieldOfStudyFr,
+    fieldEs: row.field_of_study_es ?? row.fieldOfStudyEs,
+    grade: row.gpa ?? row.grade,
     location: null,
   };
 }
@@ -152,35 +152,64 @@ export function mapEducationDtoToRow(dto) {
   };
 }
 
+export function mapEducationFormToDto(dto) {
+  if (!dto) return dto;
+  return {
+    institutionNameEn: dto.institutionNameEn ?? dto.institutionEn ?? '',
+    institutionNameFr: dto.institutionNameFr ?? dto.institutionFr ?? '',
+    institutionNameEs: dto.institutionNameEs ?? dto.institutionEs ?? '',
+    degreeEn: dto.degreeEn ?? '',
+    degreeFr: dto.degreeFr ?? '',
+    degreeEs: dto.degreeEs ?? '',
+    fieldOfStudyEn: dto.fieldOfStudyEn ?? dto.fieldEn ?? '',
+    fieldOfStudyFr: dto.fieldOfStudyFr ?? dto.fieldFr ?? '',
+    fieldOfStudyEs: dto.fieldOfStudyEs ?? dto.fieldEs ?? '',
+    descriptionEn: dto.descriptionEn ?? null,
+    descriptionFr: dto.descriptionFr ?? null,
+    descriptionEs: dto.descriptionEs ?? null,
+    startDate: dto.startDate ?? null,
+    endDate: dto.endDate ?? null,
+    isCurrent: dto.isCurrent ?? false,
+    gpa: dto.gpa ?? dto.grade ?? null,
+  };
+}
+
 export function mapExperienceRow(row) {
   if (!row) return row;
   return {
     id: row.id,
-    companyNameEn: row.company_name_en,
-    companyNameFr: row.company_name_fr,
-    companyNameEs: row.company_name_es,
-    positionEn: row.position_en,
-    positionFr: row.position_fr,
-    positionEs: row.position_es,
-    descriptionEn: row.description_en,
-    descriptionFr: row.description_fr,
-    descriptionEs: row.description_es,
-    locationEn: row.location_en,
-    locationFr: row.location_fr,
-    locationEs: row.location_es,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    isCurrent: row.is_current,
-    skillsUsed: row.skills_used,
+    companyNameEn: row.company_name_en ?? row.companyNameEn,
+    companyNameFr: row.company_name_fr ?? row.companyNameFr,
+    companyNameEs: row.company_name_es ?? row.companyNameEs,
+    positionEn: row.position_en ?? row.positionEn,
+    positionFr: row.position_fr ?? row.positionFr,
+    positionEs: row.position_es ?? row.positionEs,
+    descriptionEn: row.description_en ?? row.descriptionEn,
+    descriptionFr: row.description_fr ?? row.descriptionFr,
+    descriptionEs: row.description_es ?? row.descriptionEs,
+    locationEn: row.location_en ?? row.locationEn,
+    locationFr: row.location_fr ?? row.locationFr,
+    locationEs: row.location_es ?? row.locationEs,
+    startDate: row.start_date ?? row.startDate,
+    endDate: row.end_date ?? row.endDate,
+    isCurrent: row.is_current ?? row.isCurrent,
+    skillsUsed: row.skills_used ?? row.skillsUsed,
     icon: row.icon,
     createdAt: toIso(row.created_at),
     updatedAt: toIso(row.updated_at),
 
     // Back-compat with admin UI field names.
-    companyEn: row.company_name_en,
-    companyFr: row.company_name_fr,
-    companyEs: row.company_name_es,
-    location: row.location_en ?? row.location_fr ?? row.location_es ?? null,
+    companyEn: row.company_name_en ?? row.companyNameEn,
+    companyFr: row.company_name_fr ?? row.companyNameFr,
+    companyEs: row.company_name_es ?? row.companyNameEs,
+    location:
+      row.location_en ??
+      row.locationEn ??
+      row.location_fr ??
+      row.locationFr ??
+      row.location_es ??
+      row.locationEs ??
+      null,
   };
 }
 
@@ -208,16 +237,40 @@ export function mapExperienceDtoToRow(dto) {
   };
 }
 
+export function mapExperienceFormToDto(dto) {
+  if (!dto) return dto;
+  const locationFallback = dto.location ?? null;
+  return {
+    companyNameEn: dto.companyNameEn ?? dto.companyEn ?? '',
+    companyNameFr: dto.companyNameFr ?? dto.companyFr ?? '',
+    companyNameEs: dto.companyNameEs ?? dto.companyEs ?? '',
+    positionEn: dto.positionEn ?? '',
+    positionFr: dto.positionFr ?? '',
+    positionEs: dto.positionEs ?? '',
+    descriptionEn: dto.descriptionEn ?? null,
+    descriptionFr: dto.descriptionFr ?? null,
+    descriptionEs: dto.descriptionEs ?? null,
+    locationEn: dto.locationEn ?? locationFallback,
+    locationFr: dto.locationFr ?? locationFallback,
+    locationEs: dto.locationEs ?? locationFallback,
+    startDate: dto.startDate ?? null,
+    endDate: dto.endDate ?? null,
+    isCurrent: dto.isCurrent ?? false,
+    skillsUsed: dto.skillsUsed ?? null,
+    icon: dto.icon ?? null,
+  };
+}
+
 export function mapHobbyRow(row) {
   if (!row) return row;
   return {
     id: row.id,
-    nameEn: row.name_en,
-    nameFr: row.name_fr,
-    nameEs: row.name_es,
-    descriptionEn: row.description_en,
-    descriptionFr: row.description_fr,
-    descriptionEs: row.description_es,
+    nameEn: row.name_en ?? row.nameEn,
+    nameFr: row.name_fr ?? row.nameFr,
+    nameEs: row.name_es ?? row.nameEs,
+    descriptionEn: row.description_en ?? row.descriptionEn,
+    descriptionFr: row.description_fr ?? row.descriptionFr,
+    descriptionEs: row.description_es ?? row.descriptionEs,
     icon: row.icon,
     createdAt: toIso(row.created_at),
     updatedAt: toIso(row.updated_at),
@@ -233,6 +286,19 @@ export function mapHobbyDtoToRow(dto) {
     description_en: dto.descriptionEn ?? null,
     description_fr: dto.descriptionFr ?? null,
     description_es: dto.descriptionEs ?? null,
+    icon: dto.icon ?? null,
+  };
+}
+
+export function mapHobbyFormToDto(dto) {
+  if (!dto) return dto;
+  return {
+    nameEn: dto.nameEn ?? '',
+    nameFr: dto.nameFr ?? '',
+    nameEs: dto.nameEs ?? '',
+    descriptionEn: dto.descriptionEn ?? null,
+    descriptionFr: dto.descriptionFr ?? null,
+    descriptionEs: dto.descriptionEs ?? null,
     icon: dto.icon ?? null,
   };
 }

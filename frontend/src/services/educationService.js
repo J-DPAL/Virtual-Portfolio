@@ -1,5 +1,9 @@
 import apiClient from './apiClient';
-import { mapEducationDtoToRow, mapEducationRow } from './dbMappers';
+import {
+  mapEducationDtoToRow,
+  mapEducationFormToDto,
+  mapEducationRow,
+} from './dbMappers';
 import {
   assertSupabaseConfigured,
   isSupabaseConfigured,
@@ -11,7 +15,10 @@ function toAxiosLikeResponse(data) {
 }
 
 export const getAllEducation = async () => {
-  if (!isSupabaseConfigured()) return apiClient.get('/education');
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get('/education');
+    return toAxiosLikeResponse((response.data || []).map(mapEducationRow));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -23,7 +30,10 @@ export const getAllEducation = async () => {
 };
 
 export const getEducationById = async (id) => {
-  if (!isSupabaseConfigured()) return apiClient.get(`/education/${id}`);
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get(`/education/${id}`);
+    return toAxiosLikeResponse(mapEducationRow(response.data));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -37,7 +47,7 @@ export const getEducationById = async (id) => {
 
 export const createEducation = async (educationData) => {
   if (!isSupabaseConfigured())
-    return apiClient.post('/education', educationData);
+    return apiClient.post('/education', mapEducationFormToDto(educationData));
 
   assertSupabaseConfigured();
   const row = mapEducationDtoToRow(educationData);
@@ -52,7 +62,7 @@ export const createEducation = async (educationData) => {
 
 export const updateEducation = async (id, educationData) => {
   if (!isSupabaseConfigured())
-    return apiClient.put(`/education/${id}`, educationData);
+    return apiClient.put(`/education/${id}`, mapEducationFormToDto(educationData));
 
   assertSupabaseConfigured();
   const row = mapEducationDtoToRow(educationData);

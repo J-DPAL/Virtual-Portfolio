@@ -1,5 +1,9 @@
 import apiClient from './apiClient';
-import { mapExperienceDtoToRow, mapExperienceRow } from './dbMappers';
+import {
+  mapExperienceDtoToRow,
+  mapExperienceFormToDto,
+  mapExperienceRow,
+} from './dbMappers';
 import {
   assertSupabaseConfigured,
   isSupabaseConfigured,
@@ -11,7 +15,10 @@ function toAxiosLikeResponse(data) {
 }
 
 export const getAllExperiences = async () => {
-  if (!isSupabaseConfigured()) return apiClient.get('/experience');
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get('/experience');
+    return toAxiosLikeResponse((response.data || []).map(mapExperienceRow));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -23,7 +30,10 @@ export const getAllExperiences = async () => {
 };
 
 export const getExperienceById = async (id) => {
-  if (!isSupabaseConfigured()) return apiClient.get(`/experience/${id}`);
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get(`/experience/${id}`);
+    return toAxiosLikeResponse(mapExperienceRow(response.data));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -37,7 +47,7 @@ export const getExperienceById = async (id) => {
 
 export const createExperience = async (experienceData) => {
   if (!isSupabaseConfigured())
-    return apiClient.post('/experience', experienceData);
+    return apiClient.post('/experience', mapExperienceFormToDto(experienceData));
 
   assertSupabaseConfigured();
   const row = mapExperienceDtoToRow(experienceData);
@@ -52,7 +62,7 @@ export const createExperience = async (experienceData) => {
 
 export const updateExperience = async (id, experienceData) => {
   if (!isSupabaseConfigured())
-    return apiClient.put(`/experience/${id}`, experienceData);
+    return apiClient.put(`/experience/${id}`, mapExperienceFormToDto(experienceData));
 
   assertSupabaseConfigured();
   const row = mapExperienceDtoToRow(experienceData);

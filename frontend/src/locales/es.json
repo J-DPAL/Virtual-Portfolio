@@ -318,6 +318,7 @@
   "descriptionFrench": "Descripcion (frances)",
   "descriptionSpanish": "Descripcion (espanol)",
   "proficiencyLevel": "Nivel de dominio",
+  "category": "Categoria",
   "beginner": "Principiante",
   "intermediate": "Intermedio",
   "advanced": "Avanzado",

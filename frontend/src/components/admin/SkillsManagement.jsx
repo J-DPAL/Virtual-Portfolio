@@ -25,6 +25,7 @@ export default function SkillsManagement() {
     descriptionFr: '',
     descriptionEs: '',
     proficiency: 'intermediate',
+    category: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -59,6 +60,7 @@ export default function SkillsManagement() {
       descriptionFr: '',
       descriptionEs: '',
       proficiency: 'intermediate',
+      category: '',
     });
     setShowModal(true);
   };
@@ -72,10 +74,22 @@ export default function SkillsManagement() {
       descriptionEn: skill.descriptionEn || '',
       descriptionFr: skill.descriptionFr || '',
       descriptionEs: skill.descriptionEs || '',
-      proficiency: skill.proficiency || 'intermediate',
+      proficiency: skill.proficiencyLevel || skill.proficiency || 'intermediate',
+      category: skill.category || '',
     });
     setShowModal(true);
   };
+
+  const buildSkillPayload = () => ({
+    nameEn: formData.nameEn,
+    nameFr: formData.nameFr,
+    nameEs: formData.nameEs,
+    descriptionEn: formData.descriptionEn,
+    descriptionFr: formData.descriptionFr,
+    descriptionEs: formData.descriptionEs,
+    proficiencyLevel: formData.proficiency,
+    category: formData.category,
+  });
 
   const handleDelete = async (id) => {
     if (window.confirm(t('confirmDelete'))) {
@@ -94,11 +108,12 @@ export default function SkillsManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = buildSkillPayload();
       if (editingSkill) {
-        await updateSkill(editingSkill.id, formData);
+        await updateSkill(editingSkill.id, payload);
         setSuccessMessage(t('skillUpdateSuccess'));
       } else {
-        await createSkill(formData);
+        await createSkill(payload);
         setSuccessMessage(t('skillCreateSuccess'));
       }
       setShowModal(false);
@@ -240,16 +255,16 @@ export default function SkillsManagement() {
                       <td className="px-6 py-4">
                         <span
                           className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                            skill.proficiency === 'expert'
+                            (skill.proficiencyLevel || skill.proficiency || 'intermediate').toLowerCase() === 'expert'
                               ? 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300'
-                              : skill.proficiency === 'advanced'
+                              : (skill.proficiencyLevel || skill.proficiency || 'intermediate').toLowerCase() === 'advanced'
                                 ? 'bg-blue-100 text-blue-700'
-                                : skill.proficiency === 'intermediate'
+                                : (skill.proficiencyLevel || skill.proficiency || 'intermediate').toLowerCase() === 'intermediate'
                                   ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
                                   : 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
                           }`}
                         >
-                          {skill.proficiency}
+                          {skill.proficiencyLevel || skill.proficiency}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right space-x-2">
@@ -444,6 +459,22 @@ export default function SkillsManagement() {
                     <option value="advanced">{t('advanced')}</option>
                     <option value="expert">{t('expert')}</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    {t('category')}
+                  </label>
+                  <input
+                    type="text"
+                    name="category"
+                    value={formData.category}
+                    onChange={(e) =>
+                      setFormData({ ...formData, category: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    required
+                  />
                 </div>
 
                 <div className="flex gap-4 pt-4">

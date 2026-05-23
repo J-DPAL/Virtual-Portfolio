@@ -321,6 +321,7 @@
   "descriptionFrench": "Description (French)",
   "descriptionSpanish": "Description (Spanish)",
   "proficiencyLevel": "Proficiency Level",
+  "category": "Category",
   "beginner": "Beginner",
   "intermediate": "Intermediate",
   "advanced": "Advanced",

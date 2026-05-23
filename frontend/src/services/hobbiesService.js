@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { mapHobbyDtoToRow, mapHobbyRow } from './dbMappers';
+import { mapHobbyDtoToRow, mapHobbyFormToDto, mapHobbyRow } from './dbMappers';
 import {
   assertSupabaseConfigured,
   isSupabaseConfigured,
@@ -11,7 +11,10 @@ function toAxiosLikeResponse(data) {
 }
 
 export const getAllHobbies = async () => {
-  if (!isSupabaseConfigured()) return apiClient.get('/hobbies');
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get('/hobbies');
+    return toAxiosLikeResponse((response.data || []).map(mapHobbyRow));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -23,7 +26,10 @@ export const getAllHobbies = async () => {
 };
 
 export const getHobbyById = async (id) => {
-  if (!isSupabaseConfigured()) return apiClient.get(`/hobbies/${id}`);
+  if (!isSupabaseConfigured()) {
+    const response = await apiClient.get(`/hobbies/${id}`);
+    return toAxiosLikeResponse(mapHobbyRow(response.data));
+  }
 
   assertSupabaseConfigured();
   const { data, error } = await supabase
@@ -36,7 +42,8 @@ export const getHobbyById = async (id) => {
 };
 
 export const createHobby = async (hobbyData) => {
-  if (!isSupabaseConfigured()) return apiClient.post('/hobbies', hobbyData);
+  if (!isSupabaseConfigured())
+    return apiClient.post('/hobbies', mapHobbyFormToDto(hobbyData));
 
   assertSupabaseConfigured();
   const row = mapHobbyDtoToRow(hobbyData);
@@ -50,7 +57,8 @@ export const createHobby = async (hobbyData) => {
 };
 
 export const updateHobby = async (id, hobbyData) => {
-  if (!isSupabaseConfigured()) return apiClient.put(`/hobbies/${id}`, hobbyData);
+  if (!isSupabaseConfigured())
+    return apiClient.put(`/hobbies/${id}`, mapHobbyFormToDto(hobbyData));
 
   assertSupabaseConfigured();
   const row = mapHobbyDtoToRow(hobbyData);
