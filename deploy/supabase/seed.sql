@@ -130,12 +130,29 @@ begin
        'Aplicacion social con publicacion y visualizacion de posts, backend REST y frontend React.',
        'ReactJS, Spring Boot, SQL (H2/SQL DB), DTO/ResponseEntity',
        null,null,null,'2024-12-01','2024-12-31','Completed');
-      ('SmartCD.ai','SmartCD.ai','SmartCD.ai',
-       'A fintech web application that helps users compare CD options, view ranked recommendations, and get AI-powered explanations for the top results.',
-       'Une application fintech qui aide les utilisateurs à comparer des options de CD, voir des recommandations classées et obtenir des explications générées par l’IA.',
-       'Una aplicación fintech que ayuda a los usuarios a comparar opciones de CD, ver recomendaciones clasificadas y recibir explicaciones generadas por IA.',
-       'React, Vite, Tailwind CSS, Python, FastAPI, Supabase, Render, Vercel, SQL, Redis, FAISS',
-       'https://www.smartcd.ai/','https://github.com/Sylv1011/smart-cd-ai','SmartCD.png',null,null,null,'Completed');
+  end if;
+
+  if not exists (
+    select 1 from public.projects where lower(title_en) = lower('SmartCD.ai')
+  ) then
+    insert into public.projects (
+      title_en, title_fr, title_es,
+      description_en, description_fr, description_es,
+      technologies, project_url, github_url, image_url,
+      start_date, end_date, status
+    ) values (
+      'SmartCD.ai','SmartCD.ai','SmartCD.ai',
+      'A fintech web application that helps users compare CD options, view ranked recommendations, and get AI-powered explanations for the top results.',
+      'Une application fintech qui aide les utilisateurs à comparer des options de CD, voir des recommandations classées et obtenir des explications générées par l’IA.',
+      'Una aplicación fintech que ayuda a los usuarios a comparar opciones de CD, ver recomendaciones clasificadas y recibir explicaciones generadas por IA.',
+      'React, Vite, Tailwind CSS, Python, FastAPI, Supabase, Render, Vercel, SQL, Redis, FAISS',
+      'https://www.smartcd.ai/',
+      'https://github.com/Sylv1011/smart-cd-ai',
+      'SmartCD.png',
+      null,
+      null,
+      'Completed'
+    );
   end if;
 
   if not exists (select 1 from public.work_experience limit 1) then
@@ -161,14 +178,31 @@ begin
        'Recepcion de votantes y verificacion de identificacion, con confidencialidad y cumplimiento de procedimientos.',
        'Quebec, QC','Quebec, QC','Quebec, QC',
        '2022-10-01','2022-10-02',false,null,null);
-      ('Product Manager Accelerator','Product Manager Accelerator','Product Manager Accelerator',
-       'Full-Stack AI Engineering Intern','Stagiaire en ingénierie IA Full-Stack','Pasante de Ingeniería Full-Stack e IA',
-       'Worked as a Full-Stack and AI Engineering Intern at Product Manager Accelerator, contributing to frontend and backend development, deployment architecture, AI-assisted features, and system reliability improvements. Helped improve the user experience by implementing interactive UI features, integrating AI-powered recommendation systems, fixing production issues, and optimizing application performance. Collaborated with developers, designers, and project teams in an Agile-style environment while working on real-world software systems involving cloud deployment, AI integration, and data reliability.',
-       'J’ai travaillé comme stagiaire en ingénierie Full-Stack et IA chez Product Manager Accelerator, en contribuant au développement frontend et backend, à l’architecture de déploiement, aux fonctionnalités assistées par l’IA et aux améliorations de la fiabilité du système. J’ai aidé à améliorer l’expérience utilisateur en développant des fonctionnalités interactives pour l’interface, en intégrant des systèmes de recommandations alimentés par l’IA, en corrigeant des problèmes en production et en optimisant les performances de l’application. J’ai collaboré avec des développeurs, des designers et des équipes de projet dans un environnement de travail de type Agile tout en travaillant sur des systèmes logiciels réels impliquant le déploiement cloud, l’intégration de l’IA et la fiabilité des données.',
-       'Trabajé como pasante de Ingeniería Full-Stack e IA en Product Manager Accelerator, contribuyendo al desarrollo frontend y backend, la arquitectura de despliegue, funciones asistidas por IA y mejoras en la confiabilidad del sistema. Ayudé a mejorar la experiencia del usuario implementando funciones interactivas de interfaz, integrando sistemas de recomendaciones impulsados por IA, corrigiendo problemas en producción y optimizando el rendimiento de la aplicación. Colaboré con desarrolladores, diseñadores y equipos de proyecto en un entorno de trabajo estilo Agile mientras trabajaba en sistemas de software reales relacionados con despliegue en la nube, integración de IA y confiabilidad de datos.',
+  end if;
+
+  if not exists (
+    select 1
+    from public.work_experience
+    where lower(company_name_en) = lower('Product Manager Accelerator')
+      and lower(position_en) = lower('Full-Stack AI Engineering Intern')
+  ) then
+    insert into public.work_experience (
+      company_name_en, company_name_fr, company_name_es,
+      position_en, position_fr, position_es,
+      description_en, description_fr, description_es,
+      location_en, location_fr, location_es,
+      start_date, end_date, is_current, skills_used, icon
+    ) values (
+      'Product Manager Accelerator','Product Manager Accelerator','Product Manager Accelerator',
+      'Full-Stack AI Engineering Intern','Stagiaire en ingénierie IA Full-Stack','Pasante de Ingeniería Full-Stack e IA',
+      'Worked as a Full-Stack and AI Engineering Intern at Product Manager Accelerator, contributing to frontend and backend development, deployment architecture, AI-assisted features, and system reliability improvements. Helped improve the user experience by implementing interactive UI features, integrating AI-powered recommendation systems, fixing production issues, and optimizing application performance. Collaborated with developers, designers, and project teams in an Agile-style environment while working on real-world software systems involving cloud deployment, AI integration, and data reliability.',
+      'J’ai travaillé comme stagiaire en ingénierie Full-Stack et IA chez Product Manager Accelerator, en contribuant au développement frontend et backend, à l’architecture de déploiement, aux fonctionnalités assistées par l’IA et aux améliorations de la fiabilité du système. J’ai aidé à améliorer l’expérience utilisateur en développant des fonctionnalités interactives pour l’interface, en intégrant des systèmes de recommandations alimentés par l’IA, en corrigeant des problèmes en production et en optimisant les performances de l’application. J’ai collaboré avec des développeurs, des designers et des équipes de projet dans un environnement de travail de type Agile tout en travaillant sur des systèmes logiciels réels impliquant le déploiement cloud, l’intégration de l’IA et la fiabilité des données.',
+      'Trabajé como pasante de Ingeniería Full-Stack e IA en Product Manager Accelerator, contribuyendo al desarrollo frontend y backend, la arquitectura de despliegue, funciones asistidas por IA y mejoras en la confiabilidad del sistema. Ayudé a mejorar la experiencia del usuario implementando funciones interactivas de interfaz, integrando sistemas de recomendaciones impulsados por IA, corrigiendo problemas en producción y optimizando el rendimiento de la aplicación. Colaboré con desarrolladores, diseñadores y equipos de proyecto en un entorno de trabajo estilo Agile mientras trabajaba en sistemas de software reales relacionados con despliegue en la nube, integración de IA y confiabilidad de datos.',
       'Remote','Remote','Remoto',
       '2026-01-19','2026-06-19',false,
-       'Python, FastAPI, React, Vite, Tailwind CSS, SQL, GitHub, Docker, Redis, FAISS, Supabase, Render, Vercel, REST APIs, Frontend Development, Backend Development, Full-Stack Development, Cloud Deployment, AI Integration, RAG Systems, Debugging, UI/UX Improvements',null);
+      'Python, FastAPI, React, Vite, Tailwind CSS, SQL, GitHub, Docker, Redis, FAISS, Supabase, Render, Vercel, REST APIs, Frontend Development, Backend Development, Full-Stack Development, Cloud Deployment, AI Integration, RAG Systems, Debugging, UI/UX Improvements',
+      null
+    );
   end if;
 
   if not exists (select 1 from public.education limit 1) then
