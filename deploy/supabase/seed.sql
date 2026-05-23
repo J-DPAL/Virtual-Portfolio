@@ -130,6 +130,12 @@ begin
        'Aplicacion social con publicacion y visualizacion de posts, backend REST y frontend React.',
        'ReactJS, Spring Boot, SQL (H2/SQL DB), DTO/ResponseEntity',
        null,null,null,'2024-12-01','2024-12-31','Completed');
+      ('SmartCD.ai','SmartCD.ai','SmartCD.ai',
+       'A fintech web application that helps users compare CD options, view ranked recommendations, and get AI-powered explanations for the top results.',
+       'Une application fintech qui aide les utilisateurs à comparer des options de CD, voir des recommandations classées et obtenir des explications générées par l’IA.',
+       'Una aplicación fintech que ayuda a los usuarios a comparar opciones de CD, ver recomendaciones clasificadas y recibir explicaciones generadas por IA.',
+       'React, Vite, Tailwind CSS, Python, FastAPI, Supabase, Render, Vercel, SQL, Redis, FAISS',
+       'https://www.smartcd.ai/','https://github.com/Sylv1011/smart-cd-ai','SmartCD.png',null,null,null,'Completed');
   end if;
 
   if not exists (select 1 from public.work_experience limit 1) then
