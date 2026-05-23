@@ -62,6 +62,71 @@ export default function ProjectsPage() {
     }
   };
 
+  const renderProjectCard = (project) => {
+    const visual = getProjectVisual(project);
+    const projectImageSrc = project.imageUrl
+      ? project.imageUrl.startsWith('http')
+        ? project.imageUrl
+        : `/assets/project-images/${project.imageUrl}`
+      : visual.imageSrc;
+
+    return (
+      <div
+        key={project.id}
+        onClick={() => handleProjectOpen(project)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleProjectOpen(project);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        className={`group relative rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 ring-1 text-left w-full cursor-pointer ${
+          isDark
+            ? 'bg-slate-900/70 ring-slate-800 hover:ring-blue-500/50'
+            : 'bg-slate-50/80 ring-slate-200 hover:ring-blue-400/40'
+        } animate-fadeIn`}
+      >
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
+        </div>
+        <div className={`bg-gradient-to-br ${visual.gradient} h-48 flex items-center justify-center relative`}>
+          {projectImageSrc ? (
+            <img src={projectImageSrc} alt={getProjectTitle(project)} className="h-full w-full object-cover" loading="lazy" />
+          ) : (
+            <svg className="w-20 h-20 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={visual.iconPath} />
+            </svg>
+          )}
+        </div>
+        <div className="p-6 backdrop-blur-sm">
+          <h2 className={`text-2xl font-bold mb-3 group-hover:text-indigo-400 transition ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+            {getProjectTitle(project)}
+          </h2>
+          <p className={`mb-4 line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{getProjectDescription(project)}</p>
+          {project.technologies && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {project.technologies.split(',').slice(0, 3).map((tech, idx) => (
+                <span key={idx} className={`text-xs px-3 py-1 rounded-full font-medium border ${isDark ? 'bg-indigo-900/30 text-indigo-300 border-indigo-700' : 'bg-indigo-50 text-indigo-700 border-indigo-200'}`}>
+                  {tech.trim()}
+                </span>
+              ))}
+            </div>
+          )}
+          {project.projectUrl && (
+            <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className={`inline-flex items-center font-medium transition ${isDark ? 'text-indigo-300 hover:text-indigo-200' : 'text-indigo-600 hover:text-indigo-700'}`}>
+              {t('viewProject')}
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const getProjectTitle = (project) =>
     currentLang === 'es' && project.titleEs
       ? project.titleEs
@@ -414,127 +479,7 @@ export default function ProjectsPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {filteredProjects.map((project) => {
-            const visual = getProjectVisual(project);
-            const projectImageSrc = project.imageUrl
-              ? project.imageUrl.startsWith('http')
-                ? project.imageUrl
-                : `/assets/project-images/${project.imageUrl}`
-              : visual.imageSrc;
-
-            return (
-            <div
-              key={project.id}
-              onClick={() => handleProjectOpen(project)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  handleProjectOpen(project);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              className={`group relative rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 ring-1 text-left w-full cursor-pointer ${
-                isDark
-                  ? 'bg-slate-900/70 ring-slate-800 hover:ring-blue-500/50'
-                  : 'bg-slate-50/80 ring-slate-200 hover:ring-blue-400/40'
-              } animate-fadeIn`}
-            >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-teal-500/10"></div>
-              </div>
-              <div
-                className={`bg-gradient-to-br ${visual.gradient} h-48 flex items-center justify-center relative`}
-              >
-                {projectImageSrc ? (
-                  <img
-                    src={projectImageSrc}
-                    alt={getProjectTitle(project)}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <svg
-                    className="w-20 h-20 text-white opacity-80"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d={visual.iconPath}
-                    />
-                  </svg>
-                )}
-              </div>
-              <div className="p-6 backdrop-blur-sm">
-                <h2
-                  className={`text-2xl font-bold mb-3 group-hover:text-indigo-400 transition ${
-                    isDark ? 'text-slate-100' : 'text-slate-900'
-                  }`}
-                >
-                  {getProjectTitle(project)}
-                </h2>
-                <p
-                  className={`mb-4 line-clamp-3 ${
-                    isDark ? 'text-slate-400' : 'text-slate-600'
-                  }`}
-                >
-                  {getProjectDescription(project)}
-                </p>
-                {project.technologies && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies
-                      .split(',')
-                      .slice(0, 3)
-                      .map((tech, idx) => (
-                        <span
-                          key={idx}
-                          className={`text-xs px-3 py-1 rounded-full font-medium border ${
-                            isDark
-                              ? 'bg-indigo-900/30 text-indigo-300 border-indigo-700'
-                              : 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                          }`}
-                        >
-                          {tech.trim()}
-                        </span>
-                      ))}
-                  </div>
-                )}
-                {project.projectUrl && (
-                  <a
-                    href={project.projectUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(event) => event.stopPropagation()}
-                    className={`inline-flex items-center font-medium transition ${
-                      isDark
-                        ? 'text-indigo-300 hover:text-indigo-200'
-                        : 'text-indigo-600 hover:text-indigo-700'
-                    }`}
-                  >
-                    {t('viewProject')}
-                    <svg
-                      className="w-4 h-4 ml-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+          {filteredProjects.map((project) => renderProjectCard(project))}
         {filteredProjects.length === 0 && !loading && (
           <div className="text-center py-12">
             <p
