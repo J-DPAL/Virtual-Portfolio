@@ -35,7 +35,8 @@ public class ExperienceDataService {
   }
 
   public List<WorkExperienceDto> getCurrentExperiences() {
-    String sql = "select * from public.work_experience where is_current = true order by start_date desc";
+    String sql =
+        "select * from public.work_experience where is_current = true order by start_date desc";
     return jdbc.query(sql, rowMapper());
   }
 
@@ -120,7 +121,8 @@ public class ExperienceDataService {
     }
   }
 
-  private WorkExperienceDto queryOne(String sql, SqlParameterSource params, String notFoundMessage) {
+  private WorkExperienceDto queryOne(
+      String sql, SqlParameterSource params, String notFoundMessage) {
     try {
       return jdbc.queryForObject(sql, params, rowMapper());
     } catch (EmptyResultDataAccessException ex) {

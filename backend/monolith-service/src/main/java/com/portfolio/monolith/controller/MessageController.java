@@ -84,7 +84,8 @@ public class MessageController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<MessageDto> updateMessage(@PathVariable Long id, @Valid @RequestBody MessageDto dto) {
+  public ResponseEntity<MessageDto> updateMessage(
+      @PathVariable Long id, @Valid @RequestBody MessageDto dto) {
     return ResponseEntity.ok(service.updateMessage(id, dto));
   }
 

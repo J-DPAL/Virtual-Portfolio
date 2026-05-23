@@ -49,7 +49,8 @@ public class HobbyController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<HobbyDto> updateHobby(@PathVariable Long id, @Valid @RequestBody HobbyDto dto) {
+  public ResponseEntity<HobbyDto> updateHobby(
+      @PathVariable Long id, @Valid @RequestBody HobbyDto dto) {
     return ResponseEntity.ok(service.updateHobby(id, dto));
   }
 

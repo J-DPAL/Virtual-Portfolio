@@ -9,7 +9,8 @@ public class ErrorResponse {
   public LocalDateTime timestamp;
   public Map<String, String> errors;
 
-  public ErrorResponse(int status, String message, LocalDateTime timestamp, Map<String, String> errors) {
+  public ErrorResponse(
+      int status, String message, LocalDateTime timestamp, Map<String, String> errors) {
     this.status = status;
     this.message = message;
     this.timestamp = timestamp;

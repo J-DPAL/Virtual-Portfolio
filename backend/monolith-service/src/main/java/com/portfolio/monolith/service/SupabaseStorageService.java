@@ -75,11 +75,7 @@ public class SupabaseStorageService {
     }
 
     String url =
-        supabaseUrl
-            + "/storage/v1/object/"
-            + encodePathSegment(bucket)
-            + "/"
-            + encodePath(path);
+        supabaseUrl + "/storage/v1/object/" + encodePathSegment(bucket) + "/" + encodePath(path);
 
     HttpHeaders headers = new HttpHeaders();
     headers.set("apikey", serviceRoleKey);
@@ -89,7 +85,8 @@ public class SupabaseStorageService {
 
     try {
       ResponseEntity<String> response =
-          restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(payload, headers), String.class);
+          restTemplate.exchange(
+              url, HttpMethod.POST, new HttpEntity<>(payload, headers), String.class);
       if (!response.getStatusCode().is2xxSuccessful()) {
         throw new ApiException(HttpStatus.BAD_GATEWAY, "Failed to upload resume");
       }
@@ -148,7 +145,8 @@ public class SupabaseStorageService {
             restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, byte[].class);
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
           MediaType mediaType = response.getHeaders().getContentType();
-          String contentType = mediaType != null ? mediaType.toString() : MediaType.APPLICATION_PDF_VALUE;
+          String contentType =
+              mediaType != null ? mediaType.toString() : MediaType.APPLICATION_PDF_VALUE;
           return new ResumeMetadata(fileName(path), path, contentType, response.getBody().length);
         }
       } catch (HttpStatusCodeException ex) {

@@ -48,13 +48,15 @@ public class WorkExperienceController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
-  public ResponseEntity<WorkExperienceDto> createExperience(@Valid @RequestBody WorkExperienceDto dto) {
+  public ResponseEntity<WorkExperienceDto> createExperience(
+      @Valid @RequestBody WorkExperienceDto dto) {
     return new ResponseEntity<>(service.createExperience(dto), HttpStatus.CREATED);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<WorkExperienceDto> updateExperience(@PathVariable Long id, @Valid @RequestBody WorkExperienceDto dto) {
+  public ResponseEntity<WorkExperienceDto> updateExperience(
+      @PathVariable Long id, @Valid @RequestBody WorkExperienceDto dto) {
     return ResponseEntity.ok(service.updateExperience(id, dto));
   }
 

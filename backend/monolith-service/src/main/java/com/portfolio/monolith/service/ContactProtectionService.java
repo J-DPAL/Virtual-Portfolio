@@ -3,10 +3,10 @@ package com.portfolio.monolith.service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -54,7 +54,8 @@ public class ContactProtectionService {
   @Value("${security.contact.turnstile.secret-key:}")
   private String turnstileSecretKey;
 
-  @Value("${security.contact.turnstile.verify-url:https://challenges.cloudflare.com/turnstile/v0/siteverify}")
+  @Value(
+      "${security.contact.turnstile.verify-url:https://challenges.cloudflare.com/turnstile/v0/siteverify}")
   private String turnstileVerifyUrl;
 
   @Value("${security.contact.turnstile.minimum-score:0.5}")
@@ -116,8 +117,7 @@ public class ContactProtectionService {
   }
 
   private void enforceEmailRateLimit(String emailHash) {
-    Bucket bucket =
-        emailBuckets.computeIfAbsent(emailHash, this::newEmailRateLimitedBucket);
+    Bucket bucket = emailBuckets.computeIfAbsent(emailHash, this::newEmailRateLimitedBucket);
     if (!bucket.tryConsume(1)) {
       throw new RateLimitExceededException("Too many contact form submissions");
     }

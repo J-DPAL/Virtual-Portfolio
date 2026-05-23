@@ -74,7 +74,8 @@ public class SupabaseAuthService {
       AuthenticatedUser user = mapUserNode(payload.path("user"));
       return new LoginResult(accessToken, toUserResponse(user));
     } catch (HttpStatusCodeException ex) {
-      if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED || ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+      if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED
+          || ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
         throw new UnauthorizedException("Invalid email or password");
       }
       throw new ApiException(HttpStatus.BAD_GATEWAY, "Supabase authentication failed");
@@ -158,8 +159,7 @@ public class SupabaseAuthService {
   private void ensureConfigured() {
     if (isBlank(supabaseUrl) || isBlank(anonKey)) {
       throw new ApiException(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          "Supabase auth is not configured on backend");
+          HttpStatus.INTERNAL_SERVER_ERROR, "Supabase auth is not configured on backend");
     }
   }
 

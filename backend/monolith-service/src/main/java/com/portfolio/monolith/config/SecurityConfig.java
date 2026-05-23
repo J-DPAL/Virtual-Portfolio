@@ -47,7 +47,8 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .cors(Customizer.withDefaults())
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .exceptionHandling(
             exceptions ->
                 exceptions
@@ -73,7 +74,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/testimonials", "/messages")
                     .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/v1/files/resume/download", "/v1/files/resume/current")
+                    .requestMatchers(
+                        HttpMethod.GET, "/v1/files/resume/download", "/v1/files/resume/current")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
@@ -92,7 +94,8 @@ public class SecurityConfig {
     } else {
       configuration.setAllowedOrigins(allowedOrigins);
     }
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    configuration.setAllowedMethods(
+        Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);

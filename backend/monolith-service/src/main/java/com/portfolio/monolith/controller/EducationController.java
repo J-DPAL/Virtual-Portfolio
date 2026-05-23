@@ -54,7 +54,8 @@ public class EducationController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<EducationDto> updateEducation(@PathVariable Long id, @Valid @RequestBody EducationDto dto) {
+  public ResponseEntity<EducationDto> updateEducation(
+      @PathVariable Long id, @Valid @RequestBody EducationDto dto) {
     return ResponseEntity.ok(service.updateEducation(id, dto));
   }
 

@@ -54,7 +54,8 @@ public class SkillController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<SkillDto> updateSkill(@PathVariable Long id, @Valid @RequestBody SkillDto dto) {
+  public ResponseEntity<SkillDto> updateSkill(
+      @PathVariable Long id, @Valid @RequestBody SkillDto dto) {
     return ResponseEntity.ok(service.updateSkill(id, dto));
   }
 

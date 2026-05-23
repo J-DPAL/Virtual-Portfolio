@@ -25,12 +25,14 @@ public class TestimonialDataService {
   }
 
   public List<TestimonialDto> getApprovedTestimonials() {
-    String sql = "select * from public.testimonials where status = 'APPROVED' order by created_at desc";
+    String sql =
+        "select * from public.testimonials where status = 'APPROVED' order by created_at desc";
     return jdbc.query(sql, rowMapper());
   }
 
   public List<TestimonialDto> getPendingTestimonials() {
-    String sql = "select * from public.testimonials where status = 'PENDING' order by created_at desc";
+    String sql =
+        "select * from public.testimonials where status = 'PENDING' order by created_at desc";
     return jdbc.query(sql, rowMapper());
   }
 
@@ -69,12 +71,14 @@ public class TestimonialDataService {
   }
 
   public TestimonialDto approveTestimonial(Long id) {
-    String sql = "update public.testimonials set status = 'APPROVED', updated_at = now() where id = :id returning *";
+    String sql =
+        "update public.testimonials set status = 'APPROVED', updated_at = now() where id = :id returning *";
     return queryOne(sql, new MapSqlParameterSource("id", id), "Testimonial not found");
   }
 
   public TestimonialDto rejectTestimonial(Long id) {
-    String sql = "update public.testimonials set status = 'REJECTED', updated_at = now() where id = :id returning *";
+    String sql =
+        "update public.testimonials set status = 'REJECTED', updated_at = now() where id = :id returning *";
     return queryOne(sql, new MapSqlParameterSource("id", id), "Testimonial not found");
   }
 

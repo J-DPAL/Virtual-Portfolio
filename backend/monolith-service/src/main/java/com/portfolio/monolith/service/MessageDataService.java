@@ -72,7 +72,8 @@ public class MessageDataService {
   }
 
   public MessageDto markMessageAsRead(Long id) {
-    String sql = "update public.messages set is_read = true, updated_at = now() where id = :id returning *";
+    String sql =
+        "update public.messages set is_read = true, updated_at = now() where id = :id returning *";
     return queryOne(sql, new MapSqlParameterSource("id", id), "Message not found");
   }
 

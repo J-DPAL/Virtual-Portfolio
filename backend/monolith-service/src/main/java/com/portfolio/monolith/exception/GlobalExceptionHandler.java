@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+  public ResponseEntity<ErrorResponse> handleValidationExceptions(
+      MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
     for (FieldError error : ex.getBindingResult().getFieldErrors()) {
       errors.put(error.getField(), error.getDefaultMessage());
@@ -38,7 +39,8 @@ public class GlobalExceptionHandler {
     return build(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", null);
   }
 
-  private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, Map<String, String> errors) {
+  private ResponseEntity<ErrorResponse> build(
+      HttpStatus status, String message, Map<String, String> errors) {
     ErrorResponse response =
         new ErrorResponse(status.value(), message, LocalDateTime.now(), errors);
     return ResponseEntity.status(status).body(response);
